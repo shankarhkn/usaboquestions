@@ -1,0 +1,36 @@
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+  background-color: #f4f4f4;
+}
+
+#app {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+button {
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#question-text {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+#answer-text {
+  margin-top: 1rem;
+  color: green;
+}
