@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>USABO Question Viewer</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USABO Questions</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app">
-    <h1>USABO Question Viewer</h1>
-    <div id="question-box">
-      <p id="question-text">Loading...</p>
-      <button id="show-answer">Show Answer</button>
-      <p id="answer-text" style="display: none;"></p>
-    </div>
-    <div class="controls">
-      <button id="prev">Previous</button>
-      <button id="next">Next</button>
-    </div>
+  <div id="question-container">
+    <p id="question-text">Loading question...</p>
+    <p id="answer-text" style="display: none;"></p>
+    <button id="show-answer">Show Answer</button>
+    <button id="next-question">Next Question</button>
   </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
