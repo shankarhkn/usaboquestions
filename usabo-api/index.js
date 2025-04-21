@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,6 +14,9 @@ const questions = require('./questions.json');
 app.get('/questions', (req, res) => {
   res.json(questions);
 });
+
+// Serve static files if needed
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Start the server
 app.listen(PORT, () => {
