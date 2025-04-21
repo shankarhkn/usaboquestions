@@ -3,7 +3,7 @@ let index = 0;
 
 async function fetchQuestions() {
   try {
-    const res = await fetch('https://usabo-api.onrender.com/questions'); // Replace with your real URL
+    const res = await fetch('https://usaboquestions.onrender.com/questions'); // Replace with your real URL
     questions = await res.json();
     showQuestion();
   } catch (e) {
