@@ -1,28 +1,30 @@
 let questions = [];
-let currentQuestionIndex = 0; // Track the index of the current question
+let currentQuestion = {};
 
 async function fetchQuestions() {
   try {
-    const res = await fetch('https://usaboquestions.onrender.com/questions');
+    const res = await fetch('https://usaboquestions.onrender.com/questions'); // Your deployed API endpoint
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.status} - ${res.statusText}`);
     }
     questions = await res.json();
-    showQuestion(currentQuestionIndex); // Show the first question
+    
+    if (questions.length > 0) {
+      showRandomQuestion();
+    } else {
+      throw new Error('No questions available.');
+    }
   } catch (e) {
     console.error('Error fetching questions:', e);
     document.getElementById('question-text').textContent = 'Failed to load questions.';
   }
 }
 
-// Function to display the current question based on its index
-function showQuestion(index) {
-  if (index >= questions.length) {
-    document.getElementById('question-text').textContent = 'No more questions available.';
-    return;
-  }
-  
-  const currentQuestion = questions[index];
+// Function to display a random question
+function showRandomQuestion() {
+  const randomIndex = Math.floor(Math.random() * questions.length);
+  currentQuestion = questions[randomIndex];
+
   document.getElementById('question-text').textContent = currentQuestion.question;
   document.getElementById('answer-text').textContent = currentQuestion.answer;
   document.getElementById('answer-text').style.display = 'none';
@@ -31,15 +33,6 @@ function showQuestion(index) {
 // Show the answer when the button is clicked
 document.getElementById('show-answer').addEventListener('click', () => {
   document.getElementById('answer-text').style.display = 'block';
-});
-
-// Move to the next question when the "Next Question" button is clicked
-document.getElementById('next-question').addEventListener('click', () => {
-  currentQuestionIndex++;
-  if (currentQuestionIndex >= questions.length) {
-    currentQuestionIndex = 0; // Reset to the first question when we reach the end
-  }
-  showQuestion(currentQuestionIndex); // Show the next question
 });
 
 // Fetch the questions when the page loads
