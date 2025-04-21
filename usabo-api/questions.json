@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "question": "What organelle is responsible for photosynthesis?",
+    "answer": "Chloroplast"
+  },
+  {
+    "id": 2,
+    "question": "Which hormone regulates blood sugar levels?",
+    "answer": "Insulin"
+  },
+  {
+    "id": 3,
+    "question": "What is the powerhouse of the cell?",
+    "answer": "Mitochondria"
+  }
+]
