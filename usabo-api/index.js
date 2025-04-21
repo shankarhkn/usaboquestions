@@ -8,7 +8,7 @@ app.use(cors());
 const questions = [
   {
     id: 1,
-    question: "What organelle is primarily responsible for ATP production?",
+    question: "What organelle is primarily responsible for ATP production? Is it",
     options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
     answer: "Mitochondria"
   },
