@@ -1,24 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 10000;
+const path = require('path');
 
-// Enable CORS to allow frontend to make requests
+// Enable CORS for all origins
 app.use(cors());
 
-// Serve the questions data
-const questions = require('./questions.json');
+// Serve the static files (if any)
+app.use(express.static(path.join(__dirname, 'public')));
 
-// API endpoint to get the questions
+// Sample questions
+const questions = [
+  { id: 1, question: "What organelle is responsible for photosynthesis?", answer: "Chloroplast" },
+  { id: 2, question: "Which hormone regulates blood sugar levels?", answer: "Insulin" },
+  // Add more questions here
+];
+
+// API endpoint to fetch questions
 app.get('/questions', (req, res) => {
   res.json(questions);
 });
 
-// Serve static files if needed
-app.use(express.static(path.join(__dirname, 'frontend')));
+// Define the port
+const PORT = process.env.PORT || 10000;  // Default to 10000 if PORT isn't defined (e.g., for local development)
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
