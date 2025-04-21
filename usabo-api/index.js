@@ -1,26 +1,27 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 
-// Hardcoded USABO-style questions
-const questions = [
-  {
-    id: 1,
-    question: "What organelle is primarily responsible for ATP production? Is it",
-    options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
-    answer: "Mitochondria"
-  },
-  {
-    id: 2,
-    question: "Which phase of mitosis involves the alignment of chromosomes along the equator?",
-    options: ["Prophase", "Metaphase", "Anaphase", "Telophase"],
-    answer: "Metaphase"
-  }
-];
+// Load questions from JSON file
+const questionsPath = path.join(__dirname, 'questions.json');
+let questions = [];
+
+try {
+  const data = fs.readFileSync(questionsPath, 'utf8');
+  questions = JSON.parse(data);
+  console.log(`Loaded ${questions.length} questions from questions.json`);
+} catch (err) {
+  console.error('Error loading questions:', err.message);
+}
 
 app.get('/questions', (req, res) => {
+  if (!questions || questions.length === 0) {
+    return res.status(500).json({ error: 'No questions available' });
+  }
   res.json(questions);
 });
 
