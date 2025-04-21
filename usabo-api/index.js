@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
 const path = require('path');
+const fs = require('fs');
+const app = express();
 
 // Enable CORS for all origins
 app.use(cors());
@@ -9,15 +10,21 @@ app.use(cors());
 // Serve the static files (if any)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Sample questions
-const questions = [
-  { id: 1, question: "What organelle is responsible for photosynthesis?", answer: "Chloroplast" },
-  { id: 2, question: "Which hormone regulates blood sugar levels?", answer: "Insulin" },
-  // Add more questions here
-];
+// Load questions from the JSON file
+function loadQuestions() {
+  const questionsFilePath = path.join(__dirname, 'questions.json');
+  try {
+    const rawData = fs.readFileSync(questionsFilePath);
+    return JSON.parse(rawData);
+  } catch (error) {
+    console.error('Error loading questions:', error);
+    return [];
+  }
+}
 
 // API endpoint to fetch questions
 app.get('/questions', (req, res) => {
+  const questions = loadQuestions();
   res.json(questions);
 });
 
