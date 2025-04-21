@@ -1,46 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
 
-// Sample questions (hardcoded)
+const app = express();
+app.use(cors());
+
+// Hardcoded USABO-style questions
 const questions = [
   {
     id: 1,
-    question: "What is the powerhouse of the cell?",
-    options: [
-      "a) Nucleus",
-      "b) Mitochondria",
-      "c) Ribosomes",
-      "d) Chloroplasts"
-    ],
-    answer: "b"
+    question: "What organelle is primarily responsible for ATP production?",
+    options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
+    answer: "Mitochondria"
   },
   {
     id: 2,
-    question: "Which organelle is responsible for protein synthesis?",
-    options: [
-      "a) Nucleus",
-      "b) Ribosome",
-      "c) Mitochondria",
-      "d) Chloroplasts"
-    ],
-    answer: "b"
-  },
-  // More questions...
+    question: "Which phase of mitosis involves the alignment of chromosomes along the equator?",
+    options: ["Prophase", "Metaphase", "Anaphase", "Telophase"],
+    answer: "Metaphase"
+  }
 ];
 
-app.use(cors());
-
-// Serve static files (optional if you're serving front-end assets)
-app.use(express.static('public'));
-
-// API route to serve the questions
 app.get('/questions', (req, res) => {
   res.json(questions);
 });
 
-// Define the port
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
