@@ -49,5 +49,5 @@ if current_question:
     questions.append(current_question)
 
 # Export to JSON
-with open("python/questions.json", "w", encoding="utf-8") as f:
+with open("usabo-api/questions.json", "w", encoding="utf-8") as f:
     json.dump(questions, f, indent=2, ensure_ascii=False)
