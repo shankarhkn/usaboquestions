@@ -1,262 +1,130 @@
 [
   {
-    "question": "In the extracellular matrix of an animal cell, you would like to test the binding partner of integrins in vitro. Integrins would most likely require firm attachment to which of the above option?",
-    "choices": {}
+    "question": "In the extracellular matrix of an animal cell, you would like to test the binding partner of integrins in vitro. Integrins would most likely require firm attachment to which of the following?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Cadherins"
+      },
+      {
+        "label": "B",
+        "text": "Laminins"
+      },
+      {
+        "label": "C",
+        "text": "Myosins"
+      },
+      {
+        "label": "D",
+        "text": "Actins"
+      },
+      {
+        "label": "E",
+        "text": "Keratin filaments"
+      }
+    ]
   },
   {
-    "question": "You are working with Dr. Lee at University of Wisconsin-Madison to investigate cytokinesis in a newly discovered marine worm. You generated antibodies to conserved proteins involved in cell division in other organism to look for proteins that localize to important structures during cell division. What molecular motor protein should you look for in the contractile ring?",
-    "choices": {}
+    "question": "You are working with Dr. Lee at University of Wisconsin-Madison to investigate cytokinesis in a newly discovered marine worm. You generated antibodies to conserved proteins involved in cell division in other organisms to look for proteins that localize to important structures during cell division. What molecular motor protein should you look for in the contractile ring?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Kinesin"
+      },
+      {
+        "label": "B",
+        "text": "Myosin"
+      },
+      {
+        "label": "C",
+        "text": "Dynein"
+      },
+      {
+        "label": "D",
+        "text": "Actin"
+      },
+      {
+        "label": "E",
+        "text": "Tubulin"
+      }
+    ]
   },
   {
     "question": "An unnamed acid has a pKa value of 4.76. Which of the following is closest to the ratio of the concentration of its protonated to deprotonated forms in a pH environment of 6.8?",
-    "choices": {
-      "A": "100 : 1.",
-      "B": "10 : 1.",
-      "C": "1 : 1.",
-      "D": "1 : 10.",
-      "E": "1 : 100. 2018 USABO Open Exam Page 2"
-    }
-  },
-  {
-    "question": "Select the answer choice that correctly describes which chemical species are oxidized, reduced, and phosphorylated in the process of oxidative phosphorylation. Choice Oxidized Reduced Phosphorylated",
-    "choices": {
-      "A": "𝐻𝐻2𝑂𝑂 𝑜𝑜𝑜𝑜𝑜𝑜𝑜𝑜 𝑁𝑁𝑁𝑁𝐷𝐷+ 𝑎𝑎𝑜𝑜𝑎𝑎 𝐹𝐹𝑁𝑁𝐷𝐷 𝑁𝑁𝐷𝐷𝐴𝐴",
-      "B": "𝑁𝑁𝑁𝑁𝐷𝐷𝐻𝐻 𝑎𝑎𝑜𝑜𝑎𝑎 𝐹𝐹𝑁𝑁𝐷𝐷𝐻𝐻2 𝑂𝑂2 𝑁𝑁𝐷𝐷𝐴𝐴",
-      "C": "𝑁𝑁𝑁𝑁𝐷𝐷𝐻𝐻𝑎𝑎𝑜𝑜𝑎𝑎 𝐹𝐹𝑁𝑁𝐷𝐷𝐻𝐻2 𝐶𝐶𝑂𝑂2 𝑁𝑁𝐴𝐴𝐴𝐴",
-      "D": "𝐻𝐻2𝑂𝑂 𝑜𝑜𝑜𝑜𝑜𝑜𝑜𝑜 𝑁𝑁𝑁𝑁𝐷𝐷+ 𝑜𝑜𝑜𝑜𝑜𝑜𝑜𝑜  𝑁𝑁𝐷𝐷𝐴𝐴",
-      "E": "𝑁𝑁𝑁𝑁𝐷𝐷𝐴𝐴𝐻𝐻 𝑜𝑜𝑜𝑜𝑜𝑜𝑜𝑜 𝐹𝐹𝑁𝑁𝐷𝐷 𝑜𝑜𝑜𝑜𝑜𝑜𝑜𝑜 𝑁𝑁𝐴𝐴𝐴𝐴"
-    }
+    "choices": [
+      {
+        "label": "A",
+        "text": "100 : 1."
+      },
+      {
+        "label": "B",
+        "text": "10 : 1."
+      },
+      {
+        "label": "C",
+        "text": "1 : 1."
+      },
+      {
+        "label": "D",
+        "text": "1 : 10."
+      },
+      {
+        "label": "E",
+        "text": "1 : 100."
+      }
+    ]
   },
   {
     "question": "Which scientist(s) is incorrectly matched with his/her/their discoveries?",
-    "choices": {
-      "A": "Frederick Griffith – discovery of transformation through bacteriophages.",
-      "B": "Hershey and Chase – discovery of DNA as the hereditary material of cells.",
-      "C": "Chargaff – discovery that relative amounts of nucleotide bases varies among organisms.",
-      "D": "Watson and Crick – discovery of the double-helix structure of DNA.",
-      "E": "Meselson and Stahl – discovery of the semi-conservative replication of DNA. 2018 USABO Open Exam Page 3"
-    }
+    "choices": [
+      {
+        "label": "A",
+        "text": "Frederick Griffith – discovery of transformation through bacteriophages."
+      },
+      {
+        "label": "B",
+        "text": "Hershey and Chase – discovery of DNA as the hereditary material of cells."
+      },
+      {
+        "label": "C",
+        "text": "Chargaff – discovery that relative amounts of nucleotide bases varies among organisms."
+      },
+      {
+        "label": "D",
+        "text": "Watson and Crick – discovery of the double-helix structure of DNA."
+      },
+      {
+        "label": "E",
+        "text": "Meselson and Stahl – discovery of the semi-conservative replication of DNA."
+      }
+    ]
   },
   {
-    "question": "You discover a transmembrane protein ALPHA that, like most transmembrane proteins, exhibits a transmembrane domain composed of alpha helices. You next discover that ALPHA serves as a channel. What is a likely amino acid sequence for some portion of the transmembrane domain? (See chart below for one-letter abbreviations).",
-    "choices": {
-      "A": "ALQQMMDSILDY.",
-      "B": "ALILALMWWLLF.",
-      "C": "FPPALGGLPFAMG.",
-      "D": "LMQKPMDSLPDY.",
-      "E": "LKMELAKMILLA. Abbreviation  1 letter abbreviation  Amino acid name Ala   A  Alanine Arg   R  Arginine Asn   N  Asparagine Asp  D  Aspartic acid Cys  C  Cysteine Gln  Q  Glutamine Glu  E  Glutamic acid Gly  G  Glycine His  H  Histidine Ile  I  Isoleucine Leu   L  Leucine Lys   K  Lysine Met  M  Methionine Phe  F  Phenylalanine Pro  P  Proline Pyl  O  Pyrrolysine Ser  S  Serine Sec  U  Selenocysteine Thr  T  Threonine Trp  W  Tryptophan Tyr  Y  Tyrosine Val  V  Valine Questions 7 to 10. Indicate if each of the following statements is TRUE or FALSE about the electron transport chain in cellular respiration. Use “A” for True and “B” for False."
-    }
-  },
-  {
-    "question": "Ubiquinone proteins have a heme group to facilitate electron transport.",
-    "choices": {}
-  },
-  {
-    "question": "FADH2 adds its electrons to complex III while NADH adds its electrons in complex I.",
-    "choices": {}
-  },
-  {
-    "question": "Cytochrome a is more electronegative than cytochrome b.",
-    "choices": {}
-  },
-  {
-    "question": "Cytochrome c is more electronegative than cytochrome b. 2018 USABO Open Exam Page 4 15% Plant Anatomy and Physiology 8 questions (0 needed)",
-    "choices": {}
-  },
-  {
-    "question": "Observe the seedlings growing below which have a loss of function mutation in the ethylene receptor. Source: University of Queensland, Australia. Which of the following statement(s) is (are) TRUE regarding this mutant’s growth response NOT being related to a triple response?  Select one response A, B, C, D, or E. I. This mutant will not respond to the exposure of ethylene under any circumstances. II. This mutant has a constitutive activity where it leads to the activation of kinase, which is important for the triple response. III. This mutant has a constitutive activity where it leads to the inactivation of kinase, which is important for the triple response. IV. If this mutant is treated with aminoethoxyvinylglycine (ethylene synthesis inhibitor), this mutant will be able to undergo triple response. V. If this mutant is treated with aminoethoxyvinylglycine (ethylene synthesis inhibitor), this mutant will not respond to the treatment and not undergo triple response.",
-    "choices": {
-      "A": "I.",
-      "B": "II, IV.",
-      "C": "III, V.",
-      "D": "I, II, IV.",
-      "E": "I, III, V. ."
-    }
-  },
-  {
-    "question": "Three groups of Arabidopsis  seedlings are subjected to a short burst of ethylene. Group A is comprised of ethylene-insensitive (ein) mutants. Group B consists of constitutive triple-response (ctr) mutants. Group C is also subjected to high levels of abscisic acid. Group D serves as a control (wild type) and receives the ethylene treatment. Which group is likely to be the tallest after a few days of the treatment?",
-    "choices": {
-      "A": "Group A.",
-      "B": "Group B.",
-      "C": "Group C.",
-      "D": "Group D.",
-      "E": "They will be equally as tall. 2018 USABO Open Exam Page 5"
-    }
-  },
-  {
-    "question": "Today’s corn plants evolved from an ancestral plant known as teosinte. One genetic change that occurred in modern corn is a mutation in the regulatory DNA associated with the gene tb1. As a result of this change, teosinte has low levels of tb1 expression, and corn has high levels of tb1 expression. High levels of tb1 expression in plant axillary buds inhibit the growth of branches, leading to tall, unbranched corn plants in farmer’s fields. In contrast, teosinte is highly branched. The tb1 gene is also required for the development of ears of corn on the plant; both modern corn and teosinte produce ears of corn that carry the seeds of the plant. Based on this information, which of the following statements is NOT true?",
-    "choices": {
-      "A": "The replacement of the tb1 protein-coding sequence of corn with the tb1 protein-coding sequence of teosinte would be expected to result in a plant that is able to produce ears of corn.",
-      "B": "A corn plant with a synonymous substitution mutation in the tb1 gene would produce ears of corn.",
-      "C": "Deletion of the tb1 gene from modern corn would result in a plant resembling teosinte in its shape and production.",
-      "D": "A corn plant with a nonsense mutation at the beginning of the tb1 gene would be expected to exhibit increased branching.",
-      "E": "A missense mutation in tb1 that led to a nonfunctional protein product could be considered a loss-of- function mutation."
-    }
-  },
-  {
-    "question": "A plant geneticist uses an RNA microarray to assess gene expression in two populations of cabbage plants: a wild-type cabbage line, and a line carrying a deletion in gene “X”. The geneticist calculates the relative signal for each gene expressed by the cabbages, relative to a reference gene that is known to be unaffected by gene X.  In the gene X mutant line, the relative levels of expression of genes A, B, and C are drastically reduced (as compared to their relative expression level in the wild-type cabbages). Which of the following potential explanations for the effect of gene X is NOT directly consistent with the microarray data?",
-    "choices": {
-      "A": "Gene X produces a helix-turn-helix transcription factor that binds to the promoters of genes A, B, and C.",
-      "B": "The product of gene X binds to enhancer sequences located 100,000 base pairs upstream of each of the genes A, B, and C.",
-      "C": "The product of gene X inhibits a ubiquitin ligase that targets the products of genes A, B, and C to the proteasome.",
-      "D": "The product of gene X binds to the 3’ untranslated region of gene A, B, and C mRNAs to regulate stability.",
-      "E": "The product of gene X binds to and inhibits a repressor of gene A, B, and C transcription. 2018 USABO Open Exam Page 6"
-    }
-  },
-  {
-    "question": "Tissue culture can be used to generate whole plants from single cells in the laboratory.  In the “doubled haploid” technique, a haploid cell is obtained from a plant and induced to double in chromosome number without cell division.  A plant breeder would like to try the method on a diploid rose variety. Which of the following would be a suitable source of haploid cells to begin this procedure?",
-    "choices": {
-      "A": "Endosperm.",
-      "B": "Meristem.",
-      "C": "Sporophyte.",
-      "D": "Pollen grains.",
-      "E": "Flower buds."
-    }
-  },
-  {
-    "question": "The Arabidopsis  plant utilizes a range of posttranslational modifications to the genome as a means of regulating gene expression.  These include activation of genes by histone acetylation, and methylation of DNA. Which of the following statements does NOT correctly describe the mechanism or impacts of these modifications in the plant cell?",
-    "choices": {
-      "A": "Addition of DNA and histone modifications in the cell is performed by protein-based enzymes.",
-      "B": "Lysine acetylation leads to a tighter association of histone proteins with DNA in the promoter regions.",
-      "C": "DNA methylation patterns can be propagated to daughter strands after DNA replication.",
-      "D": "The covalent addition of methyl groups to plant DNA is reversible in the cell.",
-      "E": "More than one of the above does NOT correctly describe the impacts of these modifications."
-    }
-  },
-  {
-    "question": "Nitrogen fixation has the following net chemical reaction: N2 + 8e- + 8H+ + 16 ATP  2NH3 + H2 + 16ADP + 16○Pi If 1 kg of ATP (molar mass 507.2 g/mol) and 3 g of nitrogen gas (molar mass 28 g/mol) are supplied as input, what is the maximum yield of ammonia (molecular mass 17 g/mol)?",
-    "choices": {
-      "A": "1.8 g.",
-      "B": "2.5 g.",
-      "C": "3.6 g.",
-      "D": "4.2 g.",
-      "E": "4.9 g. 2018 USABO Open Exam Page 7"
-    }
-  },
-  {
-    "question": "Order the following elements of a tree trunk from the center of the trunk outward:",
-    "choices": {}
-  },
-  {
-    "question": "Sapwood",
-    "choices": {}
-  },
-  {
-    "question": "Secondary phloem",
-    "choices": {}
-  },
-  {
-    "question": "Vascular cambium",
-    "choices": {}
-  },
-  {
-    "question": "Heartwood",
-    "choices": {}
-  },
-  {
-    "question": "Periderm",
-    "choices": {
-      "A": "1, 2, 4, 5, 3.",
-      "B": "4, 1, 3, 2, 5.",
-      "C": "5, 2, 3, 1, 4.",
-      "D": "3, 5, 4, 2, 1.",
-      "E": "4, 1, 5, 2, 3. 25% Animal Anatomy and Physiology 12 questions (0 Needed)"
-    }
-  },
-  {
-    "question": "A woman experiencing rickets is diagnosed with a deficiency of a particular vitamin and given a diet guideline. Which of the following food is most likely to help with the condition?",
-    "choices": {
-      "A": "Carrot.",
-      "B": "Butter.",
-      "C": "Whole grains.",
-      "D": "Oranges.",
-      "E": "Tomatoes."
-    }
-  },
-  {
-    "question": "Consider the following figure that describes the structure of an antibody. Select the letter for the area where an antibody bound to a pathogen in the bloodstream would be recognized by a hunting macrophage. 2018 USABO Open Exam Page 8 Questions 21 & 22. As a winter intern at an animal development lab at University of Wisconsin-Madison, you would like to investigate how different treatments may alter the outcomes of fertilization in sea urchins.",
-    "choices": {}
-  },
-  {
-    "question": "You would like to test different conditions in which fertilization is blocked in sea urchin eggs. All of the following conditions would result in unsuccessful fertilizations EXCEPT FOR",
-    "choices": {
-      "A": "When the sea urchin sperm not exposed to egg jelly interacts with sea urchin egg stripped of its egg jelly.",
-      "B": "When the normal sea urchin sperm interacts with sea urchin egg held at a constant +20 mv by using an electrophysiological voltage camp.",
-      "C": "When the sea urchin sperm treated with calcium ionophore interacts with the normal sea urchin egg from same species with its egg jelly removed.",
-      "D": "When the sea urchin egg is prematurely exposed to IP3 and DAG, this triggers the release of calcium from the smooth endoplasmic reticulum and triggers the cortical reaction.",
-      "E": "When the sea urchin sperm exposed to egg jelly interacts with sea urchin egg from same species pretreated with purified bindin, a protein responsible for the specific adhesion of the sperm acrosomal process in sea urchin."
-    }
-  },
-  {
-    "question": "As a side project, you would also like to work on fertilization in mouse embryos using CRISPR/cas9 technology by conducting in vitro  fertilization (IVF).  At which phase of the embryo should you return the embryo to the mouse uterus?",
-    "choices": {
-      "A": "2-cell stage.",
-      "B": "4-cell stage.",
-      "C": "8-cell stage.",
-      "D": "Blastocysts.",
-      "E": "Fertilized egg (zygote)."
-    }
-  },
-  {
-    "question": "By blindfolding fish, Brian Partridge and Tony Pitcher demonstrated in 1979 that schooling behavior is dependent not on vision, but instead on the proper functioning of a different organ: the lateral line. Given this knowledge, which of the following structures, when damaged, would lead to a loss in the ability for fish to school?",
-    "choices": {
-      "A": "Fovea.",
-      "B": "Cupula.",
-      "C": "Ruffini ending.",
-      "D": "Zonule.",
-      "E": "Eustachian tube. 2018 USABO Open Exam Page 9"
-    }
-  },
-  {
-    "question": "Dr. Ross has developed a new drug, Rossazole that prevents the presentation of antigens to CD4 helper T cells. She administers the drug to a lab mouse. Which one of the following immune cell types would have its functions LEAST disrupted by the drug?",
-    "choices": {
-      "A": "Cytotoxic T Cell",
-      "B": "Memory B Cell",
-      "C": "Macrophage",
-      "D": "Neutrophil",
-      "E": "Dendritic Cell"
-    }
-  },
-  {
-    "question": "Which of the following is most accurate regarding the anatomy and physiology of the vertebrate vascular system?",
-    "choices": {
-      "A": "The thin walls of veins are an adaptation that allows the tissues of the vein itself to obtain, via diffusion, sufficient oxygen from oxygen-poor venous blood. Otherwise, the tissue of thick-walled vessels carrying deoxygenated blood would experience inadequate oxygenation and die.",
-      "B": "Arteries and veins contain valves to prevent backflow of blood.",
-      "C": "Elastic fibers made of the protein elastin in the tunica media allow arteries to accommodate fluctuating blood pressures. They are almost absent in the tunica media of veins.",
-      "D": "The larger arteries have a thick layer of smooth muscle, the motion of which helps propel blood forward.",
-      "E": "Vascular endothelial growth factor (VEGF) is a signaling protein that stimulates branching and growth of capillaries. The gene encoding VEGF is often lost or inhibited in solid tissue cancers."
-    }
-  },
-  {
-    "question": "In tetrapods, neural pathways carrying information from all the senses, except for the sense of smell, pass through and synapse in a particular anatomical structure in the brain, which is embryonically derived from the diencephalon. This structure is the:",
-    "choices": {
-      "A": "Medulla.",
-      "B": "Thalamus.",
-      "C": "Amygdala.",
-      "D": "Occipital lobe.",
-      "E": "Somatosensory cortex. 2018 USABO Open Exam Page 10"
-    }
-  },
-  {
-    "question": "Which of the following are most responsible for carrying and transporting triacylglycerols in the body?",
-    "choices": {
-      "A": "IDL and LDL.",
-      "B": "Chylomicrons and LDL.",
-      "C": "Chylomicrons and VLDL.",
-      "D": "HDL and LDL.",
-      "E": "IDL and VLDL."
-    }
-  },
-  {
-    "question": "A patient complains to his neurologist that he is experiencing powerful headaches and double vision. An MRI confirms that he is suffering from prolactinoma. Which substance should the neurologist prescribe to control the release of prolactin from the pituitary gland?",
-    "choices": {
-      "A": "Renin.",
-      "B": "Dopamine.",
-      "C": "Angiotensin-2.",
-      "D": "Endorphins.",
-      "E": "Caffeine."
-    }
-  },
+    "question": "You discover a transmembrane protein ALPHA that, like most transmembrane proteins, exhibits a transmembrane domain composed of alpha helices. You next discover that ALPHA serves as a channel. What is a likely amino acid sequence for some portion of the transmembrane domain?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "ALQQMMDSILDY."
+      },
+      {
+        "label": "B",
+        "text": "ALILALMWWLLF."
+      },
+      {
+        "label": "C",
+        "text": "FPPALGGLPFAMG."
+      },
+      {
+        "label": "D",
+        "text": "LMQKPMDSLPDY."
+      },
+      {
+        "label": "E",
+        "text": "LKMELAKMILLA."
+      }
+    ]
+  }
+]
   {
     "question": "A mutant Drosophila  is engineered to be unable to efficiently produce certain amino acids. Metabolic analysis finds the mutant contains very low levels of alpha-ketoglutarate, an important intermediate in the Krebs cycle. Which amino acid is most likely to NOT be produced?",
     "choices": {
