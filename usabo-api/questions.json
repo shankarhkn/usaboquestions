@@ -1,18 +1,341 @@
 [
   {
-    "question": "In the extracellular matrix of an animal cell, you would like to test the binding partner of integrins in vitro. Integrins would most likely require firm attachment to which of the above option?",
-    "choices": ["Option A", "Option B", "Option C", "Option D"]
+    "question": "In the extracellular matrix of an animal cell, you would like to test the binding partner of integrins in vitro. Integrins would most likely require firm attachment to which of the following?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Cadherins"
+      },
+      {
+        "label": "B",
+        "text": "Laminins"
+      },
+      {
+        "label": "C",
+        "text": "Myosins"
+      },
+      {
+        "label": "D",
+        "text": "Actins"
+      },
+      {
+        "label": "E",
+        "text": "Keratin filaments"
+      }
+    ]
   },
   {
-    "question": "You are working with Dr. Lee at University of Wisconsin-Madison to investigate cytokinesis in a newly discovered marine worm. You generated antibodies to conserved proteins involved in cell division in other organism to look for proteins that localize to important structures during cell division. What molecular motor protein should you look for in the contractile ring?",
-    "choices": ["Option A", "Option B", "Option C", "Option D"]
+    "question": "You are working with Dr. Lee at University of Wisconsin-Madison to investigate cytokinesis in a newly discovered marine worm. You generated antibodies to conserved proteins involved in cell division in other organisms to look for proteins that localize to important structures during cell division. What molecular motor protein should you look for in the contractile ring?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Kinesin"
+      },
+      {
+        "label": "B",
+        "text": "Myosin"
+      },
+      {
+        "label": "C",
+        "text": "Dynein"
+      },
+      {
+        "label": "D",
+        "text": "Actin"
+      },
+      {
+        "label": "E",
+        "text": "Tubulin"
+      }
+    ]
   },
   {
     "question": "An unnamed acid has a pKa value of 4.76. Which of the following is closest to the ratio of the concentration of its protonated to deprotonated forms in a pH environment of 6.8?",
-    "choices": ["A: 100 : 1.", "B: 10 : 1.", "C: 1 : 1.", "D: 1 : 10.", "E: 1 : 100."]
+    "choices": [
+      {
+        "label": "A",
+        "text": "100 : 1."
+      },
+      {
+        "label": "B",
+        "text": "10 : 1."
+      },
+      {
+        "label": "C",
+        "text": "1 : 1."
+      },
+      {
+        "label": "D",
+        "text": "1 : 10."
+      },
+      {
+        "label": "E",
+        "text": "1 : 100."
+      }
+    ]
   },
   {
-    "question": "Select the answer choice that correctly describes which chemical species are oxidized, reduced, and phosphorylated in the process of oxidative phosphorylation.",
-    "choices": ["A: HH2OO", "B: NNNDD", "C: FFDH2O", "D: H2O", "E: None of the above."]
+    "question": "Which scientist(s) is incorrectly matched with his/her/their discoveries?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Frederick Griffith – discovery of transformation through bacteriophages."
+      },
+      {
+        "label": "B",
+        "text": "Hershey and Chase – discovery of DNA as the hereditary material of cells."
+      },
+      {
+        "label": "C",
+        "text": "Chargaff – discovery that relative amounts of nucleotide bases varies among organisms."
+      },
+      {
+        "label": "D",
+        "text": "Watson and Crick – discovery of the double-helix structure of DNA."
+      },
+      {
+        "label": "E",
+        "text": "Meselson and Stahl – discovery of the semi-conservative replication of DNA."
+      }
+    ]
+  },
+  {
+    "question": "You discover a transmembrane protein ALPHA that, like most transmembrane proteins, exhibits a transmembrane domain composed of alpha helices. You next discover that ALPHA serves as a channel. What is a likely amino acid sequence for some portion of the transmembrane domain?",
+    "choices": [
+      {
+        "label": "A",
+        "text": "ALQQMMDSILDY."
+      },
+      {
+        "label": "B",
+        "text": "ALILALMWWLLF."
+      },
+      {
+        "label": "C",
+        "text": "FPPALGGLPFAMG."
+      },
+      {
+        "label": "D",
+        "text": "LMQKPMDSLPDY."
+      },
+      {
+        "label": "E",
+        "text": "LKMELAKMILLA."
+      }
+    ]
+  },
+  {
+    "question": "A mutant Drosophila  is engineered to be unable to efficiently produce certain amino acids. Metabolic analysis finds the mutant contains very low levels of alpha-ketoglutarate, an important intermediate in the Krebs cycle. Which amino acid is most likely to NOT be produced?",
+    "choices": {
+      "A": "Argnine.",
+      "B": "Glycine.",
+      "C": "Phenylalanine.",
+      "D": "Histidine.",
+      "E": "Tyrosine."
+    }
+  },
+  {
+    "question": "Which two amino acids are the least likely to occur in the middle of an alpha helical protein structure?",
+    "choices": {
+      "A": "Glycine and lysine.",
+      "B": "Glycine and proline.",
+      "C": "Lysine and proline.",
+      "D": "Methionine and lysine.",
+      "E": "Methionine and proline. 5%Ethology 3 questions (0 needed)"
+    }
+  },
+  {
+    "question": "Some herding animals develop matriarchal leadership systems led by the oldest female. Which of the following hypothetical reasons could NOT be a proximate cause of this social behavior?",
+    "choices": {
+      "A": "Older individuals are more able to distinguish between friendly and hostile family groups.",
+      "B": "Older individuals confer onto the herd increased chances of survival and reproduction.",
+      "C": "Older individuals have more time to develop ties with other herd members.",
+      "D": "Older individuals hold more knowledge of safe watering grounds and territorial boundaries.",
+      "E": "Older individuals have enhanced social and emotional intelligence. 2018 USABO Open Exam Page 11"
+    }
+  },
+  {
+    "question": "A female guppy has a choice of three mates: (1) an unpaired, dull-colored guppy; (2) an unpaired, brightly-colored guppy; (3) a paired, dull-colored guppy. Which of the mates would the guppy prefer?",
+    "choices": {
+      "A": "Mate 1, because its dull coloration confers on it a selective advantage against predation.",
+      "B": "Mate 2, because its bright coloration indicates robust health and ready access to nutrition.",
+      "C": "Mate 2, because its bright coloration reflects increased genetic variation.",
+      "D": "Mate 3, because guppies prefer to engage in polygynous behavior.",
+      "E": "Mate 3, because its current courtship will induce mate choice copying."
+    }
+  },
+  {
+    "question": "Dr. T is a famous lecturer on ethology, and his favorite topic happens to be agonistic behavior. Which of the following are examples of agonistic behavior? I. A female guppy picking a mate based on the males’ external features. II. Two grey kangaroos boxing with each other to decide who gets the mate. III. Two male stalk-eyed flies comparing eye-stalk lengths for rights to a mate. IV. Male grey catbirds fluffing their feathers when their territory is threatened by another male.",
+    "choices": {
+      "A": "I, II, IV.",
+      "B": "I, III, V.",
+      "C": "II, III.",
+      "D": "II, III, IV.",
+      "E": "III, IV. 20 % Genetics and Evolution 10 questions (0 needed)"
+    }
+  },
+  {
+    "question": "Which of the following amino-acid substitutions is LEAST likely to be disruptive to protein function?",
+    "choices": {
+      "A": "Lysine to glycine.",
+      "B": "Cysteine to leucine.",
+      "C": "Alanine to proline.",
+      "D": "Aspartate to valine.",
+      "E": "Alanine to valine. 2018 USABO Open Exam Page 12"
+    }
+  },
+  {
+    "question": "Prader-Willi syndrome and Angelman Syndrome can each occur due to a deletion in the same part of chromosome 15. However, Prader-Willi syndrome will result if the defective chromosome was inherited from the father, while Angelman syndrome results if it was inherited from the mother. Identify the answer choice below that also exemplifies a similar inheritance pattern. Choice",
+    "choices": {
+      "A": "Inheritance of Flower Color in Peas",
+      "B": "Inheritance of Flower Color in Snapdragons",
+      "C": "Inheritance of the Igf-2 gene in Mice",
+      "D": "Inheritance of X-linked Color Blindness in Humans",
+      "E": "Inheritance of Height in Humans"
+    }
+  },
+  {
+    "question": "A 30-year old woman (is planning to have a child and visits a genetic counselor. The only observed genetic disorder in her immediate family is that her brother was afflicted by Hurler syndrome (also known as mucopolysaccharidosis type I), a monogenic, autosomal recessive metabolic disorder caused by a loss of function of a lysosomal enzyme named alpha-L iduronidase. Hurler syndrome manifests itself early in childhood and is often fatal. What is the probability that the woman is a carrier for a disease-causing allele of alpha-L iduronidase?",
+    "choices": {
+      "A": "¼.",
+      "B": "½.",
+      "C": "9/16.",
+      "D": "2/3.",
+      "E": "¾."
+    }
+  },
+  {
+    "question": "Which of the following is incorrect about operons?",
+    "choices": {
+      "A": "Operons can be switched off with a repressor.",
+      "B": "The lac operon is an inducible operon.",
+      "C": "In the presence of lactose and glucose, the lac operon will not be repressed.",
+      "D": "CAP is an activator of transcription when not bound to cAMP.",
+      "E": "A mutation in the operator of the trp operon can lead to overproduction of tryptophan. 2018 USABO Open Exam Page 13"
+    }
+  },
+  {
+    "question": "The ratio of synonymous to nonsynonymous mutations that a protein-coding gene experiences in a given period of time is frequently used to infer the evolutionary pressures acting upon that gene. In particular, let ω = dN / dS, where dN is the number of nonsynonymous mutations per nonsynonymous site, and dS is the number of synonymous mutations per synonymous site. Which of the following statements about ω and protein evolution is NOT correct?",
+    "choices": {
+      "A": "A viral protein that experiences strong selection from the host immune system is likely to have ω > 1.",
+      "B": "In the absence of selection, nonsynonymous changes are more likely to occur than synonymous changes at any given codon site.",
+      "C": "A gene paralog that is no longer expressed is likely to have ω = 1.",
+      "D": "For most genes, ω = 1.",
+      "E": "A highly conserved housekeeping gene is likely to have ω < 1."
+    }
+  },
+  {
+    "question": "Each of the five phylogenies below displays a set of relationships between species A through M. Which of the phylogenies represents a DIFFERENT set of relationships from the others? 2018 USABO Open Exam Page 14",
+    "choices": {}
+  },
+  {
+    "question": "Eye color in fruit fly shows an X linked recessive mode of inheritance with red being the dominant phenotype and white being the recessive phenotype. Which of the following mating experiments best prove this observation?",
+    "choices": {
+      "A": "Mate a heterozygous red-eye female fly with a red-eye male fly.",
+      "B": "Mate a homozygous red-eye female fly with a white-eye male fly.",
+      "C": "Mate a white-eye female fly with a red-eye male fly.",
+      "D": "Mate a white- eye female fly with a white-eye male fly.",
+      "E": "Mate a heterozygous red-eye female fly with a white-eye male fly."
+    }
+  },
+  {
+    "question": "After Pete was infected with Chikungunya virus, his immune system developed immunoglobulins against the virus’s epitope with a peptide sequence VPRNAELGD. Which of the following mutated sequences will most likely lead to immune evasion? (Assume that the mutated virus retains function)",
+    "choices": {
+      "A": "APRNAELGD",
+      "B": "VPRQAELGD",
+      "C": "VPRNAELAD",
+      "D": "VPRNYELAD",
+      "E": "VPRNAEIGD"
+    }
+  },
+  {
+    "question": "Which process likely explains why exons of the tissue plasminogen activator (TPA) are also found in other proteins?",
+    "choices": {
+      "A": "Exon shuffling.",
+      "B": "Clonal selection.",
+      "C": "Translocation.",
+      "D": "Heterochrony.",
+      "E": "Transposition. . 2018 USABO Open Exam Page 15"
+    }
+  },
+  {
+    "question": "The following are the results of a trihybrid cross. vcv+ct+ 580 v+cvct 592 vcvct+ 45 v+cv+ct 40 Vcvct 89 v+cv+ct+ 94 vcv+ct 3 v+cvct+ 5 Which of the following correctly shows the correct chromosomal map and distance (in CM) between the three genes?",
+    "choices": {
+      "A": "v(13.2)ct(6.4)cv.",
+      "B": "cv(13.2)ct(6.4)v.",
+      "C": "ct(13.2)v(6.4)cv.",
+      "D": "ct(6.4)v(13.2)cv.",
+      "E": "v(6.4)cv(13.2)ct. 10 % Ecology 5 questions (0 needed)"
+    }
+  },
+  {
+    "question": "A microbiologist inoculates a clump of yeast cells into a large, sterile, closed flask full of growth media.  Every hour, she uses a measure of the cloudiness of the liquid (known as the optical density) to estimate the number of yeast present. Initially, the yeast in the flask doubled in number every hour. After 24 hours, however, the growth of the yeast population slowed down; after 36 hours of measurement, the population size remained steady for the next 6 hours. Which of the following is NOT true about this experiment?",
+    "choices": {
+      "A": "One possible explanation for the results is the accumulation of high levels of ethanol in the flask over time.",
+      "B": "For the first day, the yeast exhibit exponential growth.",
+      "C": "At time = 36 hours, the yeast culture has reached a state of approximately zero population growth.",
+      "D": "The plateau in population size at 36 hours is likely to be due to density-dependent regulation.",
+      "E": "A graph of the yeast population over time (using a linear scale) has a constant slope for the first day, with a steadily decreasing slope from 24-36 hrs. and zero slope after 36 hrs. 2018 USABO Open Exam Page 16"
+    }
+  },
+  {
+    "question": "Microbiologists from around the world travel to Hawaii to study the interaction of Euprymna scolopes , the Hawaiian squid, with the bacterium Vibrio fischeri .  Vibrio  bacteria live inside the light organ and obtain nutrients from the squid.  The bacteria produce light through a process known as bioluminescence, providing a mechanism for camouflage for the squid in the ocean. This is an example of:",
+    "choices": {
+      "A": "Commensalism.",
+      "B": "Parasitism.",
+      "C": "Behavioral Imprinting.",
+      "D": "Epigenetic modification.",
+      "E": "Mutualism."
+    }
+  },
+  {
+    "question": "Which of the following is FALSE regarding the cycling of water and nutrients in the ecosystems?",
+    "choices": {
+      "A": "Prokaryotic nitrogen fixation is a mode for nitrogen entrance into ecosystems.",
+      "B": "Solar energy is the force that causes water to move in a global cycle.",
+      "C": "The carbon cycle mirrors the shared processes of cellular respiration and photosynthesis.",
+      "D": "The proportion of a particular nutrient form and its cycling in that form is consistent within ecosystems.",
+      "E": "Vegetation regulates nutrient cycling."
+    }
+  },
+  {
+    "question": "A meaningful estimate of the minimum viable population for a species requires computing the effective population size. Which of the following statements is NOT true regarding factors that affect effective population size?",
+    "choices": {
+      "A": "An uneven breeding sex ratio can lower the effective population size.",
+      "B": "In an ideal population, the number of breeding individuals is constant between generations.",
+      "C": "Effective population size calculations assume that all members of a generation are born at the same time.",
+      "D": "In natural populations, the number of offspring for each individual often does not follow a Poisson distribution. This lowers the effective population size.",
+      "E": "Genetic drift can lower the effective population size."
+    }
+  },
+  {
+    "question": "A certain caterpillar has a net production efficiency of 28%, assimilation efficiency of 39%, exploitation efficiency of 50%, and a gross production efficiency of 10.92%. If there are 900 calories in the form of leaves (which this certain caterpillar loves to eat), how many calories will actually be used for production by this caterpillar?",
+    "choices": {
+      "A": "5.405 calories.",
+      "B": "90 calories.",
+      "C": "49.14 calories.",
+      "D": "10.81 calories.",
+      "E": "19.305 calories. 2018 USABO Open Exam Page 17 5 %Biosystematics 2 questions (0 needed)"
+    }
+  },
+  {
+    "question": "Which is not a difference between bacteria and archaea?",
+    "choices": {
+      "A": "Presence of introns in archaea.",
+      "B": "Presence of some histones in archaea.",
+      "C": "Extremophilic growth of archaea.",
+      "D": "Bacterial presence of peptidoglycan.",
+      "E": "All of the above are differences."
+    }
+  },
+  {
+    "question": "Which is not a similarity between land plants and green algae?",
+    "choices": {
+      "A": "Rosette complexes for cellulose synthesis.",
+      "B": "Lignified cell walls.",
+      "C": "Peroxisome enzymes.",
+      "D": "Structure of flagellated sperm.",
+      "E": "Formation of a phragmoplast."
+    }
   }
 ]
