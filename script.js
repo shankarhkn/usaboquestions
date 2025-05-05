@@ -3,6 +3,7 @@ let questions = [];
 async function fetchQuestions() {
   const questionText = document.getElementById('question-text');
   const answerText = document.getElementById('answer-text');
+  const choicesText = document.getElementById('choices-text'); // Add this to reference where choices will go
 
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
@@ -29,8 +30,18 @@ function showRandomQuestion() {
   const question = questions[randomIndex];
 
   document.getElementById('question-text').textContent = question.question;
-  document.getElementById('choices-text').textContent = question.choices;
-  document.getElementById('answer-text').textContent = question.answer;
+  
+  // Dynamically display choices as a list
+  const choicesText = document.getElementById('choices-text');
+  choicesText.innerHTML = '';  // Clear previous choices
+
+  question.choices.forEach(choice => {
+    const choiceElement = document.createElement('div');
+    choiceElement.textContent = choice;
+    choicesText.appendChild(choiceElement);
+  });
+
+  document.getElementById('answer-text').textContent = question.answer || 'Answer will be shown here';
   document.getElementById('answer-text').style.display = 'none';
 }
 
