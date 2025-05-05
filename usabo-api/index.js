@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 
 // Load questions from JSON file
-const questionsPath = path.join(__dirname, 'usabo-api/questions.json');
+const questionsPath = path.join(__dirname, 'questions.json');
 let questions = [];
 
 try {
