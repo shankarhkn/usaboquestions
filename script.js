@@ -29,6 +29,7 @@ function showRandomQuestion() {
   const question = questions[randomIndex];
 
   document.getElementById('question-text').textContent = question.question;
+  document.getElementById('choices-text').textContent = question.choices;
   document.getElementById('answer-text').textContent = question.answer;
   document.getElementById('answer-text').style.display = 'none';
 }
