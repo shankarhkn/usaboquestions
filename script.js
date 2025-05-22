@@ -50,3 +50,7 @@ document.getElementById('show-answer').addEventListener('click', () => {
 });
 
 fetchQuestions();
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
