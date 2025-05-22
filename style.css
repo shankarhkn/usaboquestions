@@ -42,3 +42,10 @@ button {
   margin-top: 1rem;
   color: green;
 }
+
+.copyright {
+    text-align: center;
+    padding-top: var(--spacing-md);
+    border-top: 0.1rem solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+}
