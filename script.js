@@ -1,4 +1,5 @@
 let questions = [];
+let currentIndex = 0;  // Track current question index
 
 async function fetchQuestions() {
   const questionText = document.getElementById('question-text');
@@ -17,7 +18,8 @@ async function fetchQuestions() {
       throw new Error('No questions available');
     }
 
-    showRandomQuestion();
+    currentIndex = 0;  // Start from first question
+    showQuestion(currentIndex);
   } catch (error) {
     console.error(error);
     questionText.textContent = 'Failed to load questions.';
@@ -25,18 +27,22 @@ async function fetchQuestions() {
   }
 }
 
-function showRandomQuestion() {
+function showQuestion(index) {
   const questionText = document.getElementById('question-text');
   const choicesText = document.getElementById('choices-text');
   const answerText = document.getElementById('answer-text');
 
   if (!questionText || !choicesText || !answerText) {
-    console.error("❌ Missing one or more required HTML elements (check your IDs)");
+    console.error("Missing one or more required HTML elements");
     return;
   }
 
-  const randomIndex = Math.floor(Math.random() * questions.length);
-  const question = questions[randomIndex];
+  if (index < 0 || index >= questions.length) {
+    console.warn("Question index out of bounds");
+    return;
+  }
+
+  const question = questions[index];
 
   questionText.textContent = question.question;
   choicesText.innerHTML = '';
@@ -55,6 +61,20 @@ document.getElementById('show-answer').addEventListener('click', () => {
   const answerText = document.getElementById('answer-text');
   if (answerText) {
     answerText.style.display = 'block';
+  }
+});
+
+document.getElementById('prev').addEventListener('click', () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    showQuestion(currentIndex);
+  }
+});
+
+document.getElementById('next').addEventListener('click', () => {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    showQuestion(currentIndex);
   }
 });
 
