@@ -405,5 +405,47 @@
     "E. Methionine and proline."
   ],
   "answer": "B"
+},
+{
+  "question_number": "31",
+  "set": "2018 USABO Open",
+  "category": "Ethology",
+  "question": "Some herding animals develop matriarchal leadership systems led by the oldest female. Which of the following hypothetical reasons could NOT be a proximate cause of this social behavior?",
+  "choices": [
+    "A. Older individuals are more able to distinguish between friendly and hostile family groups.",
+    "B. Older individuals confer onto the herd increased chances of survival and reproduction.",
+    "C. Older individuals have more time to develop ties with other herd members.",
+    "D. Older individuals hold more knowledge of safe watering grounds and territorial boundaries.",
+    "E. Older individuals have enhanced social and emotional intelligence."
+  ],
+  "answer": "B"
+},
+{
+  "question_number": "32",
+  "set": "2018 USABO Open",
+  "category": "Ethology",
+  "question": "A female guppy has a choice of three mates: (1) an unpaired, dull-colored guppy; (2) an unpaired, brightly-colored guppy; (3) a paired, dull-colored guppy. Which of the mates would the guppy prefer?",
+  "choices": [
+    "A. Mate 1, because its dull coloration confers on it a selective advantage against predation.",
+    "B. Mate 2, because its bright coloration indicates robust health and ready access to nutrition.",
+    "C. Mate 2, because its bright coloration reflects increased genetic variation.",
+    "D. Mate 3, because guppies prefer to engage in polygynous behavior.",
+    "E. Mate 3, because its current courtship will induce mate choice copying."
+  ],
+  "answer": "E"
+},
+{
+  "question_number": "33",
+  "set": "2018 USABO Open",
+  "category": "Ethology",
+  "question": "Dr. T is a famous lecturer on ethology, and his favorite topic happens to be agonistic behavior. Which of the following are examples of agonistic behavior?        I. A female guppy picking a mate based on the males's external features.   II. Two grey kangaroos boxing with each other to decide who gets the mate.   III. Two male stalk-eyed flies comparing eye-stalk lengths for rights to a mate.     IV. Male grey catbirds fluffing their feathers when their territory is threatened by another male."  ,
+  "choices": [
+    "A. I, II, IV.",
+    "B. I, III, V.",
+    "C. II, III.",
+    "D. II, III, IV.",
+    "E. III, IV."
+  ],
+  "answer": "D"
 }
 ]
