@@ -22,8 +22,8 @@ async function fetchQuestions() {
       throw new Error('No questions available');
     }
 
-    shuffle(questions);        // Shuffle questions randomly
-    currentIndex = 0;          // Reset index to first question
+    shuffle(questions);
+    currentIndex = 0;
     showQuestion(currentIndex);
   } catch (error) {
     console.error(error);
@@ -35,10 +35,10 @@ async function fetchQuestions() {
 function showQuestion(index) {
   const question = questions[index];
 
-  document.getElementById('question-number').textContent = 
+  document.getElementById('question-number').textContent =
     `Question ${question.question_number || (index + 1)}`;
 
-  document.getElementById('question-set').textContent = 
+  document.getElementById('question-set').textContent =
     question.set ? `Set: ${question.set}` : '';
 
   document.getElementById('question-text').textContent = question.question;
@@ -51,8 +51,13 @@ function showQuestion(index) {
     choicesText.appendChild(choiceElement);
   });
 
+  // Prepare answer text as "Answer: B. Myosin." for example
+  const answerLetter = question.answer;
+  const matchingChoice = question.choices.find(c => c.trim().startsWith(answerLetter + '.')) || '';
+  const answerFullText = matchingChoice ? matchingChoice : `Answer: ${answerLetter}`;
+
   const answerElem = document.getElementById('answer-text');
-  answerElem.textContent = question.answer_text || '';
+  answerElem.textContent = answerFullText;
   answerElem.style.display = 'none';
 }
 
@@ -73,5 +78,4 @@ document.getElementById('next').addEventListener('click', () => {
   showQuestion(currentIndex);
 });
 
-// Initial fetch of questions on page load
 fetchQuestions();
