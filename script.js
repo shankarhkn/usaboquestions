@@ -1,10 +1,7 @@
 let questions = [];
+let currentQuestionIndex = 0; // Keep track of the current question
 
 async function fetchQuestions() {
-  const questionText = document.getElementById('question-text');
-  const answerText = document.getElementById('answer-text');
-  const choicesText = document.getElementById('choices-text'); // Add this to reference where choices will go
-
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
     if (!response.ok) {
@@ -17,36 +14,63 @@ async function fetchQuestions() {
       throw new Error('No questions available');
     }
 
-    showRandomQuestion();
+    showQuestion(currentQuestionIndex); // Show the first question
   } catch (error) {
     console.error(error);
-    questionText.textContent = 'Failed to load questions.';
-    answerText.style.display = 'none';
+    document.getElementById('question-text').textContent = 'Failed to load questions.';
+    document.getElementById('answer-text').style.display = 'none';
+    document.getElementById('choices-text').innerHTML = ''; // Clear choices
   }
 }
 
-function showRandomQuestion() {
-  const randomIndex = Math.floor(Math.random() * questions.length);
-  const question = questions[randomIndex];
+function showQuestion(index) {
+  if (index < 0 || index >= questions.length) {
+    console.warn('Question index out of bounds:', index);
+    return; // Don't try to display an invalid question
+  }
+
+  const question = questions[index];
+
+  if (!question) {
+    console.error('Error: No question found at index', index);
+    return;
+  }
 
   document.getElementById('question-text').textContent = question.question;
-  
-  // Dynamically display choices as a list
+
   const choicesText = document.getElementById('choices-text');
-  choicesText.innerHTML = '';  // Clear previous choices
+  choicesText.innerHTML = '';
 
-  question.choices.forEach(choice => {
-    const choiceElement = document.createElement('div');
-    choiceElement.textContent = choice;
-    choicesText.appendChild(choiceElement);
-  });
+  if (question.choices && Array.isArray(question.choices)) {
+    question.choices.forEach(choice => {
+      const choiceElement = document.createElement('div');
+      choiceElement.textContent = choice;
+      choicesText.appendChild(choiceElement);
+    });
+  } else {
+    choicesText.textContent = 'No choices provided.';
+  }
 
-  document.getElementById('answer').textContent = question.answer || 'Answer will be shown here';
-  document.getElementById('answer').style.display = 'none';
+  document.getElementById('answer-text').textContent = question.answer || 'Answer will be shown here';
+  document.getElementById('answer-text').style.display = 'none'; // Initially hidden
 }
 
 document.getElementById('show-answer').addEventListener('click', () => {
-  document.getElementById('answer').style.display = 'block';
+  document.getElementById('answer-text').style.display = 'block';
+});
+
+document.getElementById('next').addEventListener('click', () => {
+  if (currentQuestionIndex < questions.length - 1) {
+    currentQuestionIndex++;
+    showQuestion(currentQuestionIndex);
+  }
+});
+
+document.getElementById('prev').addEventListener('click', () => {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    showQuestion(currentQuestionIndex);
+  }
 });
 
 fetchQuestions();
