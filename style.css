@@ -1,8 +1,17 @@
 body {
-  font-family: sans-serif;
+  font-family: 'Rubik', sans-serif;
   padding: 2rem;
   background-color: #f4f4f4;
 }
+
+
+.rubik-<rubik> {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <400>;
+  font-style: normal;
+}
+
 
 #app {
   max-width: 600px;
@@ -33,4 +42,11 @@ button {
 #answer-text {
   margin-top: 1rem;
   color: green;
+}
+
+.copyright {
+    text-align: center;
+    padding-top: var(--spacing-md);
+    border-top: 0.1rem solid rgba(255, 255, 255, 0.1);
+    color: rgba(0, 0, 0, 0.7);
 }
