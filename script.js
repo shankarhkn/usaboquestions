@@ -40,6 +40,10 @@ function showQuestion(index) {
 
   document.getElementById('question-set').textContent =
     question.set ? `Set: ${question.set}` : '';
+  
+  
+  document.getElementById('question-category').textContent =
+    question.category ? `Category: ${question.category}` : '';  
 
   document.getElementById('question-text').textContent = question.question;
 
