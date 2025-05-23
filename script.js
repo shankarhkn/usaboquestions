@@ -2,13 +2,14 @@ let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;
 
+// Shuffles the question that comes
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
+// Calls the questions
 async function fetchQuestions() {
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
@@ -25,7 +26,7 @@ async function fetchQuestions() {
     document.getElementById('answer-text').style.display = 'none';
   }
 }
-
+// Allows user to filter from category and sets (ex. Cell Biology, or 2018 USABO Open)
 function populateFilterOptions() {
   const categorySelect = document.getElementById('category-select');
   const setSelect = document.getElementById('set-select');
