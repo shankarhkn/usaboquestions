@@ -215,7 +215,7 @@
     "question_number": "17",
     "set": "2018 USABO Open",
     "category": "Plant Anatomy and Physiology",
-    "question": "Nitrogen fixation has the following net chemical reaction:  $N_{2}+8e^{-}+8H^{+}+16~ATP\\rightarrow2NH_{3}+H_{2}+16ADP+16P_{i}$   If 1 kg of ATP (molar mass $507.2~g/mol)$ and 3 g of nitrogen gas (molar mass $28~g/mol)$ are supplied  as input, what is the maximum yield of ammonia (molecular mass $17~g/mol)$?",
+    "question": "Nitrogen fixation has the following net chemical reaction:  N2 + 8e- + 8H+ + 16ATP -> 2NH3 + H2 + 16ADP + 16P   If 1 kg of ATP (molar mass 507.2 g/mol) and 3g of nitrogen gas (molar mass 28 g/mol) are supplied  as input, what is the maximum yield of ammonia (molecular mass 17 g/mol)?",
     "choices": [
       "A. 1.8 g.",
       "B. 2.5 g.",
@@ -223,7 +223,7 @@
       "D. 4.2 g.",
       "E. 4.9 g."
     ],
-    "answer": "A"
+    "answer": "C"
   },
   {
     "question_number": "18",
