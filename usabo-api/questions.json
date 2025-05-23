@@ -2,18 +2,26 @@
   {
     "question_number": "1",
     "question": "In the extracellular matrix of an animal cell, you would like to test the binding partner of integrins in vitro. Integrins would most likely require firm attachment to which of the above option?",
-    "choices": [],
-    "answer": "A",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. Actin.",
+      "B. Myosin.",
+      "C. Dynein.",
+      "D. Kinesin.",
+      "E. Cyclin."
+    ],
+    "answer": "A"
   },
   {
     "question_number": "2",
     "question": "You are working with Dr. Lee at University of Wisconsin-Madison to investigate cytokinesis in a newly discovered marine worm. You generated antibodies to conserved proteins involved in cell division in other organism to look for proteins that localize to important structures during cell division. What molecular motor protein should you look for in the contractile ring?",
-    "choices": [],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. Actin.",
+      "B. Myosin.",
+      "C. Dynein.",
+      "D. Kinesin.",
+      "E. Cyclin."
+    ],
+    "answer": "B"
   },
   {
     "question_number": "3",
@@ -25,17 +33,19 @@
       "D. 1:10.",
       "E. 1:100."
     ],
-    "answer": "E",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "E"
   },
   {
     "question_number": "4",
     "question": "Select the answer choice that correctly describes which chemical species are oxidized, reduced, and phosphorylated in the process of oxidative phosphorylation.",
-    "choices": [],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. Oxidized: $H_{2}O$ only, Reduced: $NAD^{+}$ and FAD, Phosphorylated: ADP",
+      "B. Oxidized: NADH and $FADH_{2}$, Reduced: $O_{2}$, Phosphorylated: ADP",
+      "C. Oxidized: NADHand $FADH_{2}$, Reduced: $CO_{2}$, Phosphorylated: ATP",
+      "D. Oxidized: $H_{2}O$ only, Reduced: $NAD^{+}$ only, Phosphorylated: ADP",
+      "E. Oxidized: NADPH only, Reduced: FAD only, Phosphorylated: ATP"
+    ],
+    "answer": "B"
   },
   {
     "question_number": "5",
@@ -47,9 +57,7 @@
       "D. Watson and Crick - discovery of the double-helix structure of DNA.",
       "E. Meselson and Stahl - discovery of the semi-conservative replication of DNA."
     ],
-    "answer": "A",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "A"
   },
   {
     "question_number": "6",
@@ -61,41 +69,43 @@
       "D. LMQKPMDSLPDY.",
       "E. LKMELAKMILLA."
     ],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "B"
   },
   {
     "question_number": "7",
     "question": "Ubiquinone proteins have a heme group to facilitate electron transport.",
-    "choices": [],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "B"
   },
   {
     "question_number": "8",
     "question": "FADH2 adds its electrons to complex III while NADH adds its electrons in complex I.",
-    "choices": [],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "B"
   },
   {
     "question_number": "9",
     "question": "Cytochrome a is more electronegative than cytochrome b.",
-    "choices": [],
-    "answer": "A",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A"
   },
   {
     "question_number": "10",
     "question": "Cytochrome c is more electronegative than cytochrome b.",
-    "choices": [],
-    "answer": "A",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A. True",
+      "B. False"
+    ],
+    "answer": "A"
   },
   {
     "question_number": "11",
@@ -107,9 +117,7 @@
       "D. I, II, IV.",
       "E. I, III, V."
     ],
-    "answer": "E",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "E"
   },
   {
     "question_number": "12",
@@ -121,9 +129,7 @@
       "D. Group D.",
       "E. They will be equally as tall."
     ],
-    "answer": "A",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "A"
   },
   {
     "question_number": "13",
@@ -135,9 +141,7 @@
       "D. A corn plant with a nonsense mutation at the beginning of the tb1 gene would be expected to exhibit increased branching.",
       "E. A missense mutation in tb1 that led to a nonfunctional protein product could be considered a loss-of- function mutation."
     ],
-    "answer": "C",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "C"
   },
   {
     "question_number": "14",
@@ -149,9 +153,7 @@
       "D. The product of gene X binds to the $3^{\\prime}$ untranslated region of gene A, B, and C mRNAs to regulate stability.",
       "E. The product of gene X binds to and inhibits a repressor of gene A, B, and C transcription."
     ],
-    "answer": "C",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "C"
   },
   {
     "question_number": "15",
@@ -163,9 +165,7 @@
       "D. Pollen grains.",
       "E. Flower buds."
     ],
-    "answer": "D",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "D"
   },
   {
     "question_number": "16",
@@ -177,9 +177,7 @@
       "D. The covalent addition of methyl groups to plant DNA is reversible in the cell.",
       "E. More than one of the above does NOT correctly describe the impacts of these modifications."
     ],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "B"
   },
   {
     "question_number": "17",
@@ -191,9 +189,7 @@
       "D. 4.2 g.",
       "E. 4.9 g."
     ],
-    "answer": "A",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "A"
   },
   {
     "question_number": "18",
@@ -205,9 +201,7 @@
       "D. 3, 5, 4, 2, 1.",
       "E. 4, 1, 5, 2, 3."
     ],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "B"
   },
   {
     "question_number": "19",
@@ -219,17 +213,18 @@
       "D. Oranges.",
       "E. Tomatoes."
     ],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "B"
   },
   {
     "question_number": "20",
     "question": "Consider the following figure that describes the structure of an antibody.    Select the letter for the area where an antibody bound to a pathogen in the bloodstream would be  recognized by a hunting macrophage.",
-    "choices": [],
-    "answer": "D",
-    "answer_text": null,
-    "matched_highlight": null
+    "choices": [
+      "A.",
+      "B.",
+      "C.",
+      "D."
+    ],
+    "answer": "D"
   },
   {
     "question_number": "21",
@@ -241,9 +236,7 @@
       "D. When the sea urchin egg is prematurely exposed to IP3 and DAG, this triggers the release of calcium from  the smooth endoplasmic reticulum and triggers the cortical reaction.",
       "E. When the sea urchin sperm exposed to egg jelly interacts with sea urchin egg from same species pretreated  with purified bindin, a protein responsible for the specific adhesion of the sperm acrosomal process in sea  urchin."
     ],
-    "answer": "E",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "E"
   },
   {
     "question_number": "22",
@@ -255,9 +248,7 @@
       "D. Blastocysts.",
       "E. Fertilized egg (zygote)."
     ],
-    "answer": "D",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "D"
   },
   {
     "question_number": "23",
@@ -269,8 +260,6 @@
       "D. Zonule.",
       "E. Eustachian tube."
     ],
-    "answer": "B",
-    "answer_text": null,
-    "matched_highlight": null
+    "answer": "B"
   }
 ]
