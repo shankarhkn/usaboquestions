@@ -257,7 +257,7 @@
     "question_number": "20",
     "set": "2018 USABO Open",
     "category": "Animal Anatomy and Physiology",
-    "question": "Consider the following figure that describes the structure of an antibody. <br><img src='https://i.imgur.com/ySFUCan.png' alt='diagram' style='max-width: 100%; height: auto;'><br>    Select the letter for the area where an antibody bound to a pathogen in the bloodstream would be  recognized by a hunting macrophage.",
+    "question": "Consider the following figure that describes the structure of an antibody. <br><img src='https://i.imgur.com/ySFUCan.png' alt='diagram' style='max-width: 75%; height: auto;'><br>    Select the letter for the area where an antibody bound to a pathogen in the bloodstream would be  recognized by a hunting macrophage.",
     "choices": [
       "A.",
       "B.",
