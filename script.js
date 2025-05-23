@@ -45,7 +45,7 @@ function showQuestion(index) {
   document.getElementById('question-category').textContent =
     question.category ? `Category: ${question.category}` : '';  
 
-  document.getElementById('question-text').textContent = question.question;
+  document.getElementById('question-text').innerHTML = question.question;
 
   const choicesText = document.getElementById('choices-text');
   choicesText.innerHTML = '';
