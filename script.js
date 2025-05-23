@@ -3,7 +3,7 @@ let questions = [];
 async function fetchQuestions() {
   const questionText = document.getElementById('question-text');
   const answerText = document.getElementById('answer-text');
-  const choicesText = document.getElementById('choices-text'); // Add this to reference where choices will go
+  const choicesText = document.getElementById('choices-text');
 
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
@@ -17,9 +17,14 @@ async function fetchQuestions() {
       throw new Error('No questions available');
     }
 
-    showRandomQuestion();
+    try {
+      showRandomQuestion();
+    } catch (err) {
+      console.error('Error displaying question:', err);
+      questionText.textContent = 'Error displaying question.';
+    }
   } catch (error) {
-    console.error(error);
+    console.error('Fetch error:', error);
     questionText.textContent = 'Failed to load questions.';
     answerText.style.display = 'none';
   }
@@ -29,9 +34,13 @@ function showRandomQuestion() {
   const randomIndex = Math.floor(Math.random() * questions.length);
   const question = questions[randomIndex];
 
+  // Safety checks
+  if (!question || typeof question.question !== 'string' || !Array.isArray(question.choices)) {
+    throw new Error('Invalid question structure');
+  }
+
   document.getElementById('question-text').textContent = question.question;
-  
-  // Dynamically display choices as a list
+
   const choicesText = document.getElementById('choices-text');
   choicesText.innerHTML = '';  // Clear previous choices
 
@@ -41,8 +50,14 @@ function showRandomQuestion() {
     choicesText.appendChild(choiceElement);
   });
 
-  document.getElementById('answer').textContent = question.answer || 'Answer will be shown here';
-  document.getElementById('answer').style.display = 'none';
+  // If "answer" exists, display it. Otherwise, hide.
+  const answer = document.getElementById('answer');
+  if (question.answer || question.answer_text) {
+    answer.textContent = question.answer_text || question.answer || 'Answer not available';
+  } else {
+    answer.textContent = 'Answer not available';
+  }
+  answer.style.display = 'none';
 }
 
 document.getElementById('show-answer').addEventListener('click', () => {
