@@ -16,13 +16,13 @@ async function fetchQuestions() {
     if (!response.ok) throw new Error(`Error fetching questions: ${response.status}`);
 
     questions = await response.json();
-    if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions available');
+    if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions are available');
 
     populateFilterOptions();
     applyFilters(); // load default view
   } catch (error) {
     console.error(error);
-    document.getElementById('question-text').textContent = 'Failed to load questions.';
+    document.getElementById('question-text').textContent = 'Failed to load questions';
     document.getElementById('answer-text').style.display = 'none';
   }
 }
@@ -59,7 +59,7 @@ function applyFilters() {
   });
 
   if (filteredQuestions.length === 0) {
-    document.getElementById('question-text').textContent = 'No questions match your filter.';
+    document.getElementById('question-text').textContent = 'No questions match the filter';
     document.getElementById('choices-text').innerHTML = '';
     document.getElementById('question-set').textContent = '';
     document.getElementById('question-category').textContent = '';
