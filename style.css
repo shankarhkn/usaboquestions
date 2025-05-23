@@ -75,6 +75,19 @@ h3 {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+#question-set {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.4em;
+  color: #000000;
+}
+
+#question-category {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.4em;
+  color: #000000;
+}
 /* Question Number */
 #question-number {
   font-weight: 600;
