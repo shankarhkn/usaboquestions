@@ -1,10 +1,15 @@
 let questions = [];
 let currentIndex = 0;
 
-async function fetchQuestions() {
-  const questionText = document.getElementById('question-text');
-  const answerText = document.getElementById('answer-text');
+// Fisher-Yates shuffle
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
+async function fetchQuestions() {
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
     if (!response.ok) {
@@ -17,40 +22,28 @@ async function fetchQuestions() {
       throw new Error('No questions available');
     }
 
-    currentIndex = 0;  // Start at first question
+    shuffle(questions);        // Shuffle questions randomly
+    currentIndex = 0;          // Reset index to first question
     showQuestion(currentIndex);
   } catch (error) {
     console.error(error);
-    questionText.textContent = 'Failed to load questions.';
-    answerText.style.display = 'none';
+    document.getElementById('question-text').textContent = 'Failed to load questions.';
+    document.getElementById('answer-text').style.display = 'none';
   }
 }
 
 function showQuestion(index) {
-  const questionNumber = document.getElementById('question-number');
-  const questionText = document.getElementById('question-text');
-  const choicesText = document.getElementById('choices-text');
-  const answerText = document.getElementById('answer-text');
-
-  if (!questionNumber || !questionText || !choicesText || !answerText) {
-    console.error("Missing one or more required HTML elements");
-    return;
-  }
-
-  if (index < 0 || index >= questions.length) {
-    console.warn("Question index out of bounds");
-    return;
-  }
-
   const question = questions[index];
 
-  // Show actual question_number field if it exists, else fallback to index+1
-  questionNumber.textContent = question.question_number
-    ? `Question ${question.question_number}`
-    : `Question ${index + 1}`;
+  document.getElementById('question-number').textContent = 
+    `Question ${question.question_number || (index + 1)}`;
 
-  questionText.textContent = question.question;
+  document.getElementById('question-set').textContent = 
+    question.set ? `Set: ${question.set}` : '';
 
+  document.getElementById('question-text').textContent = question.question;
+
+  const choicesText = document.getElementById('choices-text');
   choicesText.innerHTML = '';
   question.choices.forEach(choice => {
     const choiceElement = document.createElement('div');
@@ -58,32 +51,27 @@ function showQuestion(index) {
     choicesText.appendChild(choiceElement);
   });
 
-  answerText.textContent = question.answer_text || question.answer || 'Answer not available';
-  answerText.style.display = 'none';
+  const answerElem = document.getElementById('answer-text');
+  answerElem.textContent = question.answer_text || '';
+  answerElem.style.display = 'none';
 }
 
-// Show answer button functionality
 document.getElementById('show-answer').addEventListener('click', () => {
-  const answerText = document.getElementById('answer-text');
-  if (answerText) {
-    answerText.style.display = 'block';
-  }
+  const answerElem = document.getElementById('answer-text');
+  answerElem.style.display = answerElem.style.display === 'none' ? 'block' : 'none';
 });
 
-// Previous button functionality
 document.getElementById('prev').addEventListener('click', () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    showQuestion(currentIndex);
-  }
+  if (questions.length === 0) return;
+  currentIndex = (currentIndex - 1 + questions.length) % questions.length;
+  showQuestion(currentIndex);
 });
 
-// Next button functionality
 document.getElementById('next').addEventListener('click', () => {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    showQuestion(currentIndex);
-  }
+  if (questions.length === 0) return;
+  currentIndex = (currentIndex + 1) % questions.length;
+  showQuestion(currentIndex);
 });
 
+// Initial fetch of questions on page load
 fetchQuestions();
