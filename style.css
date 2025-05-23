@@ -39,6 +39,7 @@ h3 {
 /* Question Card */
 #question-box {
   background: white;
+  width: 75%
   padding: 24px 32px;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
