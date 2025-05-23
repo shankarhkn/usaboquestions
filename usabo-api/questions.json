@@ -47,11 +47,11 @@
     "category": "Cell Biology",
     "question": "Select the answer choice that correctly describes which chemical species are oxidized, reduced, and phosphorylated in the process of oxidative phosphorylation.",
     "choices": [
-      "A. Oxidized: $H_{2}O$ only, Reduced: $NAD^{+}$ and FAD, Phosphorylated: ADP",
-      "B. Oxidized: NADH and $FADH_{2}$, Reduced: $O_{2}$, Phosphorylated: ADP",
-      "C. Oxidized: NADHand $FADH_{2}$, Reduced: $CO_{2}$, Phosphorylated: ATP",
-      "D. Oxidized: $H_{2}O$ only, Reduced: $NAD^{+}$ only, Phosphorylated: ADP",
-      "E. Oxidized: NADPH only, Reduced: FAD only, Phosphorylated: ATP"
+      "A. Oxidized: H2O Only, Reduced: NAD+ and FAD, Phosphorylated: ADP",
+      "B. Oxidized: NADH and FADH2, Reduced: O2, Phosphorylated: ADP",
+      "C. Oxidized: NADH and FADH2, Reduced: CO2, Phosphorylated: ATP",
+      "D. Oxidized: H2O Only, Reduced: NAD+ Only, Phosphorylated: ADP",
+      "E. Oxidized: NADPH Only, Reduced: FAD Only, Phosphorylated: ATP"
     ],
     "answer": "B"
   },
