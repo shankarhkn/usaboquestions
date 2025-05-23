@@ -1,16 +1,17 @@
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Rubik', sans-serif;
   padding: 2rem;
   background-color: #f4f4f4;
 }
 
 
-.outfit-<uniquifier> {
-  font-family: "Outfit", sans-serif;
+.rubik-<rubik> {
+  font-family: "Rubik", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
+  font-weight: <400>;
   font-style: normal;
 }
+
 
 #app {
   max-width: 600px;
