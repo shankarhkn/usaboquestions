@@ -1,6 +1,7 @@
 [
   {
     "question_number": "1",
+    "set": "2018 USABO Open",
     "question": "In the extracellular matrix of an animal cell, you would like to test the binding partner of integrins in vitro. Integrins would most likely require firm attachment to which of the above option?",
     "choices": [
       "A. Actin.",
@@ -13,6 +14,7 @@
   },
   {
     "question_number": "2",
+    "set": "2018 USABO Open",
     "question": "You are working with Dr. Lee at University of Wisconsin-Madison to investigate cytokinesis in a newly discovered marine worm. You generated antibodies to conserved proteins involved in cell division in other organism to look for proteins that localize to important structures during cell division. What molecular motor protein should you look for in the contractile ring?",
     "choices": [
       "A. Actin.",
@@ -25,6 +27,7 @@
   },
   {
     "question_number": "3",
+    "set": "2018 USABO Open",
     "question": "An unnamed acid has a pKa value of 4.76. Which of the following is closest to the ratio of the concentration of its protonated to deprotonated forms in a pH environment of 6.8?",
     "choices": [
       "A. 100: 1.",
@@ -37,6 +40,7 @@
   },
   {
     "question_number": "4",
+    "set": "2018 USABO Open",
     "question": "Select the answer choice that correctly describes which chemical species are oxidized, reduced, and phosphorylated in the process of oxidative phosphorylation.",
     "choices": [
       "A. Oxidized: $H_{2}O$ only, Reduced: $NAD^{+}$ and FAD, Phosphorylated: ADP",
@@ -49,6 +53,7 @@
   },
   {
     "question_number": "5",
+    "set": "2018 USABO Open",
     "question": "Which scientist(s) is incorrectly matched with his/her/their discoveries?",
     "choices": [
       "A. Frederick Griffith - discovery of transformation through bacteriophages.",
@@ -61,6 +66,7 @@
   },
   {
     "question_number": "6",
+    "set": "2018 USABO Open",
     "question": "You discover a transmembrane protein ALPHA that, like most transmembrane proteins, exhibits a transmembrane domain composed of alpha helices. You next discover that ALPHA serves as a channel. What is a likely amino acid sequence for some portion of the transmembrane domain? (See chart below for one-letter abbreviations).",
     "choices": [
       "A. ALQQMMDSILDY.",
@@ -73,6 +79,7 @@
   },
   {
     "question_number": "7",
+    "set": "2018 USABO Open",
     "question": "Ubiquinone proteins have a heme group to facilitate electron transport.",
     "choices": [
       "A. True",
@@ -82,6 +89,7 @@
   },
   {
     "question_number": "8",
+    "set": "2018 USABO Open",
     "question": "FADH2 adds its electrons to complex III while NADH adds its electrons in complex I.",
     "choices": [
       "A. True",
@@ -91,6 +99,7 @@
   },
   {
     "question_number": "9",
+    "set": "2018 USABO Open",
     "question": "Cytochrome a is more electronegative than cytochrome b.",
     "choices": [
       "A. True",
@@ -100,6 +109,7 @@
   },
   {
     "question_number": "10",
+    "set": "2018 USABO Open",
     "question": "Cytochrome c is more electronegative than cytochrome b.",
     "choices": [
       "A. True",
@@ -109,6 +119,7 @@
   },
   {
     "question_number": "11",
+    "set": "2018 USABO Open",
     "question": "Observe the seedlings growing below which have a loss of function mutation in the ethylene receptor. Source: University of Queensland, Australia.  Which of the following statement(s) is (are) TRUE regarding this mutant's growth response NOT  being related to a triple response? Select one response A, B, C, D, or E. I. This mutant will not respond to the exposure of ethylene under any circumstances. II. This mutant has a constitutive activity where it leads to the activation of kinase, which is important for the triple response. III. This mutant has a constitutive activity where it leads to the inactivation of kinase, which is important for the triple response. IV. If this mutant is treated with aminoethoxyvinylglycine (ethylene synthesis inhibitor), this mutant will be able to undergo triple response. V. If this mutant is treated with aminoethoxyvinylglycine (ethylene synthesis inhibitor), this mutant will not  respond to the treatment and not undergo triple response.",
     "choices": [
       "A. I.",
@@ -121,6 +132,7 @@
   },
   {
     "question_number": "12",
+    "set": "2018 USABO Open",
     "question": "Three groups of Arabidopsis seedlings are subjected to a short burst of ethylene. Group A is  comprised of ethylene-insensitive (ein) mutants. Group B consists of constitutive triple-response (ctr)  mutants. Group C is also subjected to high levels of abscisic acid. Group D serves as a control (wild  type) and receives the ethylene treatment. Which group is likely to be the tallest after a few days of  the treatment?",
     "choices": [
       "A. Group A.",
@@ -133,6 +145,7 @@
   },
   {
     "question_number": "13",
+    "set": "2018 USABO Open",
     "question": "Today's corn plants evolved from an ancestral plant known as teosinte. One genetic change that  occurred in modern corn is a mutation in the regulatory DNA associated with the gene tb1. As a  result of this change, teosinte has low levels of tb1 expression, and corn has high levels of tb1  expression. High levels of tb1 expression in plant axillary buds inhibit the growth of branches,  leading to tall, unbranched corn plants in farmer's fields. In contrast, teosinte is highly branched. The  tb1 gene is also required for the development of ears of corn on the plant;  both modern corn and  teosinte produce ears of corn that carry the seeds of the plant. Based on this information, which of the following statements is NOT true?",
     "choices": [
       "A. The replacement of the tb1 protein-coding sequence of corn with the tb1 protein-coding sequence of teosinte would be expected to result in a plant that is able to produce ears of corn.",
@@ -145,6 +158,7 @@
   },
   {
     "question_number": "14",
+    "set": "2018 USABO Open",
     "question": "A plant geneticist uses an RNA microarray to assess gene expression in two populations of cabbage  plants: a wild-type cabbage line, and a line carrying a deletion in gene \"X\". The geneticist calculates  the relative signal for each gene expressed by the cabbages, relative to a reference gene that is known  to be unaffected by gene X. In the gene X mutant line, the relative levels of expression of genes A, B,  and C are drastically reduced (as compared to their relative expression level in the wild-type  cabbages). Which of the following potential explanations for the effect of gene X is NOT directly consistent with  the microarray data?",
     "choices": [
       "A. Gene X produces a helix-turn-helix transcription factor that binds to the promoters of genes A, B, and C.",
@@ -157,6 +171,7 @@
   },
   {
     "question_number": "15",
+    "set": "2018 USABO Open",
     "question": "Tissue culture can be used to generate whole plants from single cells in the laboratory. In the  \"doubled haploid\" technique, a haploid cell is obtained from a plant and induced to double in  chromosome number without cell division. A plant breeder would like to try the method on a diploid  rose variety. Which of the following would be a suitable source of haploid cells to begin this  procedure?",
     "choices": [
       "A. Endosperm.",
@@ -169,6 +184,7 @@
   },
   {
     "question_number": "16",
+    "set": "2018 USABO Open",
     "question": "The Arabidopsis plant utilizes a range of posttranslational modifications to the genome as a means of  regulating gene expression. These include activation of genes by histone acetylation, and  methylation of DNA. Which of the following statements does NOT correctly describe the mechanism  or impacts of these modifications in the plant cell?",
     "choices": [
       "A. Addition of DNA and histone modifications in the cell is performed by protein-based enzymes.",
@@ -181,6 +197,7 @@
   },
   {
     "question_number": "17",
+    "set": "2018 USABO Open",
     "question": "Nitrogen fixation has the following net chemical reaction:  $N_{2}+8e^{-}+8H^{+}+16~ATP\\rightarrow2NH_{3}+H_{2}+16ADP+16P_{i}$   If 1 kg of ATP (molar mass $507.2~g/mol)$ and 3 g of nitrogen gas (molar mass $28~g/mol)$ are supplied  as input, what is the maximum yield of ammonia (molecular mass $17~g/mol)$?",
     "choices": [
       "A. 1.8 g.",
@@ -193,6 +210,7 @@
   },
   {
     "question_number": "18",
+    "set": "2018 USABO Open",
     "question": "Order the following elements of a tree trunk from the center of the trunk outward:  1. Sapwood 2. Secondary phloem 3. Vascular cambium 4. Heartwood 5. Periderm",
     "choices": [
       "A. 1, 2, 4, 5, 3.",
@@ -205,6 +223,7 @@
   },
   {
     "question_number": "19",
+    "set": "2018 USABO Open",
     "question": "A woman experiencing rickets is diagnosed with a deficiency of a particular vitamin and given a diet guideline. Which of the following food is most likely to help with the condition?",
     "choices": [
       "A. Carrot.",
@@ -217,6 +236,7 @@
   },
   {
     "question_number": "20",
+    "set": "2018 USABO Open",
     "question": "Consider the following figure that describes the structure of an antibody.    Select the letter for the area where an antibody bound to a pathogen in the bloodstream would be  recognized by a hunting macrophage.",
     "choices": [
       "A.",
@@ -228,6 +248,7 @@
   },
   {
     "question_number": "21",
+    "set": "2018 USABO Open",
     "question": "Questions 21 & 22. As a winter intern at an animal development lab at University of Wisconsin-Madison,  you would like to investigate how different treatments may alter the outcomes of fertilization in sea  urchins. 21. You would like to test different conditions in which fertilization is blocked in sea urchin eggs. All of  the following conditions would result in unsuccessful fertilizations EXCEPT FOR",
     "choices": [
       "A. When the sea urchin sperm not exposed to egg jelly interacts with sea urchin egg stripped of its egg jelly.",
@@ -240,6 +261,7 @@
   },
   {
     "question_number": "22",
+    "set": "2018 USABO Open",
     "question": "As a side project, you would also like to work on fertilization in mouse embryos using CRISPR/Cas9  technology by conducting in vitro fertilization (IVF). At which phase of the embryo should you  return the embryo to the mouse uterus?",
     "choices": [
       "A. 2-cell stage.",
@@ -252,6 +274,7 @@
   },
   {
     "question_number": "23",
+    "set": "2018 USABO Open",
     "question": "By blindfolding fish, Brian Partridge and Tony Pitcher demonstrated in 1979 that schooling behavior  is dependent not on vision, but instead on the proper functioning of a different organ: the lateral line. Given this knowledge, which of the following structures, when damaged, would lead to a loss in the  ability for fish to school?",
     "choices": [
       "A. Fovea.",
