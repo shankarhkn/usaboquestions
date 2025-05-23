@@ -41,12 +41,12 @@ function showRandomQuestion() {
     choicesText.appendChild(choiceElement);
   });
 
-  document.getElementById('answer-text').textContent = question.answer || 'Answer will be shown here';
-  document.getElementById('answer-text').style.display = 'none';
+  document.getElementById('answer').textContent = question.answer || 'Answer will be shown here';
+  document.getElementById('answer').style.display = 'none';
 }
 
 document.getElementById('show-answer').addEventListener('click', () => {
-  document.getElementById('answer-text').style.display = 'block';
+  document.getElementById('answer').style.display = 'block';
 });
 
 fetchQuestions();
