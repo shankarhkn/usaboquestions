@@ -307,5 +307,19 @@
       "E. Eustachian tube."
     ],
     "answer": "B"
+  },
+  {
+    "question_number": "24",
+    "set": "2018 USABO Open",
+    "category": "Animal Anatomy and Physiology",
+    "question": "Dr. Ross has developed a new drug, Rossazole that prevents the presentation of antigens to CD4 helper T cells. She administers the drug to a lab mouse. Which one of the following immune cell types would have its functions LEAST disrupted by the drug?",
+    "choices": [
+      "A. Cytotoxic T Cell.",
+      "B. Memory B Cell.",
+      "C. Macrophage.",
+      "D. Neutrophil.",
+      "E. Dendritic Cell."
+    ],
+    "answer": "D"
   }
 ]
