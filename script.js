@@ -44,13 +44,13 @@ function showQuestion(index) {
 
   const question = questions[index];
 
-  // Update question number display
-  questionNumber.textContent = `Question ${index + 1} of ${questions.length}`;
+  // Show actual question_number field if it exists, else fallback to index+1
+  questionNumber.textContent = question.question_number
+    ? `Question ${question.question_number}`
+    : `Question ${index + 1}`;
 
-  // Update question text
   questionText.textContent = question.question;
 
-  // Clear and update choices list
   choicesText.innerHTML = '';
   question.choices.forEach(choice => {
     const choiceElement = document.createElement('div');
@@ -58,7 +58,6 @@ function showQuestion(index) {
     choicesText.appendChild(choiceElement);
   });
 
-  // Update and hide answer text
   answerText.textContent = question.answer_text || question.answer || 'Answer not available';
   answerText.style.display = 'none';
 }
