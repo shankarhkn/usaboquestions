@@ -1,10 +1,9 @@
 let questions = [];
-let currentIndex = 0;  // Track current question index
+let currentIndex = 0;
 
 async function fetchQuestions() {
   const questionText = document.getElementById('question-text');
   const answerText = document.getElementById('answer-text');
-  const choicesText = document.getElementById('choices-text');
 
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
@@ -18,7 +17,7 @@ async function fetchQuestions() {
       throw new Error('No questions available');
     }
 
-    currentIndex = 0;  // Start from first question
+    currentIndex = 0;  // Start at first question
     showQuestion(currentIndex);
   } catch (error) {
     console.error(error);
@@ -28,11 +27,12 @@ async function fetchQuestions() {
 }
 
 function showQuestion(index) {
+  const questionNumber = document.getElementById('question-number');
   const questionText = document.getElementById('question-text');
   const choicesText = document.getElementById('choices-text');
   const answerText = document.getElementById('answer-text');
 
-  if (!questionText || !choicesText || !answerText) {
+  if (!questionNumber || !questionText || !choicesText || !answerText) {
     console.error("Missing one or more required HTML elements");
     return;
   }
@@ -44,19 +44,26 @@ function showQuestion(index) {
 
   const question = questions[index];
 
-  questionText.textContent = question.question;
-  choicesText.innerHTML = '';
+  // Update question number display
+  questionNumber.textContent = `Question ${index + 1} of ${questions.length}`;
 
+  // Update question text
+  questionText.textContent = question.question;
+
+  // Clear and update choices list
+  choicesText.innerHTML = '';
   question.choices.forEach(choice => {
     const choiceElement = document.createElement('div');
     choiceElement.textContent = choice;
     choicesText.appendChild(choiceElement);
   });
 
+  // Update and hide answer text
   answerText.textContent = question.answer_text || question.answer || 'Answer not available';
   answerText.style.display = 'none';
 }
 
+// Show answer button functionality
 document.getElementById('show-answer').addEventListener('click', () => {
   const answerText = document.getElementById('answer-text');
   if (answerText) {
@@ -64,6 +71,7 @@ document.getElementById('show-answer').addEventListener('click', () => {
   }
 });
 
+// Previous button functionality
 document.getElementById('prev').addEventListener('click', () => {
   if (currentIndex > 0) {
     currentIndex--;
@@ -71,6 +79,7 @@ document.getElementById('prev').addEventListener('click', () => {
   }
 });
 
+// Next button functionality
 document.getElementById('next').addEventListener('click', () => {
   if (currentIndex < questions.length - 1) {
     currentIndex++;
