@@ -122,7 +122,7 @@ document.getElementById('next').addEventListener('click', () => {
 
 document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
-// Set year in footer
+// Sets the most recent year for the copyright section in index.html
 document.getElementById('year').textContent = new Date().getFullYear();
 
 fetchQuestions();
