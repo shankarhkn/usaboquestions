@@ -1,0 +1,18 @@
+{
+  "configurations" : [
+    {
+      "id" : "D41412CB-FC78-4330-981E-27681EA5C622",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}
