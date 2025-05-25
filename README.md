@@ -1,4 +1,4 @@
-# usaboquestions
+# Biology Questions
 
-To edit the website, edit index.html, questions.json in the docs folder
-To edit the app, edit index.html, questions.json in www folder
+To edit the website, in the docs folder, edit index.html, questions.json 
+To edit the app, in the www folder, edit index.html, questions.json 
