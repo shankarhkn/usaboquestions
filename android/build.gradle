@@ -23,13 +23,6 @@ allprojects {
         mavenCentral()
     }
 }
-buildTypes {
-    release {
-        minifyEnabled false
-        shrinkResources false
-        signingConfig signingConfigs.release
-    }
-}
 
 
 task clean(type: Delete) {
