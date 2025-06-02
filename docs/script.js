@@ -112,11 +112,16 @@ function showQuestion(index) {
       choiceButton.classList.add(isCorrect ? 'correct' : 'incorrect');
 
       allButtons.forEach(btn => {
-        if (btn !== choiceButton ) {
+        if (btn !== choiceButton) {
           btn.classList.add('not-selected');
         }
       });
 
+      allButtons.forEach(btn => {
+        if (btn.textContent.trim().startsWith(answerLetter + ".")) {
+          btn.classList.add('correct');
+        }
+      });
       answerElem.style.display = 'block';
     });
 
