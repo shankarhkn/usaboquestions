@@ -90,6 +90,23 @@ function showQuestion(index) {
   const choicesText = document.getElementById('choices-text');
   choicesText.innerHTML = '';
   question.choices.forEach(choice => {
+    const choiceButton = document.createElement('button');
+    choiceButton.textContent = choice;
+    choiceButton.classList.add('choice-btn'); //Just for styling
+    
+    choiceButton.addEventListener('click', () => {
+      const allButtons = document.querySelectorAll('.choice-btn');
+      allbuttons.forEach(btn => btn.disabled = true);
+      const isCorrect = choiceButton.textContent.trim().startsWith(answerLetter + ".");
+      choiceButton.classList.add(isCorrect? 'correct' : 'incorrect');
+      allButtons.forEach(btn => {
+        if (btn.textContent.trim().startsWith(answerLetter + '.')) {
+          btn.classList.add('correct');
+        }
+    });
+
+    document.getElementById('answer-text').style.display = 'block';
+  });
     const choiceElement = document.createElement('div');
     choiceElement.textContent = choice;
     choicesText.appendChild(choiceElement);
