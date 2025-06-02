@@ -125,10 +125,12 @@ function showQuestion(index) {
 }
 
 // Toggle answer visibility
-document.getElementById('show-answer').addEventListener('click', () => {
-  const answerElem = document.getElementById('answer-text');
-  answerElem.style.display = answerElem.style.display === 'none' ? 'block' : 'none';
-});
+if (showAnswerBtn) {
+  document.getElementById('show-answer').addEventListener('click', () => {
+    const answerElem = document.getElementById('answer-text');
+    answerElem.style.display = answerElem.style.display === 'none' ? 'block' : 'none';
+  });
+}
 
 // Navigation buttons
 document.getElementById('prev').addEventListener('click', () => {
