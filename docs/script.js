@@ -125,6 +125,7 @@ function showQuestion(index) {
 }
 
 // Toggle answer visibility
+const showAnswerBtn = document.getElementById('show-answer');
 if (showAnswerBtn) {
   document.getElementById('show-answer').addEventListener('click', () => {
     const answerElem = document.getElementById('answer-text');
