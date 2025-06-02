@@ -112,8 +112,8 @@ function showQuestion(index) {
       choiceButton.classList.add(isCorrect ? 'correct' : 'incorrect');
 
       allButtons.forEach(btn => {
-        if (btn.textContent.trim().startsWith(answerLetter + '.')) {
-          btn.classList.add('correct');
+        if (btn !== choiceButton ) {
+          btn.classList.add('not-selected');
         }
       });
 
