@@ -204,3 +204,22 @@ button:disabled {
     align-items: center;
   }
 }
+
+.choice-btn {
+  margin: 4px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.choice-btn.correct {
+  background-color: #a6e3a1;
+  /* green */
+  border: 2px solid #4caf50;
+}
+
+.choice-btn.incorrect {
+  background-color: #f38ba8;
+  /* red */
+  border: 2px solid #f44336;
+}
