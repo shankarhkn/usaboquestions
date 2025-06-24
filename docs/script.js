@@ -77,14 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// Greet user
-document.addEventListener("DOMContentLoaded", () => {
-  const greeting = document.createElement("p");
-  greeting.innerHTML = `Welcome, <strong>${username}</strong>! <button id="show-stats">Show Stats</button>`;
-  greeting.style.textAlign = "center";
-  document.body.insertBefore(greeting, document.getElementById("app"));
-  document.getElementById("show-stats").addEventListener("click", showStats);
-});
+
 
 // Shuffle array
 function shuffle(array) {
