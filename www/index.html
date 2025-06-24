@@ -13,11 +13,22 @@
 </head>
 
 <body>
+  <div id="user-settings">
+    <span id="greeting"></span>
+    <button id="show-stats">Show Stats</button>
+    <button id="change-username">Change Username</button>
+    <button id="clear-stats">Clear Stats</button>
+  </div>
+
   <div id="app">
     <h1>Biology Question Viewer</h1>
     <h3>*Still in development 🛠, Version 1.11a</h3>
     <h4>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the questions.
     </h4>
+    <div id="exam-timer-container">
+      <button id="start-exam-mode">Start 50-min Exam</button>
+      <div id="exam-timer">⏱ 50:00</div>
+    </div>
 
     <!-- Filter by category and year -->
     <div id="filters">
