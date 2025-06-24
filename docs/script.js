@@ -29,6 +29,53 @@ function updateGreeting() {
   greeting.textContent = `Welcome, ${username}!`;
 }
 
+// --- Existing code above remains unchanged ---
+
+// After your DOMContentLoaded event listener (or inside it), add:
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Insert greeting element once (already in your code)
+  const greeting = document.createElement("p");
+  greeting.innerHTML = `Welcome, <strong>${username}</strong>! <button id="show-stats">Show Stats</button>`;
+  greeting.style.textAlign = "center";
+  document.body.insertBefore(greeting, document.getElementById("app"));
+
+  // Show Stats button handler
+  document.getElementById("show-stats").addEventListener("click", showStats);
+
+  // NEW: Change Username button handler
+  document.getElementById("change-username").addEventListener("click", () => {
+    const newUsername = prompt("Enter a new username (just for this device):")?.trim();
+    if (newUsername) {
+      // Update both localStorage keys to keep consistent
+      localStorage.setItem('username', newUsername);
+      localStorage.setItem('usabo_username', newUsername);
+      // Update displayed username in greeting
+      updateGreetingText(newUsername);
+      alert(`Username changed to ${newUsername}`);
+    }
+  });
+
+  // NEW: Clear Stats button handler
+  document.getElementById("clear-stats").addEventListener("click", () => {
+    if (confirm("Are you sure you want to clear all your progress stats?")) {
+      localStorage.removeItem('progress');
+      alert("Progress stats cleared.");
+    }
+  });
+
+  // Helper function to update greeting text in #user-settings
+  function updateGreetingText(name) {
+    const greetingSpan = document.querySelector("#user-settings #greeting");
+    if (greetingSpan) {
+      greetingSpan.textContent = `Welcome, ${name}!`;
+    }
+  }
+
+  // Initialize greeting text on page load
+  updateGreetingText(localStorage.getItem('usabo_username') || username);
+});
+
 
 // Greet user
 document.addEventListener("DOMContentLoaded", () => {
