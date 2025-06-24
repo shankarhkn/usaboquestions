@@ -1,23 +1,29 @@
+
+</html>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>USABO Practice Questions</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biology Reader</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="photos/seedling.svg" type="image/svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
+  <div id="app">
+    <h1>Biology Question Viewer</h1>
+    <h3>*Still in development 🛠, Version 1.11a</h3>
+    <h4>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the questions.
+    </h4>
 
-  <div id="app" class="container">
-    <h1>USABO Practice Questions</h1>
-
-    <div class="filters">
+    <!-- Filter by category and year -->
+    <div id="filters">
       <label for="category-select">Category:</label>
       <select id="category-select">
         <option value="">All</option>
@@ -32,30 +38,22 @@
     </div>
 
     <div id="question-box">
-      <div id="question-header">
-        <h2 id="question-number"></h2>
-        <p id="question-set"></p>
-        <p id="question-category"></p>
-      </div>
-
-      <div id="question-text"></div>
-
-      <div id="choices-text" class="choices"></div>
-
-      <div id="answer-container">
-        <button id="show-answer">Show Answer</button>
-        <div id="answer-text" style="display: none;"></div>
-      </div>
-
-      <div class="navigation-buttons">
-        <button id="prev">Previous</button>
-        <button id="next">Next</button>
-      </div>
+      <p id="question-set"></p>
+      <p id="question-category"></p>
+      <p id="question-number"></p>
+      <p id="question-text">Loading...</p>
+      <div id="choices-text"></div>
+      <p id="answer-text" style="display: none;"></p>
     </div>
 
-    <footer>
+    <div class="controls">
+      <button id="prev">Previous</button>
+      <button id="next">Next</button>
+    </div>
+
+    <div class="copyright">
       <p>&copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.</p>
-    </footer>
+    </div>
   </div>
 
   <script src="script.js"></script>
