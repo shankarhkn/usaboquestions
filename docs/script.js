@@ -22,7 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Initialize timer
   window.currentQuestionStartTime = Date.now();
+
+  // Example to show the first question
+  // Replace this with your actual logic
+  if (typeof showQuestion === 'function' && typeof filteredQuestions !== 'undefined') {
+    showQuestion(0);
+  }
 });
 
 function showQuestion(index) {
@@ -68,6 +75,7 @@ function showQuestion(index) {
         timeTaken: timeTaken,
         timestamp: Date.now()
       };
+
       localStorage.setItem('progress', JSON.stringify(progress));
 
       answerElem.style.display = 'block';
