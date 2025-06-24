@@ -12,6 +12,23 @@ if (!username) {
     username = "Guest";
   }
 }
+function getUsername() {
+  let username = localStorage.getItem('usabo_username');
+  if (!username) {
+    username = prompt("Enter a username:");
+    if (username) {
+      localStorage.setItem('usabo_username', username);
+    }
+  }
+  return username;
+}
+
+function updateGreeting() {
+  const greeting = document.getElementById('greeting');
+  const username = localStorage.getItem('usabo_username') || "user";
+  greeting.textContent = `Welcome, ${username}!`;
+}
+
 
 // Greet user
 document.addEventListener("DOMContentLoaded", () => {
@@ -189,5 +206,5 @@ fetchQuestions();
 function showStats() {
   const progress = JSON.parse(localStorage.getItem('progress')) || {};
   const totalCorrect = Object.keys(progress).length;
-  alert(`${username}, you have correctly answered ${totalCorrect} question(s).`);
+  alert(`${username}, you have correctly answered ${totalCorrect} question(s) correctly.`);
 }
