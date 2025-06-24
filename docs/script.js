@@ -1,3 +1,5 @@
+let filteredQuestions = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   const greetingSpan = document.getElementById('greeting');
   const savedUsername = localStorage.getItem('username') || 'Guest';
@@ -22,15 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Initialize timer
-  window.currentQuestionStartTime = Date.now();
-
-  // Example to show the first question
-  // Replace this with your actual logic
-  if (typeof showQuestion === 'function' && typeof filteredQuestions !== 'undefined') {
-    showQuestion(0);
-  }
+  loadQuestions();
 });
+
+function loadQuestions() {
+  fetch('questions.json')
+    .then(res => res.json())
+    .then(data => {
+      filteredQuestions = data;
+      showQuestion(0);
+    })
+    .catch(err => {
+      document.getElementById("question").textContent = "Failed to load questions.";
+      console.error("Error loading questions:", err);
+    });
+}
 
 function showQuestion(index) {
   const question = filteredQuestions[index];
