@@ -3,26 +3,32 @@ let filteredQuestions = [];
 let currentIndex = 0;
 
 // Get or ask for username
-let username = localStorage.getItem('username');
-if (!username) {
-  username = prompt("Enter a username (just for this device):")?.trim();
-  if (username) {
+let username = localStorage.getItem('username') || "Guest";
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateGreeting(username); // show current username (or Guest)
+
+  // Wait a moment (e.g., 500ms) then prompt if username not set
+  if (username === "Guest") {
+    setTimeout(promptForUsername, 500);
+  }
+
+  // Other event listeners and initialization here...
+});
+
+function promptForUsername() {
+  const newName = prompt("Enter a username (just for this device):")?.trim();
+  if (newName) {
+    username = newName;
     localStorage.setItem('username', username);
-  } else {
-    username = "Guest";
+    updateGreeting(username);
   }
-}
-function getUsername() {
-  let username = localStorage.getItem('usabo_username');
-  if (!username) {
-    username = prompt("Enter a username:");
-    if (username) {
-      localStorage.setItem('usabo_username', username);
-    }
-  }
-  return username;
 }
 
+function updateGreeting(name) {
+  const greetingSpan = document.getElementById('greeting');
+  if (greetingSpan) greetingSpan.textContent = `Welcome, ${name}!`;
+}
 function updateGreeting() {
   const greeting = document.getElementById('greeting');
   const username = localStorage.getItem('usabo_username') || "user";
@@ -239,7 +245,9 @@ fetchQuestions();
 
 // 📊 Show progress stats
 function showStats() {
+  const currentUsername = localStorage.getItem('username') || 'Guest';
   const progress = JSON.parse(localStorage.getItem('progress')) || {};
   const totalCorrect = Object.keys(progress).length;
-  alert(`${username}, you have correctly answered ${totalCorrect} question(s) correctly.`);
+  alert(`${currentUsername}, you have correctly answered ${totalCorrect} question(s) correctly.`);
 }
+
