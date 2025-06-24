@@ -34,11 +34,6 @@ function updateGreeting() {
 // After your DOMContentLoaded event listener (or inside it), add:
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Insert greeting element once (already in your code)
-  const greeting = document.createElement("p");
-  greeting.innerHTML = `Welcome, <strong>${username}</strong>! <button id="show-stats">Show Stats</button>`;
-  greeting.style.textAlign = "center";
-  document.body.insertBefore(greeting, document.getElementById("app"));
 
   // Show Stats button handler
   document.getElementById("show-stats").addEventListener("click", showStats);
