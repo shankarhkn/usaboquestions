@@ -2,7 +2,27 @@ let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;
 
-// Shuffle array in place
+// Get or ask for username
+let username = localStorage.getItem('username');
+if (!username) {
+  username = prompt("Enter a username (just for this device):")?.trim();
+  if (username) {
+    localStorage.setItem('username', username);
+  } else {
+    username = "Guest";
+  }
+}
+
+// Greet user
+document.addEventListener("DOMContentLoaded", () => {
+  const greeting = document.createElement("p");
+  greeting.innerHTML = `Welcome, <strong>${username}</strong>! <button id="show-stats">Show Stats</button>`;
+  greeting.style.textAlign = "center";
+  document.body.insertBefore(greeting, document.getElementById("app"));
+  document.getElementById("show-stats").addEventListener("click", showStats);
+});
+
+// Shuffle array
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -10,17 +30,15 @@ function shuffle(array) {
   }
 }
 
-// Fetch questions from API
+// Fetch questions
 async function fetchQuestions() {
   try {
     const response = await fetch('https://usaboquestions.onrender.com/questions');
     if (!response.ok) throw new Error(`Error fetching questions: ${response.status}`);
-
     questions = await response.json();
-    if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions are available');
-
+    if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions available.');
     populateFilterOptions();
-    applyFilters(); // show default view
+    applyFilters();
   } catch (error) {
     console.error(error);
     document.getElementById('question-text').textContent = 'Failed to load questions.';
@@ -28,11 +46,10 @@ async function fetchQuestions() {
   }
 }
 
-// Populate category and set dropdowns
+// Populate filters
 function populateFilterOptions() {
   const categorySelect = document.getElementById('category-select');
   const setSelect = document.getElementById('set-select');
-
   const categories = [...new Set(questions.map(q => q.category).filter(Boolean))];
   const sets = [...new Set(questions.map(q => q.set).filter(Boolean))];
 
@@ -51,7 +68,7 @@ function populateFilterOptions() {
   }
 }
 
-// Apply filter selections
+// Apply filters
 function applyFilters() {
   const selectedCategory = document.getElementById('category-select').value;
   const selectedSet = document.getElementById('set-select').value;
@@ -76,16 +93,13 @@ function applyFilters() {
   showQuestion(currentIndex);
 }
 
-// Show one question by index
+// Show a question
 function showQuestion(index) {
   const question = filteredQuestions[index];
 
-  document.getElementById('question-number').textContent =
-    `Question ${question.question_number || index + 1}`;
-  document.getElementById('question-set').textContent =
-    question.set ? `Set: ${question.set}` : '';
-  document.getElementById('question-category').textContent =
-    question.category ? `Category: ${question.category}` : '';
+  document.getElementById('question-number').textContent = `Question ${question.question_number || index + 1}`;
+  document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
+  document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
   document.getElementById('question-text').innerHTML = question.question;
 
   const choicesContainer = document.getElementById('choices-text');
@@ -94,7 +108,6 @@ function showQuestion(index) {
   const answerLetter = question.answer;
   const matchingChoice = question.choices.find(c => c.trim().startsWith(answerLetter + '.')) || '';
   const answerFullText = matchingChoice ? matchingChoice : `Answer: ${answerLetter}`;
-
   const answerElem = document.getElementById('answer-text');
   answerElem.textContent = answerFullText;
   answerElem.style.display = 'none';
@@ -117,11 +130,24 @@ function showQuestion(index) {
         }
       });
 
+      // Highlight correct answer
       allButtons.forEach(btn => {
         if (btn.textContent.trim().startsWith(answerLetter + ".")) {
           btn.classList.add('correct');
         }
       });
+
+      // Save correct answer locally
+      if (isCorrect) {
+        const progress = JSON.parse(localStorage.getItem('progress')) || {};
+        const key = `${question.set || 'set'}-${question.question_number || index}`;
+        progress[key] = {
+          correct: true,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('progress', JSON.stringify(progress));
+      }
+
       answerElem.style.display = 'block';
     });
 
@@ -129,16 +155,16 @@ function showQuestion(index) {
   });
 }
 
-// Toggle answer visibility
+// Show answer toggle (optional)
 const showAnswerBtn = document.getElementById('show-answer');
 if (showAnswerBtn) {
-  document.getElementById('show-answer').addEventListener('click', () => {
+  showAnswerBtn.addEventListener('click', () => {
     const answerElem = document.getElementById('answer-text');
     answerElem.style.display = answerElem.style.display === 'none' ? 'block' : 'none';
   });
 }
 
-// Navigation buttons
+// Navigation
 document.getElementById('prev').addEventListener('click', () => {
   if (filteredQuestions.length === 0) return;
   currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
@@ -151,11 +177,17 @@ document.getElementById('next').addEventListener('click', () => {
   showQuestion(currentIndex);
 });
 
-// Apply filters
 document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
-// Set current year in footer
+// Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Load questions initially
+// Load questions
 fetchQuestions();
+
+// 📊 Show progress stats
+function showStats() {
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  const totalCorrect = Object.keys(progress).length;
+  alert(`${username}, you have correctly answered ${totalCorrect} question(s).`);
+}
