@@ -1,7 +1,7 @@
 {
   "name": "usaboquestions",
   "version": "1.0.0",
-  "description": "",
+  "description": "To edit the website, in the docs folder, edit index.html, questions.json  To edit the app, in the www folder, edit index.html, questions.json",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,6 +21,10 @@
     "@capacitor/android": "^7.2.0",
     "@capacitor/cli": "^7.2.0",
     "@capacitor/core": "^7.2.0",
-    "@capacitor/ios": "^7.2.0"
+    "@capacitor/ios": "^7.2.0",
+    "express": "^5.1.0"
+  },
+  "directories": {
+    "doc": "docs"
   }
 }
