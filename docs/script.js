@@ -1,7 +1,9 @@
+// script.js
 let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+
 let username = localStorage.getItem('username') || "Guest";
 
 let examCountdown = null;
@@ -13,10 +15,8 @@ let examProgress = {};
 window._examTimerStartTimestamp = null;
 window._examPauseTimestamp = null;
 
-// Replace this URL with your real explanation API endpoint.
-// The endpoint should accept POST with JSON body like { set, question_number, user_answer, correct_answer }
-// and respond with JSON { explanation: "..." }
-const explanationApiUrl = 'https://your-real-api.example.com/explain';
+const explanationApiUrl = 'https://3547-73-176-184-30.ngrok-free.app/explain';
+
 
 document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
@@ -70,6 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function updateGreeting(name) {
   const greetingSpan = document.getElementById('greeting');
   if (greetingSpan) greetingSpan.textContent = `Welcome, ${name}!`;
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }
 
 async function fetchQuestions() {
@@ -134,7 +141,6 @@ function applyFilters() {
     document.getElementById('question-category').textContent = '';
     document.getElementById('question-number').textContent = '';
     document.getElementById('answer-text').style.display = 'none';
-    document.getElementById('explanation-text').style.display = 'none';
     return;
   }
 
@@ -143,7 +149,7 @@ function applyFilters() {
   showQuestion(currentIndex);
 }
 
-function showQuestion(index) {
+async function showQuestion(index) {
   const question = filteredQuestions[index];
   const key = `${question.set || 'set'}-${question.question_number || index + 1}`;
 
@@ -158,11 +164,13 @@ function showQuestion(index) {
     questionSetElem.appendChild(spanSet);
 
     const bookmarkBtn = document.getElementById('bookmark-btn');
+    bookmarkBtn.style.display = 'inline';
     bookmarkBtn.style.color = bookmarks.includes(key) ? '#f5b301' : '#666';
     bookmarkBtn.textContent = bookmarks.includes(key) ? '★' : '☆';
     bookmarkBtn.onclick = toggleBookmark;
   } else {
-    document.getElementById('bookmark-btn').style.display = 'none';
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    bookmarkBtn.style.display = 'none';
     questionSetElem.textContent = '';
   }
 
@@ -173,7 +181,7 @@ function showQuestion(index) {
 
   const answerLetter = question.answer;
 
-  // Hide answer and explanation text at first
+  // Hide answer and explanation text initially
   const answerElem = document.getElementById('answer-text');
   const explanationElem = document.getElementById('explanation-text');
   answerElem.style.display = 'none';
@@ -232,10 +240,10 @@ function showQuestion(index) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            set: question.set,
-            question_number: question.question_number,
-            user_answer: userAnswerLetter,
-            correct_answer: answerLetter
+            question: question.question,
+            answer: userAnswerLetter,  // student's selected answer
+            setName: question.set,
+            questionNumber: question.question_number
           })
         });
 
@@ -262,22 +270,11 @@ function toggleBookmark() {
   const key = `${question.set || 'set'}-${question.question_number || currentIndex + 1}`;
   const index = bookmarks.indexOf(key);
 
-  if (index > -1) {
-    bookmarks.splice(index, 1);
-  } else {
-    bookmarks.push(key);
-  }
+  if (index > -1) bookmarks.splice(index, 1);
+  else bookmarks.push(key);
 
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-
-  const bookmarkBtn = document.getElementById("bookmark-btn");
-  if (bookmarks.includes(key)) {
-    bookmarkBtn.textContent = '★';
-    bookmarkBtn.style.color = '#f5b301';
-  } else {
-    bookmarkBtn.textContent = '☆';
-    bookmarkBtn.style.color = '#666';
-  }
+  showQuestion(currentIndex);
 }
 
 function showStats() {
@@ -287,228 +284,10 @@ function showStats() {
   alert(`${currentUsername}, you have correctly answered ${totalCorrect} question(s).`);
 }
 
-// --- Exam timer and controls (same as you had, but with fixed timer format) ---
+// Dummy placeholder functions for exam timer controls (implement or remove as needed)
+function setupExamControls() { }
+function loadTimerState() { return false; }
+function loadExamProgress() { }
+function resumeExamTimer() { }
+function saveExamProgress() { }
 
-function setupExamControls() {
-  const container = document.getElementById('exam-controls-box');
-  if (!container) return;
-
-  // Timer display is already in HTML (#exam-timer)
-
-  const startBtn = document.getElementById('start-exam-mode');
-  const pauseBtn = document.getElementById('pause-timer-btn');
-  const stopBtn = document.getElementById('stop-timer-btn');
-  const statsBtn = document.getElementById('show-exam-stats-btn');
-
-  startBtn.disabled = false;
-  pauseBtn.disabled = true;
-  stopBtn.disabled = true;
-
-  startBtn.onclick = startExamMode;
-  pauseBtn.onclick = togglePause;
-  stopBtn.onclick = stopExamMode;
-  statsBtn.onclick = showExamStats;
-
-  updateTimerDisplay();
-}
-
-function updateTimerDisplay() {
-  const timerDisplay = document.getElementById('exam-timer');
-  if (!timerDisplay) return;
-
-  let minutes = Math.floor(timeLeft / 60);
-  let seconds = timeLeft % 60;
-
-  // Fix NaN case
-  if (isNaN(minutes) || isNaN(seconds)) {
-    minutes = 50;
-    seconds = 0;
-  }
-
-  timerDisplay.textContent = `⏱ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-function saveTimerState() {
-  localStorage.setItem('examTimerState', JSON.stringify({
-    examModeActive,
-    timerPaused,
-    timeLeft,
-    startTimestamp: window._examTimerStartTimestamp || null,
-    pauseTimestamp: window._examPauseTimestamp || null
-  }));
-}
-
-function loadTimerState() {
-  const state = JSON.parse(localStorage.getItem('examTimerState'));
-  if (!state) return false;
-
-  examModeActive = state.examModeActive;
-  timerPaused = state.timerPaused;
-  timeLeft = state.timeLeft || 50 * 60;
-  window._examTimerStartTimestamp = state.startTimestamp || null;
-  window._examPauseTimestamp = state.pauseTimestamp || null;
-
-  return examModeActive;
-}
-
-function saveExamProgress() {
-  localStorage.setItem('examProgress', JSON.stringify(examProgress));
-}
-
-function loadExamProgress() {
-  examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
-}
-
-function startExamMode() {
-  if (examCountdown !== null) {
-    alert("Exam timer is already running.");
-    return;
-  }
-  if (!confirm("Start the 50-minute exam timer?")) return;
-
-  timeLeft = 50 * 60;
-  timerPaused = false;
-  examModeActive = true;
-  examProgress = {};
-
-  window._examTimerStartTimestamp = Date.now();
-  window._examPauseTimestamp = null;
-
-  saveTimerState();
-  saveExamProgress();
-
-  const startBtn = document.getElementById('start-exam-mode');
-  const pauseBtn = document.getElementById('pause-timer-btn');
-  const stopBtn = document.getElementById('stop-timer-btn');
-
-  startBtn.disabled = true;
-  pauseBtn.disabled = false;
-  stopBtn.disabled = false;
-
-  examCountdown = setInterval(() => {
-    if (!timerPaused) {
-      timeLeft--;
-      updateTimerDisplay();
-
-      if (timeLeft <= 0) {
-        clearInterval(examCountdown);
-        examCountdown = null;
-        examModeActive = false;
-        alert("Time's up! Exam mode ended.");
-        saveTimerState();
-        resetExamControls();
-      }
-    }
-  }, 1000);
-
-  // Reload questions to reset UI for exam mode
-  applyFilters();
-}
-
-function togglePause() {
-  if (!examModeActive) return;
-
-  const pauseBtn = document.getElementById('pause-timer-btn');
-  if (!timerPaused) {
-    timerPaused = true;
-    window._examPauseTimestamp = Date.now();
-    pauseBtn.textContent = "Resume";
-  } else {
-    timerPaused = false;
-    if (window._examPauseTimestamp) {
-      // Adjust start time to exclude paused duration
-      let pausedDuration = Date.now() - window._examPauseTimestamp;
-      window._examTimerStartTimestamp += pausedDuration;
-    }
-    window._examPauseTimestamp = null;
-    pauseBtn.textContent = "Pause";
-  }
-  saveTimerState();
-}
-
-function stopExamMode() {
-  if (!examModeActive) return;
-  if (!confirm("Stop the exam timer? This will end exam mode.")) return;
-
-  if (examCountdown !== null) {
-    clearInterval(examCountdown);
-    examCountdown = null;
-  }
-  examModeActive = false;
-  timerPaused = false;
-  timeLeft = 50 * 60;
-  window._examTimerStartTimestamp = null;
-  window._examPauseTimestamp = null;
-  saveTimerState();
-
-  resetExamControls();
-  applyFilters(); // reset UI to normal mode
-}
-
-function resetExamControls() {
-  const startBtn = document.getElementById('start-exam-mode');
-  const pauseBtn = document.getElementById('pause-timer-btn');
-  const stopBtn = document.getElementById('stop-timer-btn');
-
-  startBtn.disabled = false;
-  pauseBtn.disabled = true;
-  pauseBtn.textContent = "Pause";
-  stopBtn.disabled = true;
-
-  updateTimerDisplay();
-}
-
-function resumeExamTimer() {
-  if (!examModeActive) return;
-
-  const startBtn = document.getElementById('start-exam-mode');
-  const pauseBtn = document.getElementById('pause-timer-btn');
-  const stopBtn = document.getElementById('stop-timer-btn');
-
-  startBtn.disabled = true;
-  pauseBtn.disabled = false;
-  stopBtn.disabled = false;
-
-  examCountdown = setInterval(() => {
-    if (!timerPaused) {
-      timeLeft--;
-      updateTimerDisplay();
-      if (timeLeft <= 0) {
-        clearInterval(examCountdown);
-        examCountdown = null;
-        examModeActive = false;
-        alert("Time's up! Exam mode ended.");
-        saveTimerState();
-        resetExamControls();
-      }
-    }
-  }, 1000);
-}
-
-function showExamStats() {
-  if (!examModeActive) {
-    alert("Exam mode is not active.");
-    return;
-  }
-  let correctCount = 0;
-  let totalAnswered = 0;
-
-  for (const key in examProgress) {
-    totalAnswered++;
-    if (examProgress[key] === 'correct') correctCount++;
-  }
-
-  alert(`Exam Mode Stats:\nAnswered: ${totalAnswered}\nCorrect: ${correctCount}\nAccuracy: ${totalAnswered > 0 ? ((correctCount / totalAnswered) * 100).toFixed(1) : '0'}%`);
-}
-
-// Utility: shuffle array in-place
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-// ---
-
-// End of script.js
