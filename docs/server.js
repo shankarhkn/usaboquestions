@@ -1,43 +1,29 @@
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const app = express();
 const port = 3000;
 
-const explanationsDB = {
-    "2018 USABO Open": {
-        "26": {
-            "A": "Explanation for answer A...",
-            "B": "Explanation for answer B...",
-            "C": "Explanation for answer C (correct).",
-            "D": "Explanation for answer D..."
-        }
-    }
-};
+app.use(cors());
+app.use(bodyParser.json());
 
-app.get('/api/explanation', (req, res) => {
-    const { set, question_number, answer } = req.query;
+// POST /explain endpoint
+app.post('/explain', (req, res) => {
+    const { question, answer, setName, questionNumber } = req.body;
 
-    if (!set || !question_number || !answer) {
-        return res.status(400).json({ error: 'Missing required parameters' });
+    if (!question || !answer || !setName || !questionNumber) {
+        return res.status(400).json({ error: 'Missing parameters' });
     }
 
-    const setExplanations = explanationsDB[set];
-    if (!setExplanations) {
-        return res.status(404).json({ error: 'Set not found' });
-    }
+    // Here: Replace this mock explanation with your LLM call
+    const correctAnswer = 'B'; // For demo, hardcoded correct answer, ideally fetched per question
+    const explanation = `You answered '${answer}'. The correct answer is '${correctAnswer}'. Explanation: This is a mock explanation for question ${questionNumber} in set '${setName}'.`;
 
-    const questionExplanations = setExplanations[question_number];
-    if (!questionExplanations) {
-        return res.status(404).json({ error: 'Question not found' });
-    }
-
-    const explanation = questionExplanations[answer];
-    if (!explanation) {
-        return res.status(404).json({ error: 'Explanation not found for given answer' });
-    }
-
+    // Respond with explanation
     res.json({ explanation });
 });
 
 app.listen(port, () => {
-    console.log(`API server listening at http://localhost:${port}`);
+    console.log(`Backend server running on http://localhost:${port}`);
 });

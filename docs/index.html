@@ -114,17 +114,19 @@
       <button id="apply-filters">Apply Filters</button>
     </div>
 
-    <div id="question-box">
+    <div id="question-box"
+      style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
       <p id="question-set"></p>
       <p id="question-category"></p>
       <p id="question-number"></p>
-      <button id="bookmark-btn" title="Bookmark this question">☆</button>
-      <p id="question-text">Loading...</p>
-      <div id="choices-text"></div>
-      <p id="answer-text" style="display: none;"></p>
-      <p id="explanation-text" style="display: none;"></p>
+      <button id="bookmark-btn" title="Bookmark this question"
+        style="font-size: 1.3rem; background: none; border: none; cursor: pointer; color: #f5b301;">☆</button>
+      <p id="question-text" style="margin-top: 15px;">Loading...</p>
+      <div id="choices-text" style="margin: 15px 0;"></div>
+      <p id="answer-text" style="display: none; font-weight: bold; margin-top: 10px;"></p>
+      <p id="explanation-text" style="margin-top: 15px; font-style: italic; color: #444;"></p>
     </div>
-
+    
     <div class="controls">
       <button id="prev">Previous</button>
       <button id="next">Next</button>
