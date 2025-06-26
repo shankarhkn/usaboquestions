@@ -11,6 +11,11 @@ let timerPaused = false;
 let examModeActive = false;
 let examProgress = {};  // To track correct/incorrect answers in exam mode
 
+// Timestamp when exam started (ms)
+window._examTimerStartTimestamp = null;
+// Timestamp when paused (ms)
+window._examPauseTimestamp = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
 
@@ -28,6 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("clear-stats").addEventListener("click", () => {
     if (confirm("Are you sure you want to clear all your progress stats?")) {
       localStorage.removeItem('progress');
+      localStorage.removeItem('examProgress');
+      localStorage.removeItem('examTimerState');
+      examProgress = {};
       alert("Progress stats cleared.");
     }
   });
@@ -49,7 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('year').textContent = new Date().getFullYear();
   fetchQuestions();
 
-  setupExamControls();
+  setupExamControls();  // Set up the floating sidebar with timer and buttons
+
+  // Load exam timer and progress if any saved state
+  if (loadTimerState()) {
+    loadExamProgress();
+    resumeExamTimer();
+  }
 });
 
 function updateGreeting(name) {
@@ -139,43 +153,41 @@ function showQuestion(index) {
   const key = `${question.set || 'set'}-${question.question_number || index + 1}`;
 
   document.getElementById('question-number').textContent = `Question ${question.question_number || index + 1}`;
-
-  // Update question-set and bookmark star inline
-  const questionSetElem = document.getElementById('question-set');
-  questionSetElem.innerHTML = ''; // clear
-
-  const setTextSpan = document.createElement('span');
-  setTextSpan.textContent = question.set ? `Set: ${question.set}` : '';
-  questionSetElem.appendChild(setTextSpan);
-
-  let bookmarkBtn = document.getElementById('bookmark-btn');
-  if (!bookmarkBtn) {
-    bookmarkBtn = document.createElement('button');
-    bookmarkBtn.id = 'bookmark-btn';
-    bookmarkBtn.title = 'Bookmark this question';
-    bookmarkBtn.style.cssText = `
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      margin: 0;
-      font-size: 1.3rem;
-      color: #f5b301;
-      transition: color 0.3s ease;
-    `;
-    bookmarkBtn.addEventListener('click', toggleBookmark);
-  }
-  questionSetElem.appendChild(bookmarkBtn);
-
-  if (bookmarks.includes(key)) {
-    bookmarkBtn.textContent = '★'; // filled star
-    bookmarkBtn.style.color = '#f5b301';
-  } else {
-    bookmarkBtn.textContent = '☆'; // hollow star
-    bookmarkBtn.style.color = '#f5b301';
-  }
-
   document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
+
+  // Show set with bookmark star at right
+  const questionSetElem = document.getElementById('question-set');
+  questionSetElem.innerHTML = ''; // Clear
+  if (question.set) {
+    const spanSet = document.createElement('span');
+    spanSet.textContent = `Set: ${question.set}`;
+    questionSetElem.appendChild(spanSet);
+
+    // Bookmark button
+    let bookmarkBtn = document.getElementById('bookmark-btn');
+    if (!bookmarkBtn) {
+      bookmarkBtn = document.createElement('button');
+      bookmarkBtn.id = 'bookmark-btn';
+      bookmarkBtn.title = 'Bookmark this question';
+      bookmarkBtn.style.cssText = `
+        font-size: 1.3rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 10px;
+        color: #f5b301;
+        transition: color 0.3s ease;
+      `;
+      bookmarkBtn.addEventListener("click", toggleBookmark);
+    }
+    bookmarkBtn.textContent = bookmarks.includes(key) ? '★' : '☆';
+    bookmarkBtn.style.color = bookmarks.includes(key) ? '#f5b301' : '#f5b301';
+    questionSetElem.appendChild(bookmarkBtn);
+  } else {
+    document.getElementById('question-set').textContent = '';
+  }
+
   document.getElementById('question-text').innerHTML = question.question;
 
   const choicesContainer = document.getElementById('choices-text');
@@ -213,8 +225,11 @@ function showQuestion(index) {
       });
 
       if (examModeActive) {
+        // Track answers only during exam mode
         examProgress[key] = isCorrect ? 'correct' : 'incorrect';
+        saveExamProgress();
       } else if (isCorrect) {
+        // Outside exam mode, track correct answers as before
         const progress = JSON.parse(localStorage.getItem('progress')) || {};
         progress[key] = {
           correct: true,
@@ -265,8 +280,10 @@ function setupExamControls() {
   const container = document.getElementById('exam-controls-box');
   if (!container) return;
 
+  // Clear any existing controls
   container.innerHTML = '';
 
+  // Timer display
   const timerDisplay = document.createElement('div');
   timerDisplay.id = 'exam-timer';
   timerDisplay.style.fontWeight = '700';
@@ -277,6 +294,7 @@ function setupExamControls() {
   timerDisplay.textContent = '⏱ 50:00';
   container.appendChild(timerDisplay);
 
+  // Start Exam button
   const startBtn = document.createElement('button');
   startBtn.id = 'start-exam-mode';
   startBtn.textContent = 'Start 50-min Exam';
@@ -291,10 +309,11 @@ function setupExamControls() {
   startBtn.addEventListener('click', startExamMode);
   container.appendChild(startBtn);
 
+  // Pause button
   const pauseBtn = document.createElement('button');
   pauseBtn.id = 'pause-timer-btn';
   pauseBtn.textContent = 'Pause';
-  pauseBtn.style.backgroundColor = '#ffc107';
+  pauseBtn.style.backgroundColor = '#ffc107';  // amber
   pauseBtn.style.color = '#333';
   pauseBtn.style.border = 'none';
   pauseBtn.style.padding = '12px';
@@ -302,17 +321,31 @@ function setupExamControls() {
   pauseBtn.style.cursor = 'pointer';
   pauseBtn.style.fontWeight = '600';
   pauseBtn.style.width = '100%';
-  pauseBtn.disabled = true;
+  pauseBtn.disabled = true; // Disabled until exam started
   pauseBtn.addEventListener('click', () => {
     timerPaused = !timerPaused;
     pauseBtn.textContent = timerPaused ? 'Resume' : 'Pause';
+
+    if (timerPaused) {
+      // Save pause timestamp
+      window._examPauseTimestamp = Date.now();
+    } else {
+      // Adjust startTimestamp to account for pause duration
+      if (window._examPauseTimestamp) {
+        const pausedDuration = Date.now() - window._examPauseTimestamp;
+        window._examTimerStartTimestamp += pausedDuration;
+        window._examPauseTimestamp = null;
+      }
+    }
+    saveTimerState();
   });
   container.appendChild(pauseBtn);
 
+  // Stop button
   const stopBtn = document.createElement('button');
   stopBtn.id = 'stop-timer-btn';
   stopBtn.textContent = 'Stop';
-  stopBtn.style.backgroundColor = '#dc3545';
+  stopBtn.style.backgroundColor = '#dc3545'; // red
   stopBtn.style.color = 'white';
   stopBtn.style.border = 'none';
   stopBtn.style.padding = '12px';
@@ -320,7 +353,7 @@ function setupExamControls() {
   stopBtn.style.cursor = 'pointer';
   stopBtn.style.fontWeight = '600';
   stopBtn.style.width = '100%';
-  stopBtn.disabled = true;
+  stopBtn.disabled = true; // Disabled until exam started
   stopBtn.addEventListener('click', () => {
     if (confirm("Stop and reset the exam timer?")) {
       clearInterval(examCountdown);
@@ -329,20 +362,28 @@ function setupExamControls() {
       timerPaused = false;
       examModeActive = false;
       examProgress = {};
+      window._examTimerStartTimestamp = null;
+      window._examPauseTimestamp = null;
+
       updateTimerDisplay(true);
       pauseBtn.disabled = true;
       stopBtn.disabled = true;
       startBtn.disabled = false;
       pauseBtn.textContent = 'Pause';
+
+      localStorage.removeItem('examTimerState');
+      localStorage.removeItem('examProgress');
+
       showExamSummary();
     }
   });
   container.appendChild(stopBtn);
 
+  // Show Exam Stats button
   const statsBtn = document.createElement('button');
   statsBtn.id = 'show-exam-stats-btn';
   statsBtn.textContent = 'Show Exam Stats';
-  statsBtn.style.backgroundColor = '#28a745';
+  statsBtn.style.backgroundColor = '#28a745'; // green
   statsBtn.style.color = 'white';
   statsBtn.style.border = 'none';
   statsBtn.style.padding = '12px';
@@ -353,6 +394,7 @@ function setupExamControls() {
   statsBtn.addEventListener('click', showExamStats);
   container.appendChild(statsBtn);
 
+  // Save buttons globally for convenience
   window._examButtons = { startBtn, pauseBtn, stopBtn };
 
   updateTimerDisplay();
@@ -372,6 +414,37 @@ function updateTimerDisplay(forceReset = false) {
   timerDisplay.textContent = `⏱ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+function saveTimerState() {
+  localStorage.setItem('examTimerState', JSON.stringify({
+    examModeActive,
+    timerPaused,
+    timeLeft,
+    startTimestamp: window._examTimerStartTimestamp || null,
+    pauseTimestamp: window._examPauseTimestamp || null
+  }));
+}
+
+function loadTimerState() {
+  const state = JSON.parse(localStorage.getItem('examTimerState'));
+  if (!state) return false;
+
+  examModeActive = state.examModeActive;
+  timerPaused = state.timerPaused;
+  timeLeft = state.timeLeft || 50 * 60;
+  window._examTimerStartTimestamp = state.startTimestamp || null;
+  window._examPauseTimestamp = state.pauseTimestamp || null;
+
+  return examModeActive;
+}
+
+function saveExamProgress() {
+  localStorage.setItem('examProgress', JSON.stringify(examProgress));
+}
+
+function loadExamProgress() {
+  examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+}
+
 function startExamMode() {
   if (examCountdown !== null) {
     alert("Exam timer is already running.");
@@ -384,6 +457,12 @@ function startExamMode() {
   examModeActive = true;
   examProgress = {};
 
+  window._examTimerStartTimestamp = Date.now();
+  window._examPauseTimestamp = null;
+
+  saveTimerState();
+  saveExamProgress();
+
   const { startBtn, pauseBtn, stopBtn } = window._examButtons;
   startBtn.disabled = true;
   pauseBtn.disabled = false;
@@ -394,33 +473,103 @@ function startExamMode() {
 
   examCountdown = setInterval(() => {
     if (!timerPaused) {
-      timeLeft--;
-      if (timeLeft < 0) {
+      const elapsedSeconds = Math.floor((Date.now() - window._examTimerStartTimestamp) / 1000);
+      timeLeft = Math.max(50 * 60 - elapsedSeconds, 0);
+
+      if (timeLeft <= 0) {
         clearInterval(examCountdown);
         examCountdown = null;
         examModeActive = false;
         alert("Exam time is over!");
         showExamSummary();
+
         startBtn.disabled = false;
         pauseBtn.disabled = true;
         stopBtn.disabled = true;
+        pauseBtn.textContent = 'Pause';
+
+        localStorage.removeItem('examTimerState');
+        localStorage.removeItem('examProgress');
       } else {
         updateTimerDisplay();
+        saveTimerState();
       }
     }
   }, 1000);
 }
 
-function showExamSummary() {
-  const total = Object.keys(examProgress).length;
-  const correct = Object.values(examProgress).filter(v => v === 'correct').length;
-  const incorrect = total - correct;
-  alert(`Exam over!\nQuestions answered: ${total}\nCorrect: ${correct}\nIncorrect: ${incorrect}`);
+function resumeExamTimer() {
+  if (!examModeActive || !window._examTimerStartTimestamp) return;
+
+  const { startBtn, pauseBtn, stopBtn } = window._examButtons;
+
+  // Disable start, enable pause and stop buttons
+  startBtn.disabled = true;
+  pauseBtn.disabled = false;
+  stopBtn.disabled = false;
+  pauseBtn.textContent = timerPaused ? 'Resume' : 'Pause';
+
+  // Calculate timeLeft using timestamps if not paused
+  if (timerPaused && window._examPauseTimestamp) {
+    const pausedDuration = Date.now() - window._examPauseTimestamp;
+    // timeLeft remains same but we note paused time for display
+  } else {
+    const elapsedSeconds = Math.floor((Date.now() - window._examTimerStartTimestamp) / 1000);
+    timeLeft = Math.max(50 * 60 - elapsedSeconds, 0);
+  }
+
+  updateTimerDisplay();
+
+  examCountdown = setInterval(() => {
+    if (!timerPaused) {
+      const elapsedSeconds = Math.floor((Date.now() - window._examTimerStartTimestamp) / 1000);
+      timeLeft = Math.max(50 * 60 - elapsedSeconds, 0);
+
+      if (timeLeft <= 0) {
+        clearInterval(examCountdown);
+        examCountdown = null;
+        examModeActive = false;
+        alert("Exam time is over!");
+        showExamSummary();
+
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        stopBtn.disabled = true;
+        pauseBtn.textContent = 'Pause';
+
+        localStorage.removeItem('examTimerState');
+        localStorage.removeItem('examProgress');
+      } else {
+        updateTimerDisplay();
+        saveTimerState();
+      }
+    }
+  }, 1000);
 }
 
 function showExamStats() {
-  const total = Object.keys(examProgress).length;
-  const correct = Object.values(examProgress).filter(v => v === 'correct').length;
-  const incorrect = total - correct;
-  alert(`Exam progress:\nCorrect answers: ${correct}\nIncorrect answers: ${incorrect}`);
+  loadExamProgress();
+
+  const totalQuestions = Object.keys(examProgress).length;
+  const correctCount = Object.values(examProgress).filter(v => v === 'correct').length;
+  const incorrectCount = totalQuestions - correctCount;
+
+  alert(`Exam Stats:
+  Total Answered: ${totalQuestions}
+  Correct: ${correctCount}
+  Incorrect: ${incorrectCount}`);
+}
+
+function showExamSummary() {
+  loadExamProgress();
+
+  const totalQuestions = Object.keys(examProgress).length;
+  const correctCount = Object.values(examProgress).filter(v => v === 'correct').length;
+  const incorrectCount = totalQuestions - correctCount;
+
+  alert(`Exam finished!
+  Total Questions Answered: ${totalQuestions}
+  Correct: ${correctCount}
+  Incorrect: ${incorrectCount}
+  Your progress has been reset.`);
 }
