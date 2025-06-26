@@ -15,7 +15,7 @@ let examProgress = {};
 window._examTimerStartTimestamp = null;
 window._examPauseTimestamp = null;
 
-const explanationApiUrl = 'https://3547-73-176-184-30.ngrok-free.app/explain';
+const explanationApiUrl = 'https://233d-34-125-70-186.ngrok-free.app/explain';
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -189,51 +189,42 @@ async function showQuestion(index) {
   explanationElem.textContent = '';
 
   question.choices.forEach(choice => {
-    const choiceButton = document.createElement('button');
-    choiceButton.textContent = choice;
-    choiceButton.classList.add('choice-btn');
-    choiceButton.disabled = false;
+    const choiceBtn = document.createElement('button');
+    choiceBtn.textContent = choice;
+    choiceBtn.classList.add('choice-btn');
 
-    choiceButton.onclick = async () => {
-      // Disable all buttons once answered
+    choiceBtn.addEventListener('click', async () => {
       const allButtons = document.querySelectorAll('.choice-btn');
       allButtons.forEach(btn => btn.disabled = true);
 
-      const userAnswerLetter = choice.trim()[0];
-      const isCorrect = userAnswerLetter === answerLetter;
+      const selectedAnswer = choice.trim().charAt(0);
+      const isCorrect = selectedAnswer === question.answer;
 
-      // Add styles for correct/incorrect
+      choiceBtn.classList.add(isCorrect ? 'correct' : 'incorrect');
+
       allButtons.forEach(btn => {
-        if (btn === choiceButton) {
-          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
-        } else {
-          btn.classList.add('not-selected');
-          if (btn.textContent.trim()[0] === answerLetter) {
-            btn.classList.add('correct');
-          }
+        if (btn !== choiceBtn) btn.classList.add('not-selected');
+        if (btn.textContent.trim().startsWith(question.answer + '.')) {
+          btn.classList.add('correct');
         }
       });
 
-      // Show selected and correct answer in answer-text
-      answerElem.textContent = `You answered '${userAnswerLetter}'. The correct answer is '${answerLetter}'.`;
-      answerElem.style.display = 'block';
-
-      // Save progress locally
       if (examModeActive) {
         examProgress[key] = isCorrect ? 'correct' : 'incorrect';
         saveExamProgress();
       } else if (isCorrect) {
         const progress = JSON.parse(localStorage.getItem('progress')) || {};
-        progress[key] = {
-          correct: true,
-          timestamp: Date.now()
-        };
+        progress[key] = { correct: true, timestamp: Date.now() };
         localStorage.setItem('progress', JSON.stringify(progress));
       }
 
-      // Fetch explanation from API
-      explanationElem.textContent = 'Loading explanation...';
+      const answerElem = document.getElementById('answer-text');
+      answerElem.style.display = 'block';
+      answerElem.textContent = `You answered '${selectedAnswer}'. The correct answer is '${question.answer}'.`;
+
+      const explanationElem = document.getElementById('explanation-text');
       explanationElem.style.display = 'block';
+      explanationElem.textContent = 'Loading explanation...';
 
       try {
         const response = await fetch(explanationApiUrl, {
@@ -241,28 +232,24 @@ async function showQuestion(index) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             question: question.question,
-            answer: userAnswerLetter,  // student's selected answer
-            setName: question.set,
-            questionNumber: question.question_number
+            user_answer: selectedAnswer,
+            correct_answer: question.answer,
+            set: question.set,
+            question_number: question.question_number
           })
         });
 
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-
         const data = await response.json();
-        if (data.explanation) {
-          explanationElem.textContent = data.explanation.trim();
-        } else {
-          explanationElem.textContent = 'No explanation available.';
-        }
-      } catch (error) {
-        console.error('Error fetching explanation:', error);
+        explanationElem.textContent = data.explanation || 'No explanation available.';
+      } catch (err) {
+        console.error('Error fetching explanation:', err);
         explanationElem.textContent = 'Failed to fetch explanation.';
       }
-    };
+    });
 
-    choicesContainer.appendChild(choiceButton);
+    choicesContainer.appendChild(choiceBtn);
   });
+  
 }
 
 function toggleBookmark() {

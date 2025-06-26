@@ -1,7 +1,7 @@
 // explain.js
 
 // Replace this with your current ngrok URL each time it changes
-const EXPLAIN_API_URL = 'https://3b7b-34-16-158-131.ngrok-free.app/explain';
+const EXPLAIN_API_URL = 'https://233d-34-125-70-186.ngrok-free.app/explain';
 
 async function getExplanation(question, userAnswer, correctAnswer, setName, questionNumber) {
     const payload = {

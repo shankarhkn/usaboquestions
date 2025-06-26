@@ -1,17 +1,21 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { OpenAI } = require('openai');
 require('dotenv').config();
-console.log('API Key:', process.env.OPENAI_API_KEY ? 'SET' : 'NOT SET');
-
 
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
 app.use(bodyParser.json());
+
+// rest of your code
+
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -34,7 +38,7 @@ The student selected: ${user_answer}
 Explain why this answer is incorrect, and what the correct answer is with reasoning.
 
 Be detailed but concise, using simple language suitable for high school biology students.
-`;
+  `;
 
     try {
         const chat = await openai.chat.completions.create({
@@ -51,6 +55,7 @@ Be detailed but concise, using simple language suitable for high school biology 
     }
 });
 
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`✅ Server running at http://localhost:${port}`);
 });
