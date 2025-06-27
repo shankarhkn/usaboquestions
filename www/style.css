@@ -1,12 +1,12 @@
-/* === style.css - Mobile Friendly === */
+/* === style.css with blue theme and mobile friendly === */
 
-/* Global styles */
 body {
   font-family: 'Rubik', sans-serif;
   margin: 0;
   padding: 10px;
-  background-color: #fff;
-  color: #222;
+  background-color: #f0f4ff;
+  /* light blue background */
+  color: #1a1a1a;
   font-size: 16px;
   line-height: 1.4;
 }
@@ -18,8 +18,11 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px 5px;
-  border-bottom: 1px solid #ccc;
-  background-color: #f9f9f9;
+  border-bottom: 3px solid #0d47a1;
+  /* strong blue border */
+  background-color: #1e3a8a;
+  /* dark blue header background */
+  color: #fff;
 }
 
 #header-left {
@@ -31,12 +34,15 @@ body {
   margin: 0;
   font-weight: 600;
   font-size: 1.5rem;
+  color: #e0e7ff;
+  /* lighter blue text */
 }
 
 #header-left #subtitle {
   margin: 3px 0 0 0;
   font-size: 0.9rem;
-  color: #666;
+  color: #a5b4fc;
+  /* pale blue text */
 }
 
 /* User settings */
@@ -47,12 +53,15 @@ body {
   gap: 8px;
   justify-content: center;
   font-size: 1rem;
+  color: #cbd5e1;
+  /* light gray-blue */
 }
 
 #user-settings span {
   flex: 1 1 100%;
   text-align: center;
   font-weight: 500;
+  color: #e0e7ff;
 }
 
 #user-settings button {
@@ -61,14 +70,16 @@ body {
   padding: 10px;
   font-size: 1rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #f4f4f4;
+  border: 1px solid #93c5fd;
+  background-color: #3b82f6;
+  /* bright blue buttons */
+  color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 #user-settings button:hover {
-  background-color: #e0e0e0;
+  background-color: #2563eb;
 }
 
 /* Exam controls */
@@ -78,9 +89,10 @@ body {
   justify-content: center;
   gap: 8px;
   margin: 15px 0;
-  background-color: #fefefe;
+  background-color: #dbeafe;
+  /* pale blue background */
   padding: 10px 5px;
-  border: 1px solid #ddd;
+  border: 1px solid #93c5fd;
   border-radius: 8px;
 }
 
@@ -90,6 +102,7 @@ body {
   flex: 1 1 100%;
   text-align: center;
   margin-bottom: 10px;
+  color: #1e40af;
 }
 
 #exam-controls-box button {
@@ -98,8 +111,10 @@ body {
   padding: 10px;
   font-size: 1rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #fafafa;
+  border: 1px solid #3b82f6;
+  background-color: #60a5fa;
+  /* lighter blue */
+  color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -110,7 +125,7 @@ body {
 }
 
 #exam-controls-box button:hover:not(:disabled) {
-  background-color: #e6e6e6;
+  background-color: #2563eb;
 }
 
 /* Filters */
@@ -130,18 +145,24 @@ body {
   font-size: 1rem;
 }
 
+#filters label {
+  color: #1e40af;
+  font-weight: 600;
+}
+
 #filters select,
 #filters button {
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #3b82f6;
   cursor: pointer;
-  background-color: #fff;
+  background-color: white;
+  color: #1e40af;
   transition: background-color 0.2s ease;
 }
 
 #filters button:hover {
-  background-color: #f0f0f0;
+  background-color: #bfdbfe;
 }
 
 /* Question Box */
@@ -149,10 +170,11 @@ body {
   max-width: 600px;
   margin: 0 auto 25px auto;
   padding: 15px 20px;
-  background-color: #fafafa;
-  border: 1px solid #ddd;
+  background-color: white;
+  border: 1px solid #93c5fd;
   border-radius: 8px;
   box-sizing: border-box;
+  color: #1e3a8a;
 }
 
 #question-meta {
@@ -162,14 +184,14 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 10px;
+  color: #1e40af;
+  font-weight: 600;
 }
 
 #question-meta-left {
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
-  font-weight: 600;
-  color: #444;
   font-size: 0.9rem;
 }
 
@@ -179,23 +201,24 @@ body {
   background: none;
   border: none;
   user-select: none;
-  color: #cc9900;
+  color: #fbbf24;
+  /* gold */
   transition: color 0.2s ease;
 }
 
 #bookmark-btn.bookmarked {
-  color: #ffcc00;
+  color: #f59e0b;
+  /* brighter gold */
 }
 
 #bookmark-btn:hover {
-  color: #ffaa00;
+  color: #d97706;
 }
 
 #question-text {
   font-size: 1.1rem;
   margin-bottom: 15px;
   line-height: 1.5;
-  color: #222;
 }
 
 /* Choices buttons */
@@ -210,35 +233,41 @@ body {
   padding: 10px 15px;
   font-size: 1rem;
   border-radius: 6px;
-  border: 1px solid #bbb;
-  background-color: #fff;
+  border: 1px solid #3b82f6;
+  background-color: white;
   cursor: pointer;
   text-align: left;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   user-select: none;
+  color: #1e3a8a;
 }
 
 .choice-btn:hover:not(:disabled) {
-  background-color: #f0f0f0;
+  background-color: #bfdbfe;
 }
 
-/* Choice button states */
+/* Choice button states with color */
 .choice-btn.correct {
-  background-color: #d4edda;
-  border-color: #28a745;
-  color: #155724;
+  background-color: #d1fae5;
+  /* light green */
+  border-color: #22c55e;
+  /* green */
+  color: #166534;
   cursor: default;
 }
 
 .choice-btn.incorrect {
-  background-color: #f8d7da;
-  border-color: #dc3545;
-  color: #721c24;
+  background-color: #fee2e2;
+  /* light red */
+  border-color: #dc2626;
+  /* red */
+  color: #991b1b;
   cursor: default;
 }
 
 .choice-btn.not-selected {
   opacity: 0.6;
+  background-color: white;
   cursor: default;
 }
 
@@ -246,13 +275,13 @@ body {
 #answer-text {
   font-weight: 700;
   margin-top: 10px;
-  color: #333;
+  color: #1e40af;
 }
 
 /* Explanation text */
 #explanation-text {
   font-style: italic;
-  color: #666;
+  color: #4b5563;
   margin-top: 10px;
   font-size: 0.9rem;
   line-height: 1.3;
@@ -273,21 +302,22 @@ body {
   padding: 12px 0;
   font-size: 1rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #fafafa;
+  border: 1px solid #3b82f6;
+  background-color: #60a5fa;
+  color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .controls button:hover {
-  background-color: #e6e6e6;
+  background-color: #2563eb;
 }
 
 /* Footer */
 footer {
   text-align: center;
   font-size: 0.9rem;
-  color: #666;
+  color: #4b5563;
   margin-bottom: 10px;
 }
 
