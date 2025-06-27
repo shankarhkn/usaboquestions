@@ -1,53 +1,24 @@
 // explain.js
-
-// Replace this with your current ngrok URL each time it changes
-const EXPLAIN_API_URL = 'https://233d-34-125-70-186.ngrok-free.app/explain';
-
-async function getExplanation(question, userAnswer, correctAnswer, setName, questionNumber) {
-    const payload = {
-        question,
-        user_answer: userAnswer,
-        correct_answer: correctAnswer,
-        setName,
-        questionNumber
-    };
-
+export async function getExplanation(question, user_answer, correct_answer, set, question_number) {
     try {
-        const response = await fetch(EXPLAIN_API_URL, {
+        const response = await fetch('http://localhost:9000/explain', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question,
+                user_answer,
+                correct_answer,
+                set,
+                question_number
+            })
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        return data.explanation;
+        return data.explanation || 'No explanation returned.';
     } catch (error) {
-        console.error('Error fetching explanation:', error);
-        return null;
+        console.error('Error in getExplanation:', error);
+        throw error;
     }
 }
-
-// Example usage (you can remove this or call from your UI)
-async function explainExample() {
-    const question = "Why does the sky appear blue?";
-    const userAnswer = "Because the ocean is blue.";
-    const correctAnswer = "Because sunlight scatters in the atmosphere.";
-    const setName = "Sample Set";
-    const questionNumber = 1;
-
-    const explanation = await getExplanation(question, userAnswer, correctAnswer, setName, questionNumber);
-    if (explanation) {
-        console.log("Explanation:", explanation);
-        // Example: update DOM element
-        // document.getElementById('explanation-text').textContent = explanation;
-    } else {
-        console.log("Failed to get explanation.");
-    }
-}
-
-// Run example if you want
-// explainExample();
