@@ -1,29 +1,5 @@
+// Updated script.js with all LLM-related features removed
 
-// all your existing script.js code here...
-async function getExplanation(question, user_answer, correct_answer, set, question_number) {
-  try {
-    const response = await fetch('http://localhost:9000/explain', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        question,
-        user_answer,
-        correct_answer,
-        set,
-        question_number
-      })
-    });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const data = await response.json();
-    return data.explanation || 'No explanation returned.';
-  } catch (error) {
-    console.error('Error in getExplanation:', error);
-    throw error;
-  }
-}
-// script.js
 let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;
@@ -39,9 +15,6 @@ let examProgress = {};
 
 window._examTimerStartTimestamp = null;
 window._examPauseTimestamp = null;
-
-const explanationApiUrl = 'http://localhost:9000/explain';
-
 
 document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
@@ -81,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("apply-filters").addEventListener("click", applyFilters);
 
-  // ** ADD: Setup Exam mode buttons here **
   const examBtn = document.getElementById("start-exam-mode");
   const pauseBtn = document.getElementById("pause-timer-btn");
   const stopBtn = document.getElementById("stop-timer-btn");
@@ -90,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (pauseBtn) pauseBtn.addEventListener("click", pauseTimer);
   if (stopBtn) stopBtn.addEventListener("click", stopTimer);
 
-  // Initially disable pause and stop buttons until exam starts
   if (pauseBtn) pauseBtn.disabled = true;
   if (stopBtn) stopBtn.disabled = true;
 
@@ -219,31 +190,24 @@ async function showQuestion(index) {
 
   const answerLetter = question.answer;
 
-  // Hide answer and explanation text initially
   const answerElem = document.getElementById('answer-text');
   const explanationElem = document.getElementById('explanation-text');
   answerElem.style.display = 'none';
   explanationElem.style.display = 'none';
   explanationElem.textContent = '';
 
-  // Make sure getExplanation is accessible here,
-  // either via import or by including explain.js before script.js in HTML
-
   question.choices.forEach(choice => {
     const choiceBtn = document.createElement('button');
     choiceBtn.textContent = choice;
     choiceBtn.classList.add('choice-btn');
 
-    choiceBtn.addEventListener('click', async () => {
-      // Disable all choice buttons so user can't change answer
+    choiceBtn.addEventListener('click', () => {
       const allButtons = document.querySelectorAll('.choice-btn');
       allButtons.forEach(btn => btn.disabled = true);
 
-      // Determine user's selected answer letter (assuming format like "A. ..." )
       const selectedAnswer = choice.trim().charAt(0);
       const isCorrect = selectedAnswer === question.answer;
 
-      // Mark buttons visually correct/incorrect
       choiceBtn.classList.add(isCorrect ? 'correct' : 'incorrect');
       allButtons.forEach(btn => {
         if (btn !== choiceBtn) btn.classList.add('not-selected');
@@ -252,36 +216,14 @@ async function showQuestion(index) {
         }
       });
 
-      // Show answer text
-      const answerElem = document.getElementById('answer-text');
       answerElem.style.display = 'block';
       answerElem.textContent = `You answered '${selectedAnswer}'. The correct answer is '${question.answer}'.`;
 
-      // Show explanation loading text
-      const explanationElem = document.getElementById('explanation-text');
-      explanationElem.style.display = 'block';
-      explanationElem.textContent = 'Loading explanation...';
-
-      try {
-        const explanation = await getExplanation(
-          question.question,
-          choice.trim().charAt(0),
-          question.answer,
-          question.set,
-          question.question_number
-        );
-
-        explanationElem.textContent = explanation || 'No explanation available.';
-      } catch (err) {
-        console.error('Error fetching explanation:', err);
-        explanationElem.textContent = 'Failed to fetch explanation.';
-      }
+      explanationElem.style.display = 'none';
     });
 
     choicesContainer.appendChild(choiceBtn);
   });
-
-
 }
 
 function toggleBookmark() {
@@ -303,25 +245,19 @@ function showStats() {
   alert(`${currentUsername}, you have correctly answered ${totalCorrect} question(s).`);
 }
 
-// -----------------
-// ADDITION: Exam Timer Controls (minimal working)
-// -----------------
-
 function setupExamControls() {
-  // No timer running initially
   updateTimerDisplay();
 }
 
 function startExamMode() {
-  if (examModeActive) return; // already running
+  if (examModeActive) return;
 
   examModeActive = true;
-  timeLeft = 50 * 60; // 50 minutes
+  timeLeft = 50 * 60;
   timerPaused = false;
   examProgress = {};
   saveExamProgress();
 
-  // Enable pause/stop buttons, disable start
   document.getElementById("start-exam-mode").disabled = true;
   document.getElementById("pause-timer-btn").disabled = false;
   document.getElementById("stop-timer-btn").disabled = false;
@@ -342,7 +278,6 @@ function startExamMode() {
 
 function pauseTimer() {
   if (!examModeActive) return;
-
   timerPaused = !timerPaused;
   document.getElementById("pause-timer-btn").textContent = timerPaused ? "Resume" : "Pause";
 }
@@ -355,7 +290,6 @@ function stopTimer() {
   timeLeft = 50 * 60;
   updateTimerDisplay();
 
-  // Enable start button, disable pause/stop
   document.getElementById("start-exam-mode").disabled = false;
   document.getElementById("pause-timer-btn").disabled = true;
   document.getElementById("stop-timer-btn").disabled = true;
@@ -373,17 +307,12 @@ function updateTimerDisplay() {
 }
 
 function loadTimerState() {
-  // Stub for future - return false for now
   return false;
 }
 
-function loadExamProgress() {
-  // Stub for future
-}
+function loadExamProgress() { }
 
-function resumeExamTimer() {
-  // Stub for future
-}
+function resumeExamTimer() { }
 
 function saveExamProgress() {
   localStorage.setItem('examProgress', JSON.stringify(examProgress));
