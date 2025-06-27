@@ -5,6 +5,7 @@ let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+let seenQuestionKeys = new Set();
 
 let username = localStorage.getItem('username') || "Guest";
 
@@ -22,8 +23,26 @@ document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
 
   document.getElementById("show-stats-btn").addEventListener("click", showStats);
+  document.getElementById("bookmark-btn").addEventListener("click", () => {
+    if (filteredQuestions.length === 0) return;
+    const q = filteredQuestions[currentIndex];
+    const key = `${q.set || 'set'}-${q.question_number || currentIndex + 1}`;
+    toggleBookmark(key);
+  });  
   document.getElementById("change-username-btn").addEventListener("click", changeUsername);
   document.getElementById("clear-stats-btn").addEventListener("click", clearStats);
+  document.getElementById("restart-questions").addEventListener("click", () => {
+    if (filteredQuestions.length === 0) {
+      alert("No questions to restart under current filters.");
+      return;
+    }
+    if (confirm("Are you sure you want to restart the current filtered questions?")) {
+      seenQuestionKeys.clear();
+      currentIndex = 0;
+      showQuestion(currentIndex);
+    }
+  });
+  
 
   document.getElementById("prev").addEventListener("click", () => {
     if (filteredQuestions.length === 0) return;
@@ -125,26 +144,28 @@ function populateFilterOptions() {
 }
 
 function applyFilters() {
+  seenQuestionKeys.clear();
   const selectedCategory = document.getElementById('category-select').value;
   const selectedSet = document.getElementById('set-select').value;
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
 
-  if (selectedSet === "__bookmarked__") {
-    filteredQuestions = questions.filter(q => bookmarks.includes(`${q.set || 'set'}-${q.question_number}`));
-  } else if (selectedSet === "__incorrect__") {
-    filteredQuestions = questions.filter(q => {
-      const key = `${q.set || 'set'}-${q.question_number}`;
-      return progress[key] === false && (!selectedCategory || q.category === selectedCategory);
-    });
-  } else {
-    filteredQuestions = questions.filter(q => {
-      return (!selectedCategory || q.category === selectedCategory) && (!selectedSet || q.set === selectedSet);
-    });
-  }
+  filteredQuestions = questions.filter(q => {
+    const isCategoryMatch = !selectedCategory || q.category === selectedCategory;
+
+    const isSetMatch =
+      (selectedSet === '__bookmarked__')
+        ? bookmarks.includes(`${q.set || 'set'}-${q.question_number}`)
+        : (!selectedSet || q.set === selectedSet);
+
+    return isCategoryMatch && isSetMatch;
+  });
 
   if (filteredQuestions.length === 0) {
-    document.getElementById('question-text').textContent = 'No questions match the filters.';
+    document.getElementById('question-text').textContent = 'No questions match the selected filters.';
     document.getElementById('choices-text').innerHTML = '';
+    document.getElementById('question-set').textContent = '';
+    document.getElementById('question-category').textContent = '';
+    document.getElementById('question-number').textContent = '';
+    document.getElementById('answer-text').style.display = 'none';
     return;
   }
 
@@ -153,35 +174,112 @@ function applyFilters() {
   showQuestion(currentIndex);
 }
 
-function showQuestion(index) {
-  const q = filteredQuestions[index];
-  if (!q) return;
 
-  const key = `${q.set || 'set'}-${q.question_number}`;
+async function showQuestion(index) {
+  if (filteredQuestions.length === 0) {
+    document.getElementById('question-text').textContent = 'No questions match the selected filters.';
+    document.getElementById('choices-text').innerHTML = '';
+    document.getElementById('question-set').textContent = '';
+    document.getElementById('question-category').textContent = '';
+    document.getElementById('question-number').textContent = '';
+    document.getElementById('answer-text').style.display = 'none';
+    return;
+  }
 
-  document.getElementById('question-set').textContent = q.set ? `Set: ${q.set}` : '';
-  document.getElementById('question-number').textContent = `Question ${q.question_number}`;
-  document.getElementById('question-category').textContent = q.category ? `Category: ${q.category}` : '';
+  // If all filtered questions have been seen, show completion message
+  if (seenQuestionKeys.size === filteredQuestions.length) {
+    document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
+    document.getElementById('choices-text').innerHTML = '';
+    document.getElementById('question-set').textContent = '';
+    document.getElementById('question-category').textContent = '';
+    document.getElementById('question-number').textContent = '';
+    document.getElementById('answer-text').style.display = 'none';
+    return;
+  }
 
-  const bookmarkBtn = document.getElementById('bookmark-btn');
-  bookmarkBtn.textContent = bookmarks.includes(key) ? '★' : '☆';
-  bookmarkBtn.style.color = '#f5b301';
-  bookmarkBtn.onclick = () => toggleBookmark(key);
+  // Loop to find next unseen question starting from index
+  let current = index;
+  let tries = 0;
+  while (tries < filteredQuestions.length) {
+    const question = filteredQuestions[current];
+    const key = `${question.set || 'set'}-${question.question_number || current + 1}`;
+    if (!seenQuestionKeys.has(key)) {
+      // Found unseen question, update currentIndex
+      currentIndex = current;
+      seenQuestionKeys.add(key);
 
-  document.getElementById('question-text').innerHTML = q.question;
+      // Display bookmark status
+      const bookmarkBtn = document.getElementById('bookmark-btn');
+      if (bookmarks.includes(key)) {
+        bookmarkBtn.classList.add('bookmarked');
+        bookmarkBtn.textContent = '★'; // filled star
+      } else {
+        bookmarkBtn.classList.remove('bookmarked');
+        bookmarkBtn.textContent = '☆'; // empty star
+      }
 
-  const choicesContainer = document.getElementById('choices-text');
-  choicesContainer.innerHTML = '';
+      // Show question metadata
+      document.getElementById('question-number').textContent = `Question ${question.question_number || current + 1}`;
+      document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
+      document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
 
-  q.choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = choice;
+      // Show question text
+      document.getElementById('question-text').innerHTML = question.question;
 
-    btn.addEventListener('click', () => handleAnswer(btn, q, choice, key));
-    choicesContainer.appendChild(btn);
-  });
+      // Show choices
+      const choicesContainer = document.getElementById('choices-text');
+      choicesContainer.innerHTML = '';
+
+      const answerElem = document.getElementById('answer-text');
+      answerElem.style.display = 'none';
+      answerElem.textContent = '';
+
+      question.choices.forEach(choice => {
+        const choiceBtn = document.createElement('button');
+        choiceBtn.textContent = choice;
+        choiceBtn.classList.add('choice-btn');
+
+        choiceBtn.addEventListener('click', () => {
+          document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+
+          const selected = choice.trim().charAt(0);
+          const correct = question.answer;
+
+          choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
+
+          document.querySelectorAll('.choice-btn').forEach(btn => {
+            if (btn.textContent.trim().startsWith(correct + '.')) btn.classList.add('correct');
+            else if (btn !== choiceBtn) btn.classList.add('not-selected');
+          });
+
+          answerElem.style.display = 'block';
+          answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+
+          // Save progress to localStorage
+          const progress = JSON.parse(localStorage.getItem('progress')) || {};
+          progress[key] = selected === correct;
+          localStorage.setItem('progress', JSON.stringify(progress));
+        });
+
+        choicesContainer.appendChild(choiceBtn);
+      });
+
+      return; // Exit after showing one question
+    }
+    current = (current + 1) % filteredQuestions.length;
+    tries++;
+  }
+
+  // If we somehow got here, show no unseen questions message
+  document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
+  document.getElementById('choices-text').innerHTML = '';
+  document.getElementById('question-set').textContent = '';
+  document.getElementById('question-category').textContent = '';
+  document.getElementById('question-number').textContent = '';
+  document.getElementById('answer-text').style.display = 'none';
 }
+
+
 
 function handleAnswer(btn, q, choice, key) {
   const buttons = document.querySelectorAll('.choice-btn');
@@ -221,8 +319,9 @@ function toggleBookmark(key) {
     bookmarks.push(key);
   }
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  showQuestion(currentIndex);
+  showQuestion(currentIndex); // Refresh display to update star
 }
+
 
 function showStats() {
   const progress = JSON.parse(localStorage.getItem('progress')) || {};
@@ -278,11 +377,25 @@ function saveExamState() {
 }
 
 function resumeExamTimer() {
-  startExamMode();
+  if (!examModeActive) return;
+  updateTimerDisplay();
+  examCountdown = setInterval(() => {
+    if (!timerPaused) {
+      timeLeft--;
+      localStorage.setItem('examTimeLeft', timeLeft);
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(examCountdown);
+        stopTimer();
+        alert("Exam time is up!");
+      }
+    }
+  }, 1000);
 }
 
+
 function showExamStats() {
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  const progress = JSON.parse(localStorage.getItem('examProgress')) || {};
   const totalSeen = Object.keys(progress).length;
   const totalCorrect = Object.values(progress).filter(v => v === true).length;
   const totalIncorrect = Object.values(progress).filter(v => v === false).length;

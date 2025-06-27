@@ -503,3 +503,6 @@ button:disabled {
   color: #f5b301;
   /* same gold when bookmarked */
 }
+#restart-questions {
+  margin-left: 10px;
+}
