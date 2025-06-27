@@ -3,38 +3,44 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Biology Reader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BiologyReader</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="photos/seedling.svg" type="image/svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="photos/seedling.svg" type="image/svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-  <div id="user-settings">
-    <span id="greeting"></span>
-    <button id="show-stats">Show Stats</button>
-    <button id="change-username">Change Username</button>
-    <button id="clear-stats">Clear Stats</button>
-  
-    <div id="exam-timer-container">
-      <button id="start-exam-mode">Start 50-min Exam</button>
-      <div id="exam-timer">50:00</div>
+  <header id="header">
+    <div id="header-left">
+      <h1>Biology Question Viewer</h1>
+      <p id="subtitle">Still in development 🛠️, version 1.05a</p>
     </div>
-  </div>
-  
+    <div id="user-settings">
+      <span>Welcome, <strong id="username-display">User</strong></span>
+      <button id="show-stats-btn">Show Stats</button>
+      <button id="change-username-btn">Change Username</button>
+      <button id="clear-stats-btn">Clear Stats</button>
+    </div>
+  </header>
 
-  <div id="app">
-    <h1>Biology Question Viewer</h1>
-    <h3>*Still in development 🛠, Version 1.11a</h3>
-    <h4>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the questions.
+  <div id="exam-controls-box">
+    <div id="exam-timer">⏱ 50:00</div>
+    <button id="start-exam-mode">Start 50-min Exam</button>
+    <button id="pause-timer-btn" disabled>Pause</button>
+    <button id="stop-timer-btn" disabled>Stop</button>
+    <button id="show-exam-stats-btn">Show Exam Stats</button>
+  </div>
+
+  <main id="app">
+    <h4 id="cee-note">
+      <strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the
+        questions.</strong>
     </h4>
 
-
-    <!-- Filter by category and year -->
-    <div id="filters">
+    <section id="filters">
       <label for="category-select">Category:</label>
       <select id="category-select">
         <option value="">All</option>
@@ -46,26 +52,37 @@
       </select>
 
       <button id="apply-filters">Apply Filters</button>
-    </div>
+    </section>
 
-    <div id="question-box">
-      <p id="question-set"></p>
-      <p id="question-category"></p>
-      <p id="question-number"></p>
-      <p id="question-text">Loading...</p>
-      <div id="choices-text"></div>
-      <p id="answer-text" style="display: none;"></p>
-    </div>
+    <section id="question-box">
+      <div id="question-meta">
+        <div id="question-meta-left">
+          <span id="question-set"></span>
+          <span id="question-number"></span>
+          <span id="question-category"></span>
+        </div>
+        <button id="bookmark-btn" title="Bookmark this question">☆</button>
+      </div>
+
+
+
+      <p id="question-text" style="margin-top: 15px;">Loading...</p>
+      <div id="choices-text" style="margin: 15px 0;"></div>
+      <p id="answer-text" style="display: none; font-weight: bold; margin-top: 10px;"></p>
+      <p id="explanation-text" style="margin-top: 15px; font-style: italic; color: #444;"></p>
+    </section>
 
     <div class="controls">
       <button id="prev">Previous</button>
       <button id="next">Next</button>
+      <button id="restart-questions">Restart Seen Questions</button>
     </div>
 
-    <div class="copyright">
-      <p>&copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.</p>
-    </div>
-  </div>
+
+    <footer class="copyright">
+      <p>&copy; <span id="year"></span> All Rights Reserved.</p>
+    </footer>
+  </main>
 
   <script src="script.js"></script>
 </body>

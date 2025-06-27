@@ -1,261 +1,327 @@
-/* Reset & Base */
-* {
-  box-sizing: border-box;
-}
+/* === style.css - Mobile Friendly === */
 
+/* Global styles */
 body {
-  font-family: 'Rubik', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ebf7ff;
-  color: #333;
+  font-family: 'Rubik', sans-serif;
   margin: 0;
-  padding: 16px;
-  line-height: 1.4;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* App container */
-#app {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 10px;
-}
-
-/* Headings */
-h1 {
-  font-weight: 700;
-  font-size: 1.8rem;
-  margin-bottom: 0.2em;
+  padding: 10px;
+  background-color: #fff;
   color: #222;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
-h3 {
-  font-weight: 400;
-  font-size: 1rem;
+/* Header */
+#header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+#header-left {
+  flex: 1 1 100%;
+  margin-bottom: 10px;
+}
+
+#header-left h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+#header-left #subtitle {
+  margin: 3px 0 0 0;
+  font-size: 0.9rem;
   color: #666;
-  margin-top: 0;
-  margin-bottom: 1em;
 }
 
-/* Filter section */
-#filters {
+/* User settings */
+#user-settings {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+#user-settings span {
+  flex: 1 1 100%;
+  text-align: center;
+  font-weight: 500;
+}
+
+#user-settings button {
+  flex: 1 1 45%;
+  min-width: 120px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#user-settings button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Exam controls */
+#exam-controls-box {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 8px;
+  margin: 15px 0;
+  background-color: #fefefe;
+  padding: 10px 5px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+#exam-timer {
+  font-size: 1.3rem;
+  font-weight: 600;
+  flex: 1 1 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#exam-controls-box button {
+  flex: 1 1 45%;
+  min-width: 120px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#exam-controls-box button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#exam-controls-box button:hover:not(:disabled) {
+  background-color: #e6e6e6;
+}
+
+/* Filters */
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+#filters label,
+#filters select,
+#filters button {
+  flex: 1 1 100%;
+  min-width: 200px;
+  font-size: 1rem;
 }
 
 #filters select,
 #filters button {
-  font-family: inherit;
-  padding: 6px 10px;
-  font-size: 0.9rem;
+  padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  cursor: pointer;
   background-color: #fff;
-  color: #333;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
-#filters select:focus,
-#filters button:focus {
-  outline: none;
-  border-color: #007bff;
+#filters button:hover {
+  background-color: #f0f0f0;
 }
 
-/* Question card */
+/* Question Box */
 #question-box {
-  background: white;
-  padding: 18px 22px;
-  border-radius: 10px;
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.06);
-  margin-bottom: 1.5rem;
-  transition: box-shadow 0.3s ease;
+  max-width: 600px;
+  margin: 0 auto 25px auto;
+  padding: 15px 20px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 
-#question-box:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+#question-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-/* Question metadata */
-#question-set,
-#question-category,
-#question-number {
-  font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 0.4em;
-  color: #000000;
+#question-meta-left {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  font-weight: 600;
+  color: #444;
+  font-size: 0.9rem;
 }
 
-#question-number {
-  color: #007bff;
-  font-size: 1.1rem;
+#bookmark-btn {
+  font-size: 1.8rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  user-select: none;
+  color: #cc9900;
+  transition: color 0.2s ease;
+}
+
+#bookmark-btn.bookmarked {
+  color: #ffcc00;
+}
+
+#bookmark-btn:hover {
+  color: #ffaa00;
 }
 
 #question-text {
   font-size: 1.1rem;
-  font-weight: 500;
-  margin-bottom: 1em;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  color: #222;
 }
 
-/* Choices styling */
+/* Choices buttons */
+#choices-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
 .choice-btn {
-  display: block;
-  font-family: inherit;
-  text-align: left;
-  width: 100%;
-  padding: 10px 14px;
-  margin-bottom: 8px;
-  background: #fefefe;
-  border: 1.2px solid #ddd;
-  border-radius: 6px;
+  padding: 10px 15px;
   font-size: 1rem;
-  color: #333;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  background-color: #fff;
   cursor: pointer;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-
-.choice-btn:hover {
-  background-color: #e6f0ff;
-  border-color: #007bff;
-}
-
-.choice-btn.not-selected {
-  background-color: rgba(200, 200, 200, 0.3);
-  color: rgba(51, 51, 51, 0.5);
-  border-color: rgba(200, 200, 200, 0.5);
-  pointer-events: none;
-}
-
-.choice-btn.correct {
-  background-color: #a6e3a1;
-  border: 2px solid #4caf50;
-  color: #1b4721;
-}
-
-.choice-btn.incorrect {
-  background-color: #f38ba8;
-  border: 2px solid #f44336;
-  color: #5e1c1c;
-}
-
-/* Navigation buttons */
-.controls {
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  margin: 0 4px;
-  transition: background-color 0.3s ease;
+  text-align: left;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   user-select: none;
 }
 
-button:hover {
-  background-color: #0056b3;
+.choice-btn:hover:not(:disabled) {
+  background-color: #f0f0f0;
 }
 
-button:disabled {
-  background-color: #999;
-  cursor: not-allowed;
+/* Choice button states */
+.choice-btn.correct {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  cursor: default;
 }
 
-/* Image styling */
-#question-box img {
-  display: block;
-  margin: 1rem auto;
-  max-width: 70%;
-  height: auto;
+.choice-btn.incorrect {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+  cursor: default;
+}
+
+.choice-btn.not-selected {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Answer text */
+#answer-text {
+  font-weight: 700;
+  margin-top: 10px;
+  color: #333;
+}
+
+/* Explanation text */
+#explanation-text {
+  font-style: italic;
+  color: #666;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+/* Controls for Prev/Next/Restart buttons */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.controls button {
+  flex: 1 1 45%;
+  min-width: 120px;
+  padding: 12px 0;
+  font-size: 1rem;
   border-radius: 6px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.controls button:hover {
+  background-color: #e6e6e6;
 }
 
 /* Footer */
-.copyright {
+footer {
   text-align: center;
-  font-size: 0.85rem;
-  color: #777;
-  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
 }
 
-/* Responsive tweaks */
-@media (max-width: 600px) {
-  #question-box {
-    padding: 16px;
-  }
-
-  button {
-    display: block;
-    width: 100%;
-    margin: 8px 0;
-  }
-
-  .controls {
-    margin-bottom: 1.5rem;
-  }
-
-  #filters {
+/* Responsive tweaks for small devices */
+@media (max-width: 480px) {
+  #header {
     flex-direction: column;
-    align-items: center;
-  }
-}
-
-/* On wider screens, user-settings and timer sit side-by-side */
-#user-settings {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-  flex-wrap: nowrap;
-  position: relative;
-}
-
-#exam-timer-container {
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: sans-serif;
-}
-
-/* On small screens, stack vertically and center */
-@media (max-width: 600px) {
-  #user-settings {
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: flex-start;
   }
 
-#exam-timer-container {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 20px) + 10px); /* Add safe area inset plus some spacing */
-  right: 10px;
-  background: #f5f5f5;
-  padding: 10px 16px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: sans-serif;
-  z-index: 999;
-  max-width: 140px;
-}
-
-
-  #user-settings>* {
-    flex: 1 1 100%;
-    text-align: center;
+  #header-left {
     margin-bottom: 8px;
+  }
+
+  #user-settings {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #user-settings button,
+  #exam-controls-box button,
+  .controls button {
+    flex: 1 1 100%;
+    min-width: auto;
+  }
+
+  #filters label,
+  #filters select,
+  #filters button {
+    flex: 1 1 100%;
+    min-width: auto;
+  }
+
+  #exam-controls-box {
+    gap: 6px;
   }
 }

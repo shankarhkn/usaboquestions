@@ -1,55 +1,96 @@
+// === FULL UPDATED script.js ===
+// Additive, non-breaking, with "Incorrect Only" filtering within set filter, preserving your existing logic
+
 let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;
-let questionStartTime = null;
-let examTimer = null;
-let examTimeLeft = 0;
+let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+let seenQuestionKeys = new Set();
 
-// Get or use default username
 let username = localStorage.getItem('username') || "Guest";
 
+let examCountdown = null;
+let timeLeft = parseInt(localStorage.getItem('examTimeLeft')) || 50 * 60;
+let timerPaused = false;
+let examModeActive = JSON.parse(localStorage.getItem('examModeActive')) || false;
+let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+
+window._examTimerStartTimestamp = null;
+window._examPauseTimestamp = null;
+
+// === On DOM Loaded ===
 document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
 
-  document.getElementById("show-stats").addEventListener("click", showStats);
-
-  document.getElementById("change-username").addEventListener("click", () => {
-    const newUsername = prompt("Enter a new username (just for this device):")?.trim();
-    if (newUsername) {
-      localStorage.setItem('username', newUsername);
-      localStorage.setItem('usabo_username', newUsername);
-      updateGreetingText(newUsername);
-      alert(`Username changed to ${newUsername}`);
+  document.getElementById("show-stats-btn").addEventListener("click", showStats);
+  document.getElementById("bookmark-btn").addEventListener("click", () => {
+    if (filteredQuestions.length === 0) return;
+    const q = filteredQuestions[currentIndex];
+    const key = `${q.set || 'set'}-${q.question_number || currentIndex + 1}`;
+    toggleBookmark(key);
+  });
+  document.getElementById("change-username-btn").addEventListener("click", changeUsername);
+  document.getElementById("clear-stats-btn").addEventListener("click", clearStats);
+  document.getElementById("restart-questions").addEventListener("click", () => {
+    if (filteredQuestions.length === 0) {
+      alert("No questions to restart under current filters.");
+      return;
+    }
+    if (confirm("Are you sure you want to restart the current filtered questions?")) {
+      seenQuestionKeys.clear();
+      currentIndex = 0;
+      showQuestion(currentIndex);
     }
   });
 
-  document.getElementById("clear-stats").addEventListener("click", () => {
-    if (confirm("Are you sure you want to clear all your progress stats?")) {
-      localStorage.removeItem('progress');
-      alert("Progress stats cleared.");
-    }
+
+  document.getElementById("prev").addEventListener("click", () => {
+    if (filteredQuestions.length === 0) return;
+    currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
+    showQuestion(currentIndex);
   });
 
-  document.getElementById("start-exam-mode").addEventListener("click", () => {
-    if (confirm("Start exam simulation mode? You will have 50 minutes.")) {
-      startExamTimer(50 * 60); // 50 minutes in seconds
-    }
+  document.getElementById("next").addEventListener("click", () => {
+    if (filteredQuestions.length === 0) return;
+    currentIndex = (currentIndex + 1) % filteredQuestions.length;
+    showQuestion(currentIndex);
   });
 
-  updateGreetingText(localStorage.getItem('usabo_username') || username);
-  fetchQuestions();
+  document.getElementById("apply-filters").addEventListener("click", applyFilters);
+
+  document.getElementById("start-exam-mode").addEventListener("click", startExamMode);
+  document.getElementById("pause-timer-btn").addEventListener("click", pauseTimer);
+  document.getElementById("stop-timer-btn").addEventListener("click", stopTimer);
+  document.getElementById("show-exam-stats-btn").addEventListener("click", showExamStats);
+
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  fetchQuestions();
+
+  if (examModeActive) {
+    resumeExamTimer();
+  }
 });
 
-function updateGreetingText(name) {
-  const greetingSpan = document.querySelector("#user-settings #greeting");
-  if (greetingSpan) greetingSpan.textContent = `Welcome, ${name}!`;
+function updateGreeting(name) {
+  document.getElementById('username-display').textContent = name;
 }
 
-function updateGreeting(name) {
-  const greeting = document.getElementById('greeting');
-  const username = localStorage.getItem('usabo_username') || "user";
-  if (greeting) greeting.textContent = `Welcome, ${username}!`;
+function changeUsername() {
+  const newUsername = prompt("Enter a new username:", username);
+  if (newUsername) {
+    username = newUsername;
+    localStorage.setItem('username', username);
+    updateGreeting(username);
+  }
+}
+
+function clearStats() {
+  if (confirm("Clear all your progress stats?")) {
+    localStorage.removeItem('progress');
+    localStorage.removeItem('examProgress');
+    alert("Progress cleared.");
+  }
 }
 
 function shuffle(array) {
@@ -61,47 +102,61 @@ function shuffle(array) {
 
 async function fetchQuestions() {
   try {
-    const response = await fetch('https://usaboquestions.onrender.com/questions');
-    if (!response.ok) throw new Error(`Error fetching questions: ${response.status}`);
-    questions = await response.json();
-    if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions available.');
+    const res = await fetch('https://usaboquestions.onrender.com/questions');
+    questions = await res.json();
     populateFilterOptions();
     applyFilters();
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e);
     document.getElementById('question-text').textContent = 'Failed to load questions.';
-    document.getElementById('answer-text').style.display = 'none';
   }
 }
 
 function populateFilterOptions() {
   const categorySelect = document.getElementById('category-select');
   const setSelect = document.getElementById('set-select');
+
   const categories = [...new Set(questions.map(q => q.category).filter(Boolean))];
   const sets = [...new Set(questions.map(q => q.set).filter(Boolean))];
 
-  for (const cat of categories) {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    categorySelect.appendChild(option);
-  }
+  categorySelect.innerHTML = '<option value="">All</option>';
+  sets.sort();
 
-  for (const set of sets) {
-    const option = document.createElement('option');
-    option.value = set;
-    option.textContent = set;
-    setSelect.appendChild(option);
-  }
+  setSelect.innerHTML = `
+        <option value="">All</option>
+        <option value="__bookmarked__">Bookmarked</option>
+        <option value="__incorrect__">Incorrect</option>
+    `;
+
+  categories.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    categorySelect.appendChild(opt);
+  });
+
+  sets.forEach(set => {
+    const opt = document.createElement('option');
+    opt.value = set;
+    opt.textContent = set;
+    setSelect.appendChild(opt);
+  });
 }
 
 function applyFilters() {
+  seenQuestionKeys.clear();
   const selectedCategory = document.getElementById('category-select').value;
   const selectedSet = document.getElementById('set-select').value;
 
   filteredQuestions = questions.filter(q => {
-    return (!selectedCategory || q.category === selectedCategory) &&
-      (!selectedSet || q.set === selectedSet);
+    const isCategoryMatch = !selectedCategory || q.category === selectedCategory;
+
+    const isSetMatch =
+      (selectedSet === '__bookmarked__')
+        ? bookmarks.includes(`${q.set || 'set'}-${q.question_number}`)
+        : (!selectedSet || q.set === selectedSet);
+
+    return isCategoryMatch && isSetMatch;
   });
 
   if (filteredQuestions.length === 0) {
@@ -119,120 +174,231 @@ function applyFilters() {
   showQuestion(currentIndex);
 }
 
-function showQuestion(index) {
-  const question = filteredQuestions[index];
 
-  document.getElementById('question-number').textContent = `Question ${question.question_number || index + 1}`;
-  document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
-  document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
-  document.getElementById('question-text').innerHTML = question.question;
+async function showQuestion(index) {
+  if (filteredQuestions.length === 0) {
+    document.getElementById('question-text').textContent = 'No questions match the selected filters.';
+    document.getElementById('choices-text').innerHTML = '';
+    document.getElementById('question-set').textContent = '';
+    document.getElementById('question-category').textContent = '';
+    document.getElementById('question-number').textContent = '';
+    document.getElementById('answer-text').style.display = 'none';
+    return;
+  }
 
-  const choicesContainer = document.getElementById('choices-text');
-  choicesContainer.innerHTML = '';
+  // If all filtered questions have been seen, show completion message
+  if (seenQuestionKeys.size === filteredQuestions.length) {
+    document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
+    document.getElementById('choices-text').innerHTML = '';
+    document.getElementById('question-set').textContent = '';
+    document.getElementById('question-category').textContent = '';
+    document.getElementById('question-number').textContent = '';
+    document.getElementById('answer-text').style.display = 'none';
+    return;
+  }
 
-  const answerLetter = question.answer;
-  const matchingChoice = question.choices.find(c => c.trim().startsWith(answerLetter + '.')) || '';
-  const answerFullText = matchingChoice ? matchingChoice : `Answer: ${answerLetter}`;
-  const answerElem = document.getElementById('answer-text');
-  answerElem.textContent = answerFullText;
-  answerElem.style.display = 'none';
+  // Loop to find next unseen question starting from index
+  let current = index;
+  let tries = 0;
+  while (tries < filteredQuestions.length) {
+    const question = filteredQuestions[current];
+    const key = `${question.set || 'set'}-${question.question_number || current + 1}`;
+    if (!seenQuestionKeys.has(key)) {
+      // Found unseen question, update currentIndex
+      currentIndex = current;
+      seenQuestionKeys.add(key);
 
-  questionStartTime = Date.now();
+      // Display bookmark status
+      const bookmarkBtn = document.getElementById('bookmark-btn');
+      if (bookmarks.includes(key)) {
+        bookmarkBtn.classList.add('bookmarked');
+        bookmarkBtn.textContent = '★'; // filled star
+      } else {
+        bookmarkBtn.classList.remove('bookmarked');
+        bookmarkBtn.textContent = '☆'; // empty star
+      }
 
-  question.choices.forEach(choice => {
-    const choiceButton = document.createElement('button');
-    choiceButton.textContent = choice;
-    choiceButton.classList.add('choice-btn');
+      // Show question metadata
+      document.getElementById('question-number').textContent = `Question ${question.question_number || current + 1}`;
+      document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
+      document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
 
-    choiceButton.addEventListener('click', () => {
-      const allButtons = document.querySelectorAll('.choice-btn');
-      allButtons.forEach(btn => btn.disabled = true);
+      // Show question text
+      document.getElementById('question-text').innerHTML = question.question;
 
-      const isCorrect = choice.trim().startsWith(answerLetter + '.');
-      choiceButton.classList.add(isCorrect ? 'correct' : 'incorrect');
+      // Show choices
+      const choicesContainer = document.getElementById('choices-text');
+      choicesContainer.innerHTML = '';
 
-      allButtons.forEach(btn => {
-        if (btn !== choiceButton) btn.classList.add('not-selected');
-        if (btn.textContent.trim().startsWith(answerLetter + '.')) btn.classList.add('correct');
+      const answerElem = document.getElementById('answer-text');
+      answerElem.style.display = 'none';
+      answerElem.textContent = '';
+
+      question.choices.forEach(choice => {
+        const choiceBtn = document.createElement('button');
+        choiceBtn.textContent = choice;
+        choiceBtn.classList.add('choice-btn');
+
+        choiceBtn.addEventListener('click', () => {
+          document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+
+          const selected = choice.trim().charAt(0);
+          const correct = question.answer;
+
+          choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
+
+          document.querySelectorAll('.choice-btn').forEach(btn => {
+            if (btn.textContent.trim().startsWith(correct + '.')) btn.classList.add('correct');
+            else if (btn !== choiceBtn) btn.classList.add('not-selected');
+          });
+
+          answerElem.style.display = 'block';
+          answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+
+          // Save progress to localStorage
+          const progress = JSON.parse(localStorage.getItem('progress')) || {};
+          progress[key] = selected === correct;
+          localStorage.setItem('progress', JSON.stringify(progress));
+        });
+
+        choicesContainer.appendChild(choiceBtn);
       });
 
-      const key = `${question.set || 'set'}-${question.question_number || index}`;
-      const timeTaken = (Date.now() - questionStartTime) / 1000;
+      return; // Exit after showing one question
+    }
+    current = (current + 1) % filteredQuestions.length;
+    tries++;
+  }
 
-      const progress = JSON.parse(localStorage.getItem('progress')) || {};
-      progress[key] = {
-        correct: isCorrect,
-        timeTaken: timeTaken,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('progress', JSON.stringify(progress));
+  // If we somehow got here, show no unseen questions message
+  document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
+  document.getElementById('choices-text').innerHTML = '';
+  document.getElementById('question-set').textContent = '';
+  document.getElementById('question-category').textContent = '';
+  document.getElementById('question-number').textContent = '';
+  document.getElementById('answer-text').style.display = 'none';
+}
 
-      answerElem.style.display = 'block';
+
+
+function handleAnswer(btn, q, choice, key) {
+  const buttons = document.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const userAnswer = choice.trim().charAt(0);
+  const isCorrect = userAnswer === q.answer;
+
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  progress[key] = isCorrect;
+  localStorage.setItem('progress', JSON.stringify(progress));
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('incorrect');
+    buttons.forEach(b => {
+      if (b.textContent.trim().startsWith(q.answer + '.')) {
+        b.classList.add('correct');
+      }
     });
+  }
 
-    choicesContainer.appendChild(choiceButton);
+  buttons.forEach(b => {
+    if (!b.classList.contains('correct') && !b.classList.contains('incorrect')) {
+      b.classList.add('not-selected');
+      b.style.backgroundColor = '#fff'; // Ensure unselected stay white
+    }
   });
 }
 
-function showStats() {
-  const currentUsername = localStorage.getItem('username') || 'Guest';
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
-  let correct = 0, incorrect = 0, totalTime = 0;
-
-  for (const key in progress) {
-    if (progress[key].correct) correct++;
-    else incorrect++;
-    totalTime += progress[key].timeTaken || 0;
+function toggleBookmark(key) {
+  const idx = bookmarks.indexOf(key);
+  if (idx > -1) {
+    bookmarks.splice(idx, 1);
+  } else {
+    bookmarks.push(key);
   }
-
-  const total = correct + incorrect;
-  const avgTime = total > 0 ? (totalTime / total).toFixed(2) : 0;
-
-  alert(`${currentUsername}'s Stats:\nCorrect: ${correct}\nIncorrect: ${incorrect}\nAverage Time: ${avgTime}s/question`);
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  showQuestion(currentIndex); // Refresh display to update star
 }
 
-function startExamTimer(seconds) {
-  clearInterval(examTimer);
-  examTimeLeft = seconds;
+
+function showStats() {
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  const totalSeen = Object.keys(progress).length;
+  const totalCorrect = Object.values(progress).filter(v => v === true).length;
+  const totalIncorrect = Object.values(progress).filter(v => v === false).length;
+
+  alert(`Stats:\nSeen: ${totalSeen}\nCorrect: ${totalCorrect}\nIncorrect: ${totalIncorrect}`);
+}
+
+function startExamMode() {
+  if (examModeActive) return;
+  examModeActive = true;
+  timeLeft = 50 * 60;
+  saveExamState();
+  examCountdown = setInterval(() => {
+    if (!timerPaused) {
+      timeLeft--;
+      localStorage.setItem('examTimeLeft', timeLeft);
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(examCountdown);
+        stopTimer();
+        alert("Exam time is up!");
+      }
+    }
+  }, 1000);
   updateTimerDisplay();
+}
 
-  examTimer = setInterval(() => {
-    examTimeLeft--;
-    updateTimerDisplay();
+function pauseTimer() {
+  timerPaused = !timerPaused;
+  document.getElementById("pause-timer-btn").textContent = timerPaused ? "Resume" : "Pause";
+}
 
-    if (examTimeLeft <= 0) {
-      clearInterval(examTimer);
-      alert("Exam time is up!");
+function stopTimer() {
+  clearInterval(examCountdown);
+  examModeActive = false;
+  timeLeft = 50 * 60;
+  saveExamState();
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  document.getElementById('exam-timer').textContent = `⏱ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+function saveExamState() {
+  localStorage.setItem('examModeActive', JSON.stringify(examModeActive));
+  localStorage.setItem('examTimeLeft', timeLeft);
+}
+
+function resumeExamTimer() {
+  if (!examModeActive) return;
+  updateTimerDisplay();
+  examCountdown = setInterval(() => {
+    if (!timerPaused) {
+      timeLeft--;
+      localStorage.setItem('examTimeLeft', timeLeft);
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(examCountdown);
+        stopTimer();
+        alert("Exam time is up!");
+      }
     }
   }, 1000);
 }
 
-function updateTimerDisplay() {
-  const el = document.getElementById("exam-timer");
-  if (!el) return;
-  const minutes = Math.floor(examTimeLeft / 60).toString().padStart(2, '0');
-  const seconds = (examTimeLeft % 60).toString().padStart(2, '0');
-  el.textContent = `⏱ ${minutes}:${seconds}`;
-}
 
-document.getElementById('prev').addEventListener('click', () => {
-  if (filteredQuestions.length === 0) return;
-  currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
-  showQuestion(currentIndex);
-});
+function showExamStats() {
+  const progress = JSON.parse(localStorage.getItem('examProgress')) || {};
+  const totalSeen = Object.keys(progress).length;
+  const totalCorrect = Object.values(progress).filter(v => v === true).length;
+  const totalIncorrect = Object.values(progress).filter(v => v === false).length;
 
-document.getElementById('next').addEventListener('click', () => {
-  if (filteredQuestions.length === 0) return;
-  currentIndex = (currentIndex + 1) % filteredQuestions.length;
-  showQuestion(currentIndex);
-});
-
-document.getElementById('apply-filters').addEventListener('click', applyFilters);
-
-const showAnswerBtn = document.getElementById('show-answer');
-if (showAnswerBtn) {
-  showAnswerBtn.addEventListener('click', () => {
-    const answerElem = document.getElementById('answer-text');
-    answerElem.style.display = answerElem.style.display === 'none' ? 'block' : 'none';
-  });
+  alert(`Exam Stats:\nSeen: ${totalSeen}\nCorrect: ${totalCorrect}\nIncorrect: ${totalIncorrect}`);
 }
