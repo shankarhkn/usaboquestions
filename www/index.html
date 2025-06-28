@@ -18,13 +18,31 @@
       <h1>Biology Question Viewer</h1>
       <p id="subtitle">Still in development 🛠️, version 1.05a</p>
     </div>
-    <div id="user-settings">
-      <span>Welcome, <strong id="username-display">User</strong></span>
-      <button id="show-stats-btn">Show Stats</button>
-      <button id="change-username-btn">Change Username</button>
-      <button id="clear-stats-btn">Clear Stats</button>
-    </div>
+  
+    <!-- Hamburger for mobile -->
+    <button id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      ☰
+    </button>
+  
+    <!-- Mobile menu container -->
+    <nav id="mobile-menu" aria-hidden="true">
+      <div id="user-settings">
+        <span>Welcome, <strong id="username-display">User</strong></span>
+        <button id="show-stats-btn">Show Stats</button>
+        <button id="change-username-btn">Change Username</button>
+        <button id="clear-stats-btn">Clear Stats</button>
+      </div>
+  
+      <div id="exam-controls-box">
+        <div id="exam-timer">⏱ 50:00</div>
+        <button id="start-exam-mode">Start 50-min Exam</button>
+        <button id="pause-timer-btn" disabled>Pause</button>
+        <button id="stop-timer-btn" disabled>Stop</button>
+        <button id="show-exam-stats-btn">Show Exam Stats</button>
+      </div>
+    </nav>
   </header>
+  
 
   <div id="exam-controls-box">
     <div id="exam-timer">⏱ 50:00</div>

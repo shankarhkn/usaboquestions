@@ -355,3 +355,74 @@ footer {
     gap: 6px;
   }
 }
+
+/* Hide hamburger by default on desktop */
+#hamburger-btn {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+
+  /* Show hamburger */
+  #hamburger-btn {
+    display: block;
+  }
+
+  /* Hide original user settings and exam controls in header */
+  #user-settings,
+  #exam-controls-box {
+    display: none;
+  }
+
+  /* Style mobile menu */
+  #mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    /* hidden by default offscreen */
+    width: 280px;
+    height: 100vh;
+    background-color: #1e3a8a;
+    /* dark blue */
+    color: white;
+    padding: 20px;
+    box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    z-index: 9999;
+  }
+
+  /* When active */
+  #mobile-menu.active {
+    right: 0;
+  }
+
+  #mobile-menu button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    font-size: 1.1rem;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  #mobile-menu button:hover {
+    background-color: #1e40af;
+  }
+
+  #mobile-menu span {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+}
