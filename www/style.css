@@ -1,207 +1,122 @@
-/* === style.css with blue theme and mobile friendly === */
-
+/* --- General body and text --- */
 body {
   font-family: 'Rubik', sans-serif;
   margin: 0;
   padding: 10px;
-  background-color: #f0f4ff;
-  /* light blue background */
+  background-color: #eef4ff;
+  /* lighter blue background */
   color: #1a1a1a;
   font-size: 16px;
   line-height: 1.4;
 }
 
-/* Header */
+/* --- Header --- */
 #header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   padding: 10px 5px;
-  border-bottom: 3px solid #0d47a1;
-  /* strong blue border */
-  background-color: #1e3a8a;
-  /* dark blue header background */
+  border-bottom: 3px solid #4f83cc;
+  /* lighter blue border */
+  background-color: #3a64b1;
+  /* lighter blue header background */
   color: #fff;
-}
-
-#header-left {
-  flex: 1 1 100%;
-  margin-bottom: 10px;
 }
 
 #header-left h1 {
   margin: 0;
   font-weight: 600;
   font-size: 1.5rem;
-  color: #e0e7ff;
-  /* lighter blue text */
+  color: #d0d9ff;
+  /* lighter header text */
 }
 
 #header-left #subtitle {
   margin: 3px 0 0 0;
   font-size: 0.9rem;
-  color: #a5b4fc;
+  color: #aabfff;
   /* pale blue text */
 }
 
-/* User settings */
-#user-settings {
-  flex: 1 1 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  font-size: 1rem;
-  color: #cbd5e1;
-  /* light gray-blue */
+/* --- Mobile Menu Styles --- */
+@media (max-width: 600px) {
+
+  #hamburger-btn {
+    display: block;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d0d9ff;
+    /* lightened hamburger color */
+  }
+
+  #user-settings,
+  #exam-controls-box {
+    display: block;
+  }
+
+  #mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background-color: #4978c7;
+    /* lighter blue background */
+    color: white;
+    padding: 25px 20px;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.25);
+    transition: right 0.35s ease;
+    overflow-y: auto;
+    z-index: 9999;
+    font-weight: 500;
+  }
+
+  #mobile-menu.active {
+    right: 0;
+  }
+
+  #mobile-menu button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 1.1rem;
+    background-color: #7aa6f9;
+    /* softer button blue */
+    border: none;
+    border-radius: 8px;
+    color: #1b2e66;
+    /* dark blue text */
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    font-weight: 600;
+  }
+
+  #mobile-menu button:hover {
+    background-color: #a4c0ff;
+    /* lighter on hover */
+    color: #0b1a3a;
+  }
+
+  #mobile-menu span {
+    display: block;
+    margin-bottom: 18px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #e6ebff;
+  }
 }
 
-#user-settings span {
-  flex: 1 1 100%;
-  text-align: center;
-  font-weight: 500;
-  color: #e0e7ff;
-}
-
-#user-settings button {
-  flex: 1 1 45%;
-  min-width: 120px;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #93c5fd;
-  background-color: #3b82f6;
-  /* bright blue buttons */
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-#user-settings button:hover {
-  background-color: #2563eb;
-}
-
-/* Exam controls */
-#exam-controls-box {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 15px 0;
-  background-color: #dbeafe;
-  /* pale blue background */
-  padding: 10px 5px;
-  border: 1px solid #93c5fd;
-  border-radius: 8px;
-}
-
-#exam-timer {
-  font-size: 1.3rem;
-  font-weight: 600;
-  flex: 1 1 100%;
-  text-align: center;
-  margin-bottom: 10px;
-  color: #1e40af;
-}
-
-#exam-controls-box button {
-  flex: 1 1 45%;
-  min-width: 120px;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #3b82f6;
-  background-color: #60a5fa;
-  /* lighter blue */
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-#exam-controls-box button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-#exam-controls-box button:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-/* Filters */
-#filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-#filters label,
-#filters select,
-#filters button {
-  flex: 1 1 100%;
-  min-width: 200px;
-  font-size: 1rem;
-}
-
-#filters label {
-  color: #1e40af;
-  font-weight: 600;
-}
-
-#filters select,
-#filters button {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #3b82f6;
-  cursor: pointer;
-  background-color: white;
-  color: #1e40af;
-  transition: background-color 0.2s ease;
-}
-
-#filters button:hover {
-  background-color: #bfdbfe;
-}
-
-/* Question Box */
-#question-box {
-  max-width: 600px;
-  margin: 0 auto 25px auto;
-  padding: 15px 20px;
-  background-color: white;
-  border: 1px solid #93c5fd;
-  border-radius: 8px;
-  box-sizing: border-box;
-  color: #1e3a8a;
-}
-
-#question-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-  color: #1e40af;
-  font-weight: 600;
-}
-
-#question-meta-left {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  font-size: 0.9rem;
-}
-
+/* --- Bookmark star color tweaks --- */
 #bookmark-btn {
   font-size: 1.8rem;
   cursor: pointer;
   background: none;
   border: none;
   user-select: none;
-  color: #fbbf24;
+  color: #facc15;
   /* gold */
   transition: color 0.2s ease;
 }
@@ -215,214 +130,229 @@ body {
   color: #d97706;
 }
 
-#question-text {
-  font-size: 1.1rem;
-  margin-bottom: 15px;
-  line-height: 1.5;
+/* --- Buttons and controls --- */
+#user-settings button,
+#exam-controls-box button,
+.controls button {
+  border-radius: 8px;
+  transition: background-color 0.25s ease;
 }
 
-/* Choices buttons */
-#choices-text {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 15px;
+#user-settings button:hover,
+#exam-controls-box button:hover,
+.controls button:hover {
+  background-color: #a4c0ff;
+  color: #0b1a3a;
 }
 
-.choice-btn {
-  padding: 10px 15px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #3b82f6;
-  background-color: white;
-  cursor: pointer;
-  text-align: left;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+/* --- Main container and content --- */
+#app {
+  max-width: 680px;
+  margin: 25px auto 30px auto;
+  padding: 0 10px;
   user-select: none;
-  color: #1e3a8a;
+  text-align: left;
 }
 
-.choice-btn:hover:not(:disabled) {
-  background-color: #bfdbfe;
+/* --- CEE note --- */
+#cee-note {
+  font-size: 0.85rem;
+  color: #111d4a;
+  font-weight: 600;
+  margin-bottom: 15px;
+  padding: 0 5px;
 }
 
-/* Choice button states with color */
-.choice-btn.correct {
-  background-color: #d1fae5;
-  /* light green */
-  border-color: #22c55e;
-  /* green */
-  color: #166534;
-  cursor: default;
-}
-
-.choice-btn.incorrect {
-  background-color: #fee2e2;
-  /* light red */
-  border-color: #dc2626;
-  /* red */
-  color: #991b1b;
-  cursor: default;
-}
-
-.choice-btn.not-selected {
-  opacity: 0.6;
-  background-color: white;
-  cursor: default;
-}
-
-/* Answer text */
-#answer-text {
-  font-weight: 700;
-  margin-top: 10px;
-  color: #1e40af;
-}
-
-/* Explanation text */
-#explanation-text {
-  font-style: italic;
-  color: #4b5563;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  line-height: 1.3;
-}
-
-/* Controls for Prev/Next/Restart buttons */
-.controls {
+/* --- Filters --- */
+#filters {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 15px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+#filters label {
+  font-size: 1rem;
+}
+
+#filters select {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1.5px solid #9aacf0;
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
+#filters button {
+  cursor: pointer;
+  background-color: #4a76d9;
+  color: white;
+  padding: 7px 15px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+#filters button:hover {
+  background-color: #2a48af;
+}
+
+/* --- Question box --- */
+#question-box {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  padding: 10px 12px 15px 12px;
+  border-radius: 18px;
+  background-color: #e4edff;
+  box-shadow:
+    0 2px 7px rgba(19, 36, 93, 0.1),
+    inset 0 0 0 2px rgba(132, 156, 246, 0.25);
+  line-height: 1.4;
+  color: #263c8a;
+}
+
+#question-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  user-select: none;
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+#question-meta-left span {
+  margin-right: 18px;
+}
+
+#question-text {
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin-top: 12px;
+  color: #182552;
+}
+
+/* --- Choices --- */
+#choices-text {
+  padding-left: 16px;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #27316a;
+}
+
+#choices-text span {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #2e3c81;
+  margin-right: 7px;
+  user-select: none;
+}
+
+/* --- Answer and explanation --- */
+#answer-text {
+  margin-top: 20px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0a3bdb;
+  user-select: none;
+}
+
+#explanation-text {
+  margin-top: 12px;
+  font-weight: 500;
+  font-style: italic;
+  color: #4b4b4b;
+}
+
+/* --- Controls: Previous, Next, Restart --- */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
   margin-bottom: 30px;
 }
 
 .controls button {
-  flex: 1 1 45%;
-  min-width: 120px;
-  padding: 12px 0;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #3b82f6;
-  background-color: #60a5fa;
+  background-color: #26418f;
   color: white;
+  border: none;
+  padding: 11px 22px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 14px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.25s ease;
+  user-select: none;
 }
 
 .controls button:hover {
-  background-color: #2563eb;
+  background-color: #1e3270;
 }
 
-/* Footer */
+/* --- Footer --- */
 footer {
+  font-size: 0.85rem;
+  font-weight: 400;
   text-align: center;
-  font-size: 0.9rem;
-  color: #4b5563;
+  color: #444;
+  margin-bottom: 18px;
+}
+
+/* --- Exam timer and controls inside header/mobile menu --- */
+#exam-controls-box {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #f0f6ff;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+#exam-timer {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dbe9ff;
   margin-bottom: 10px;
 }
 
-/* Responsive tweaks for small devices */
-@media (max-width: 480px) {
-  #header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  #header-left {
-    margin-bottom: 8px;
-  }
-
-  #user-settings {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  #user-settings button,
-  #exam-controls-box button,
-  .controls button {
-    flex: 1 1 100%;
-    min-width: auto;
-  }
-
-  #filters label,
-  #filters select,
-  #filters button {
-    flex: 1 1 100%;
-    min-width: auto;
-  }
-
-  #exam-controls-box {
-    gap: 6px;
-  }
+/* Disabled buttons */
+button:disabled {
+  background-color: #a2a6b5;
+  cursor: not-allowed;
+  color: #e5e5e5;
 }
 
-/* Hide hamburger by default on desktop */
+/* --- Hide hamburger on desktop --- */
 #hamburger-btn {
   display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: white;
 }
 
-/* Mobile styles */
-@media (max-width: 600px) {
+/* --- Scrollbar styling for mobile menu --- */
+#mobile-menu::-webkit-scrollbar {
+  width: 8px;
+}
 
-  /* Show hamburger */
-  #hamburger-btn {
-    display: block;
-  }
+#mobile-menu::-webkit-scrollbar-track {
+  background: #3a64b1;
+}
 
-  /* Hide original user settings and exam controls in header */
-  #user-settings,
-  #exam-controls-box {
-    display: none;
-  }
+#mobile-menu::-webkit-scrollbar-thumb {
+  background-color: #7aa6f9;
+  border-radius: 4px;
+}
 
-  /* Style mobile menu */
-  #mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -300px;
-    /* hidden by default offscreen */
-    width: 280px;
-    height: 100vh;
-    background-color: #1e3a8a;
-    /* dark blue */
-    color: white;
-    padding: 20px;
-    box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    z-index: 9999;
-  }
-
-  /* When active */
-  #mobile-menu.active {
-    right: 0;
-  }
-
-  #mobile-menu button {
-    width: 100%;
-    margin: 8px 0;
-    padding: 10px;
-    font-size: 1.1rem;
-    background-color: #2563eb;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  #mobile-menu button:hover {
-    background-color: #1e40af;
-  }
-
-  #mobile-menu span {
-    display: block;
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
+/* --- Accessibility focus outlines --- */
+button:focus,
+select:focus {
+  outline: 3px solid #a4c0ff;
+  outline-offset: 2px;
 }
