@@ -13,7 +13,6 @@ let examCountdown = null;
 let timeLeft = parseInt(localStorage.getItem('examTimeLeft')) || 50 * 60;
 let timerPaused = false;
 let examModeActive = JSON.parse(localStorage.getItem('examModeActive')) || false;
-let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
 
 window._examTimerStartTimestamp = null;
 window._examPauseTimestamp = null;
@@ -21,6 +20,7 @@ window._examPauseTimestamp = null;
 // === On DOM Loaded ===
 document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
+  updateExamControlButtons();
 
   document.getElementById("show-stats-btn").addEventListener("click", showStats);
   document.getElementById("bookmark-btn").addEventListener("click", () => {
@@ -90,8 +90,18 @@ function clearStats() {
     localStorage.removeItem('progress');
     localStorage.removeItem('examProgress');
     alert("Progress cleared.");
+
+    // Reset seenQuestionKeys set, so stats and filters can work fresh:
+    seenQuestionKeys.clear();
+
+    // Reload question display so stats and UI reset:
+    if (filteredQuestions.length > 0) {
+      currentIndex = 0;
+      showQuestion(currentIndex);
+    }
   }
 }
+
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -176,6 +186,7 @@ function applyFilters() {
 
 
 async function showQuestion(index) {
+  window.questionStartTime = Date.now();
   if (filteredQuestions.length === 0) {
     document.getElementById('question-text').textContent = 'No questions match the selected filters.';
     document.getElementById('choices-text').innerHTML = '';
@@ -240,30 +251,46 @@ async function showQuestion(index) {
         choiceBtn.classList.add('choice-btn');
 
         choiceBtn.addEventListener('click', () => {
+          // Disable all choice buttons immediately
           document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
 
           const selected = choice.trim().charAt(0);
           const correct = question.answer;
+          const key = `${question.set || 'set'}-${question.question_number || currentIndex + 1}`;
 
+          // Mark buttons with correct/incorrect classes
           choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
-
           document.querySelectorAll('.choice-btn').forEach(btn => {
             if (btn.textContent.trim().startsWith(correct + '.')) btn.classList.add('correct');
             else if (btn !== choiceBtn) btn.classList.add('not-selected');
           });
 
+          // Show answer feedback
+          const answerElem = document.getElementById('answer-text');
           answerElem.style.display = 'block';
           answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
 
-          // Save progress to localStorage
-          const progress = JSON.parse(localStorage.getItem('progress')) || {};
-          progress[key] = selected === correct;
-          localStorage.setItem('progress', JSON.stringify(progress));
+          // Calculate time spent on question in seconds
+          const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
+
+          // Get current progress, update, and save back
+          saveProgress(key, { correct: selected === correct, time: timeSpentSeconds });
+
+          if (examModeActive) {
+            saveExamProgress(key, { correct: selected === correct, time: timeSpentSeconds });
+          }
+
+
+          console.log('Saved progress:', progress);
         });
+        
+        
+        
 
         choicesContainer.appendChild(choiceBtn);
       });
 
+      
       return; // Exit after showing one question
     }
     current = (current + 1) % filteredQuestions.length;
@@ -290,7 +317,18 @@ function handleAnswer(btn, q, choice, key) {
 
   const progress = JSON.parse(localStorage.getItem('progress')) || {};
   progress[key] = isCorrect;
-  localStorage.setItem('progress', JSON.stringify(progress));
+  function startExamMode() {
+    if (examModeActive) {
+      alert("Exam Mode is already active.");
+      return;
+    }
+    if (!confirm("Start a new exam? This will clear your current exam progress.")) return;
+
+    examModeActive = true;
+    timeLeft = 50 * 60;
+    localStorage.setItem('examProgress', JSON.stringify({}));  // clear only on true new start
+  }
+
 
   if (isCorrect) {
     btn.classList.add('correct');
@@ -310,6 +348,19 @@ function handleAnswer(btn, q, choice, key) {
     }
   });
 }
+function updateBookmarkButtonForCurrentQuestion() {
+  if (filteredQuestions.length === 0) return;
+  const question = filteredQuestions[currentIndex];
+  const key = `${question.set || 'set'}-${question.question_number || currentIndex + 1}`;
+  const bookmarkBtn = document.getElementById('bookmark-btn');
+  if (bookmarks.includes(key)) {
+    bookmarkBtn.classList.add('bookmarked');
+    bookmarkBtn.textContent = '★'; // filled star
+  } else {
+    bookmarkBtn.classList.remove('bookmarked');
+    bookmarkBtn.textContent = '☆'; // empty star
+  }
+}
 
 function toggleBookmark(key) {
   const idx = bookmarks.indexOf(key);
@@ -319,24 +370,88 @@ function toggleBookmark(key) {
     bookmarks.push(key);
   }
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  showQuestion(currentIndex); // Refresh display to update star
+  updateBookmarkButtonForCurrentQuestion(); // Just update star, no question change
 }
+function updateExamControlButtons() {
+  const pauseBtn = document.getElementById("pause-timer-btn");
+  const stopBtn = document.getElementById("stop-timer-btn");
+  const startBtn = document.getElementById("start-exam-mode");
+
+  if (examModeActive) {
+    pauseBtn.disabled = false;
+    stopBtn.disabled = false;
+    startBtn.disabled = true;
+  } else {
+    pauseBtn.disabled = true;
+    stopBtn.disabled = true;
+    startBtn.disabled = false;
+    pauseBtn.textContent = "Pause"; // reset pause text
+    timerPaused = false;
+  }
+}
+
+
 
 
 function showStats() {
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
-  const totalSeen = Object.keys(progress).length;
-  const totalCorrect = Object.values(progress).filter(v => v === true).length;
-  const totalIncorrect = Object.values(progress).filter(v => v === false).length;
+  const raw = localStorage.getItem('progress');
+  console.log("Raw progress data:", raw);
 
-  alert(`Stats:\nSeen: ${totalSeen}\nCorrect: ${totalCorrect}\nIncorrect: ${totalIncorrect}`);
+  if (!raw) {
+    alert("No progress data found.");
+    return;
+  }
+
+  let progress;
+  try {
+    progress = JSON.parse(raw);
+  } catch (e) {
+    alert("Progress data corrupted.");
+    return;
+  }
+
+  console.log("Parsed progress object:", progress);
+
+  // Normalize
+  const normalized = Object.values(progress).map(entry => {
+    if (typeof entry === 'boolean') {
+      return { correct: entry, time: 0 };
+    }
+    return {
+      correct: !!entry.correct,
+      time: entry.time || entry.timeSpent || 0
+    };
+  });
+
+  console.log("Normalized progress:", normalized);
+
+  const totalSeen = normalized.length;
+  const totalCorrect = normalized.filter(e => e.correct).length;
+  const totalIncorrect = totalSeen - totalCorrect;
+  const totalTime = normalized.reduce((sum, e) => sum + e.time, 0);
+  const avgTime = totalSeen > 0 ? (totalTime / totalSeen).toFixed(1) : 0;
+
+  alert(`Stats:
+Seen: ${totalSeen}
+Correct: ${totalCorrect}
+Incorrect: ${totalIncorrect}
+Average time per question: ${avgTime} seconds`);
 }
+
+
+
+
+
 
 function startExamMode() {
   if (examModeActive) return;
   examModeActive = true;
   timeLeft = 50 * 60;
+
+  localStorage.setItem('examProgress', JSON.stringify({}));  // Clear exam progress on new exam
+
   saveExamState();
+  updateExamControlButtons();
   examCountdown = setInterval(() => {
     if (!timerPaused) {
       timeLeft--;
@@ -352,18 +467,24 @@ function startExamMode() {
   updateTimerDisplay();
 }
 
+function stopTimer() {
+  if (!confirm("Are you sure you want to stop the exam? Your progress will be reset.")) {
+    return; // Cancel stop if user says no
+  }
+  clearInterval(examCountdown);
+  examModeActive = false;
+  timeLeft = 50 * 60;
+  saveExamState();
+  updateExamControlButtons();
+  updateTimerDisplay();
+}
+
+
 function pauseTimer() {
   timerPaused = !timerPaused;
   document.getElementById("pause-timer-btn").textContent = timerPaused ? "Resume" : "Pause";
 }
 
-function stopTimer() {
-  clearInterval(examCountdown);
-  examModeActive = false;
-  timeLeft = 50 * 60;
-  saveExamState();
-  updateTimerDisplay();
-}
 
 function updateTimerDisplay() {
   const m = Math.floor(timeLeft / 60);
@@ -395,10 +516,58 @@ function resumeExamTimer() {
 
 
 function showExamStats() {
-  const progress = JSON.parse(localStorage.getItem('examProgress')) || {};
-  const totalSeen = Object.keys(progress).length;
-  const totalCorrect = Object.values(progress).filter(v => v === true).length;
-  const totalIncorrect = Object.values(progress).filter(v => v === false).length;
+  const raw = localStorage.getItem('examProgress');
+  console.log("Raw examProgress data:", raw);
 
-  alert(`Exam Stats:\nSeen: ${totalSeen}\nCorrect: ${totalCorrect}\nIncorrect: ${totalIncorrect}`);
+  if (!raw) {
+    alert("No exam progress found.");
+    return;
+  }
+
+  let progress;
+  try {
+    progress = JSON.parse(raw);
+  } catch (e) {
+    alert("Exam progress data corrupted.");
+    return;
+  }
+
+  console.log("Parsed examProgress object:", progress);
+
+  // Normalize
+  const normalized = Object.values(progress).map(entry => {
+    if (typeof entry === 'boolean') {
+      return { correct: entry, time: 0 };
+    }
+    return {
+      correct: !!entry.correct,
+      time: entry.time || entry.timeSpent || 0
+    };
+  });
+
+  console.log("Normalized exam progress:", normalized);
+
+  const totalSeen = normalized.length;
+  const totalCorrect = normalized.filter(e => e.correct).length;
+  const totalIncorrect = totalSeen - totalCorrect;
+  const totalTime = normalized.reduce((sum, e) => sum + e.time, 0);
+  const avgTime = totalSeen > 0 ? (totalTime / totalSeen).toFixed(1) : 0;
+
+  alert(`Exam Stats:
+Seen: ${totalSeen}
+Correct: ${totalCorrect}
+Incorrect: ${totalIncorrect}
+Average time per question: ${avgTime} seconds`);
+}
+
+function saveProgress(key, data) {
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  progress[key] = data;
+  localStorage.setItem('progress', JSON.stringify(progress));
+}
+
+function saveExamProgress(key, data) {
+  const examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+  examProgress[key] = data;
+  localStorage.setItem('examProgress', JSON.stringify(examProgress));
 }
