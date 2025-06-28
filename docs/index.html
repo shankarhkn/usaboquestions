@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/hover.css/css/hover-min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -42,17 +43,26 @@
 
     <section id="filters">
       <label for="category-select">Category:</label>
-      <select id="category-select">
-        <option value="">All</option>
-      </select>
-
+      <div class="dropdown-wrapper">
+        <select id="category-select">
+          <option value="">All</option>
+          <!-- other category options here -->
+        </select>
+        <div class="dropdown-arrow"><span>▼</span></div>
+      </div>
+    
       <label for="set-select">Set:</label>
-      <select id="set-select">
-        <option value="">All</option>
-      </select>
-
+      <div class="dropdown-wrapper">
+        <select id="set-select">
+          <option value="">All</option>
+          <!-- other set options here -->
+        </select>
+        <div class="dropdown-arrow"><span>▼</span></div>
+      </div>
+    
       <button id="apply-filters">Apply Filters</button>
     </section>
+    
 
     <section id="question-box">
       <div id="question-meta">
@@ -63,8 +73,6 @@
         </div>
         <button id="bookmark-btn" title="Bookmark this question">☆</button>
       </div>
-      
-      
 
       <p id="question-text" style="margin-top: 15px;">Loading...</p>
       <div id="choices-text" style="margin: 15px 0;"></div>
@@ -77,7 +85,6 @@
       <button id="next">Next</button>
       <button id="restart-questions">Restart Seen Questions</button>
     </div>
-    
 
     <footer class="copyright">
       <p>&copy; <span id="year"></span> All Rights Reserved.</p>

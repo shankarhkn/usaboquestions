@@ -240,11 +240,7 @@ async function showQuestion(index) {
       // Show choices
       const choicesContainer = document.getElementById('choices-text');
       choicesContainer.innerHTML = '';
-
-      const answerElem = document.getElementById('answer-text');
-      answerElem.style.display = 'none';
-      answerElem.textContent = '';
-
+      
       question.choices.forEach(choice => {
         const choiceBtn = document.createElement('button');
         choiceBtn.textContent = choice;
@@ -274,12 +270,20 @@ async function showQuestion(index) {
           const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
 
           // Get current progress, update, and save back
-          saveProgress(key, { correct: selected === correct, time: timeSpentSeconds });
+          let progress = JSON.parse(localStorage.getItem('progress')) || {};
+          progress[key] = { correct: selected === correct, time: timeSpentSeconds };
+          localStorage.setItem('progress', JSON.stringify(progress));
 
+          // Update seen questions set
+          seenQuestionKeys.add(key);
+
+          // If exam mode active, save exam progress too
           if (examModeActive) {
-            saveExamProgress(key, { correct: selected === correct, time: timeSpentSeconds });
+            let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+            examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
+            localStorage.setItem('examProgress', JSON.stringify(examProgress));
+            console.log('Saved examProgress:', examProgress);
           }
-
 
           console.log('Saved progress:', progress);
         });
@@ -317,18 +321,7 @@ function handleAnswer(btn, q, choice, key) {
 
   const progress = JSON.parse(localStorage.getItem('progress')) || {};
   progress[key] = isCorrect;
-  function startExamMode() {
-    if (examModeActive) {
-      alert("Exam Mode is already active.");
-      return;
-    }
-    if (!confirm("Start a new exam? This will clear your current exam progress.")) return;
-
-    examModeActive = true;
-    timeLeft = 50 * 60;
-    localStorage.setItem('examProgress', JSON.stringify({}));  // clear only on true new start
-  }
-
+  localStorage.setItem('progress', JSON.stringify(progress));
 
   if (isCorrect) {
     btn.classList.add('correct');
@@ -559,15 +552,14 @@ Correct: ${totalCorrect}
 Incorrect: ${totalIncorrect}
 Average time per question: ${avgTime} seconds`);
 }
-
 function saveProgress(key, data) {
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
-  progress[key] = data;
-  localStorage.setItem('progress', JSON.stringify(progress));
+    const progress = JSON.parse(localStorage.getItem('progress')) || {};
+    progress[key] = data;
+    localStorage.setItem('progress', JSON.stringify(progress));
 }
 
 function saveExamProgress(key, data) {
-  const examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
-  examProgress[key] = data;
-  localStorage.setItem('examProgress', JSON.stringify(examProgress));
+    const examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+    examProgress[key] = data;
+    localStorage.setItem('examProgress', JSON.stringify(examProgress));
 }
