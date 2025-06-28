@@ -4,135 +4,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Biology Question Viewer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
-  <style>
-    /* Paste the full CSS I provided here */
-  </style>
+  <title>BiologyReader</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="photos/seedling.svg" type="image/svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 
 <body>
   <header id="header">
     <div id="header-left">
       <h1>Biology Question Viewer</h1>
-      <div id="subtitle">USABO Practice</div>
+      <p id="subtitle">Still in development 🛠️, version 1.05a</p>
     </div>
-    <button id="hamburger-btn" aria-label="Open menu" title="Open menu">&#9776;</button>
-  </header>
-
-  <!-- Mobile menu -->
-  <nav id="mobile-menu" aria-label="Mobile menu">
-    <span>User Settings</span>
-    <div>
-      <div style="margin-bottom: 10px;">Welcome, <strong>Username</strong></div>
+    <div id="user-settings">
+      <span>Welcome, <strong id="username-display">User</strong></span>
+      <button id="show-stats-btn">Show Stats</button>
       <button id="change-username-btn">Change Username</button>
       <button id="clear-stats-btn">Clear Stats</button>
     </div>
+  </header>
 
-    <hr />
+  <div id="exam-controls-box">
+    <div id="exam-timer">⏱ 50:00</div>
+    <button id="start-exam-mode">Start 50-min Exam</button>
+    <button id="pause-timer-btn" disabled>Pause</button>
+    <button id="stop-timer-btn" disabled>Stop</button>
+    <button id="show-exam-stats-btn">Show Exam Stats</button>
+  </div>
 
-    <span>Exam Controls</span>
-    <div>
-      <button id="start-exam-btn">Start 50 Minute Exam</button>
-      <button id="pause-exam-btn" disabled>Pause Exam</button>
-      <button id="stop-exam-btn" disabled>Stop Exam</button>
-      <button id="show-stats-btn">Show Exam Stats</button>
-    </div>
-  </nav>
-
-  <!-- Overlay -->
-  <div id="menu-overlay"></div>
-
-  <!-- Main content -->
   <main id="app">
+    <h4 id="cee-note">
+      <strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the
+        questions.</strong>
+    </h4>
+
+    <section id="filters">
+      <label for="category-select">Category:</label>
+      <select id="category-select">
+        <option value="">All</option>
+      </select>
+
+      <label for="set-select">Set:</label>
+      <select id="set-select">
+        <option value="">All</option>
+      </select>
+
+      <button id="apply-filters">Apply Filters</button>
+    </section>
+
     <section id="question-box">
       <div id="question-meta">
         <div id="question-meta-left">
-          <div>Question 1/50</div>
-          <button id="bookmark-btn" aria-label="Bookmark question" title="Bookmark">&#9734;</button>
+          <span id="question-set"></span>
+          <span id="question-number"></span>
+          <span id="question-category"></span>
         </div>
+        <button id="bookmark-btn" title="Bookmark this question">☆</button>
       </div>
-      <div id="question-text">
-        Which cell has the most mitochondria?
-      </div>
-      <div id="choices-text">
-        <button class="choice-btn" data-choice="A">A. Pancreatic cell secreting digestive enzymes</button>
-        <button class="choice-btn" data-choice="B">B. Ovarian cell that produces estrogen</button>
-        <button class="choice-btn" data-choice="C">C. Muscle cell in the thigh of a long-distance runner</button>
-        <button class="choice-btn" data-choice="D">D. White blood cell that engulfs bacteria</button>
-      </div>
-      <div id="answer-text" style="display:none;">Correct Answer: C</div>
-      <div id="explanation-text" style="display:none;">
-        Muscle cells, especially in endurance athletes, have many mitochondria to produce ATP.
-      </div>
+
+
+
+      <p id="question-text" style="margin-top: 15px;">Loading...</p>
+      <div id="choices-text" style="margin: 15px 0;"></div>
+      <p id="answer-text" style="display: none; font-weight: bold; margin-top: 10px;"></p>
+      <p id="explanation-text" style="margin-top: 15px; font-style: italic; color: #444;"></p>
     </section>
 
     <div class="controls">
-      <button id="prev-btn" disabled>Previous</button>
-      <button id="next-btn">Next</button>
-      <button id="restart-btn">Restart</button>
+      <button id="prev">Previous</button>
+      <button id="next">Next</button>
+      <button id="restart-questions">Restart Seen Questions</button>
     </div>
+
+
+    <footer class="copyright">
+      <p>&copy; <span id="year"></span> All Rights Reserved.</p>
+    </footer>
   </main>
 
-  <footer>
-    &copy; 2025 Biology Question Viewer
-  </footer>
-
-  <script>
-    // Get elements
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuOverlay = document.getElementById('menu-overlay');
-
-    // Toggle mobile menu
-    function openMenu() {
-      mobileMenu.classList.add('active');
-      menuOverlay.classList.add('active');
-    }
-    function closeMenu() {
-      mobileMenu.classList.remove('active');
-      menuOverlay.classList.remove('active');
-    }
-
-    hamburgerBtn.addEventListener('click', () => {
-      if (mobileMenu.classList.contains('active')) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    });
-
-    // Close menu if overlay clicked
-    menuOverlay.addEventListener('click', closeMenu);
-
-    // Bookmark toggle example
-    const bookmarkBtn = document.getElementById('bookmark-btn');
-    bookmarkBtn.addEventListener('click', () => {
-      bookmarkBtn.classList.toggle('bookmarked');
-      bookmarkBtn.textContent = bookmarkBtn.classList.contains('bookmarked') ? '★' : '☆';
-    });
-
-    // Choice button example behavior
-    const choiceButtons = document.querySelectorAll('.choice-btn');
-    choiceButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Disable all buttons after a choice
-        choiceButtons.forEach(b => b.disabled = true);
-        // Mark correct/incorrect
-        const correctChoice = 'C';
-        if (btn.dataset.choice === correctChoice) {
-          btn.classList.add('correct');
-        } else {
-          btn.classList.add('incorrect');
-          // Show correct button highlight too
-          document.querySelector(`.choice-btn[data-choice="${correctChoice}"]`).classList.add('correct');
-        }
-        // Show answer and explanation
-        document.getElementById('answer-text').style.display = 'block';
-        document.getElementById('explanation-text').style.display = 'block';
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>

@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const q = filteredQuestions[currentIndex];
     const key = `${q.set || 'set'}-${q.question_number || currentIndex + 1}`;
     toggleBookmark(key);
-  });  
+  });
   document.getElementById("change-username-btn").addEventListener("click", changeUsername);
   document.getElementById("clear-stats-btn").addEventListener("click", clearStats);
   document.getElementById("restart-questions").addEventListener("click", () => {
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showQuestion(currentIndex);
     }
   });
-  
+
 
   document.getElementById("prev").addEventListener("click", () => {
     if (filteredQuestions.length === 0) return;
