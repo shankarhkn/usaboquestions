@@ -439,11 +439,9 @@ function toggleMenu() {
     menuOverlay.removeAttribute('hidden');
   } else {
     menuOverlay.classList.remove('active');
-    // hide overlay after transition
     setTimeout(() => menuOverlay.setAttribute('hidden', ''), 300);
   }
 }
 
 hamburgerBtn.addEventListener('click', toggleMenu);
 menuOverlay.addEventListener('click', toggleMenu);
-

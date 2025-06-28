@@ -1,17 +1,16 @@
-/* === style.css with lighter blue theme and mobile-friendly hamburger menu === */
-
+/* === Global Styles === */
 body {
   font-family: 'Rubik', sans-serif;
   margin: 0;
   padding: 10px;
-  background-color: #e6f0ff;
-  /* very light blue */
+  background-color: #f0f4ff;
+  /* light blue background */
   color: #1a1a1a;
   font-size: 16px;
   line-height: 1.4;
 }
 
-/* Header */
+/* === Header === */
 #header {
   display: flex;
   flex-wrap: wrap;
@@ -19,12 +18,10 @@ body {
   align-items: center;
   padding: 10px 15px;
   border-bottom: 3px solid #4a90e2;
-  /* medium blue border */
-  background-color: #5a8dee;
-  /* lighter blue header */
+  background-color: #5790f0;
+  /* lighter blue */
   color: white;
   position: relative;
-  z-index: 10000;
 }
 
 #header-left {
@@ -36,64 +33,156 @@ body {
   margin: 0;
   font-weight: 600;
   font-size: 1.6rem;
-  color: #e0e7ff;
+  color: #e3ecff;
 }
 
 #header-left #subtitle {
   margin: 3px 0 0 0;
-  font-size: 0.95rem;
-  color: #c6d8ff;
+  font-size: 0.9rem;
+  color: #c8dafc;
 }
 
-/* User settings */
-#user-settings {
-  flex: 1 1 100%;
+/* === Hamburger Button === */
+#hamburger-btn {
+  font-size: 2.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  display: none;
+  /* show on mobile only */
+  padding: 4px 10px;
+  user-select: none;
+  transition: color 0.2s ease;
+  z-index: 12001;
+}
+
+#hamburger-btn:hover {
+  color: #dce6ff;
+}
+
+/* === Mobile Menu === */
+#mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  /* hidden by default off screen */
+  width: 300px;
+  height: 100vh;
+  background-color: #5a8dee;
+  /* lighter blue */
+  color: white;
+  padding: 30px 25px;
+  box-shadow: -3px 0 12px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  z-index: 12000;
+  border-radius: 8px 0 0 8px;
+  font-size: 1.1rem;
+}
+
+#mobile-menu.active {
+  right: 0;
+}
+
+#mobile-menu span {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 6px;
+}
+
+/* Buttons inside mobile menu */
+#mobile-menu button {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #3b6de8;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+#mobile-menu button:hover {
+  background-color: #1e4fc1;
+}
+
+/* Divider */
+#mobile-menu hr {
+  border-color: rgba(255, 255, 255, 0.3);
+  margin: 20px 0;
+}
+
+/* === Overlay behind mobile menu === */
+#menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 11000;
+}
+
+#menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* === User Settings & Exam Controls hidden on mobile (moved to mobile menu) */
+#user-settings,
+#exam-controls-box {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
   justify-content: center;
-  font-size: 1rem;
-  color: #d6dff6;
+  gap: 8px;
+  margin: 15px 0;
+  background-color: #dbeafe;
+  /* pale blue background */
+  padding: 10px 5px;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  color: #1e40af;
 }
 
 #user-settings span {
   flex: 1 1 100%;
   text-align: center;
-  font-weight: 600;
-  color: #e7f0ff;
+  font-weight: 500;
+  color: #3b82f6;
+  /* bright blue */
 }
 
-#user-settings button {
+#user-settings button,
+#exam-controls-box button {
   flex: 1 1 45%;
   min-width: 120px;
   padding: 10px;
   font-size: 1rem;
   border-radius: 6px;
-  border: 1px solid #8bb3ff;
-  background-color: #7caeff;
+  border: 1px solid #3b82f6;
+  background-color: #60a5fa;
   color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-#user-settings button:hover {
-  background-color: #5a8dee;
+#user-settings button:hover,
+#exam-controls-box button:hover {
+  background-color: #2563eb;
 }
 
-/* Exam controls */
 #exam-controls-box {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin: 15px 0;
-  background-color: #d6e5ff;
-  padding: 12px 10px;
-  border: 1px solid #8bb3ff;
-  border-radius: 8px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 8px;
 }
 
 #exam-timer {
@@ -101,26 +190,8 @@ body {
   font-weight: 600;
   flex: 1 1 100%;
   text-align: center;
-  margin-bottom: 12px;
-  color: #3b5bbf;
-}
-
-#exam-controls-box button {
-  flex: 1 1 45%;
-  min-width: 120px;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #7caeff;
-  background-color: #a5bfff;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-#exam-controls-box button:hover:not(:disabled) {
-  background-color: #5a8dee;
-  color: white;
+  margin-bottom: 10px;
+  color: #1e40af;
 }
 
 #exam-controls-box button:disabled {
@@ -128,16 +199,13 @@ body {
   cursor: not-allowed;
 }
 
-/* Filters */
+/* === Filters === */
 #filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
-  margin-bottom: 20px;
-  max-width: 650px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 15px;
 }
 
 #filters label,
@@ -149,37 +217,35 @@ body {
 }
 
 #filters label {
-  color: #3b5bbf;
+  color: #1e40af;
   font-weight: 600;
 }
 
 #filters select,
 #filters button {
-  padding: 9px;
+  padding: 8px;
   border-radius: 6px;
-  border: 1px solid #7caeff;
+  border: 1px solid #3b82f6;
   cursor: pointer;
   background-color: white;
-  color: #3b5bbf;
+  color: #1e40af;
   transition: background-color 0.2s ease;
 }
 
-#filters select:hover,
 #filters button:hover {
-  background-color: #d6e5ff;
+  background-color: #bfdbfe;
 }
 
-/* Question Box */
+/* === Question Box === */
 #question-box {
-  max-width: 650px;
-  margin: 0 auto 30px auto;
-  padding: 20px 25px;
+  max-width: 600px;
+  margin: 0 auto 25px auto;
+  padding: 15px 20px;
   background-color: white;
-  border: 1px solid #8bb3ff;
-  border-radius: 10px;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
   box-sizing: border-box;
-  color: #2a3b8f;
-  box-shadow: 0 2px 8px rgba(90, 142, 238, 0.15);
+  color: #1e3a8a;
 }
 
 #question-meta {
@@ -187,163 +253,171 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 15px;
-  color: #3b5bbf;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: #1e40af;
   font-weight: 600;
 }
 
 #question-meta-left {
   display: flex;
-  gap: 18px;
+  gap: 15px;
   flex-wrap: wrap;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 #bookmark-btn {
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   cursor: pointer;
   background: none;
   border: none;
   user-select: none;
   color: #fbbf24;
   /* gold */
-  transition: color 0.25s ease;
+  transition: color 0.2s ease;
 }
 
 #bookmark-btn.bookmarked {
-  color: #d97706;
-  /* darker gold */
+  color: #f59e0b;
+  /* brighter gold */
 }
 
 #bookmark-btn:hover {
-  color: #c27804;
+  color: #d97706;
 }
 
 #question-text {
-  font-size: 1.15rem;
-  margin-bottom: 20px;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  line-height: 1.5;
 }
 
-/* Choices buttons */
+/* === Choices buttons === */
 #choices-text {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .choice-btn {
-  padding: 14px 18px;
-  font-size: 1.1rem;
-  border-radius: 8px;
-  border: 2px solid #7caeff;
+  padding: 12px 18px;
+  font-size: 1.05rem;
+  border-radius: 6px;
+  border: 2px solid #3b82f6;
   background-color: white;
   cursor: pointer;
   text-align: left;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   user-select: none;
-  color: #2a3b8f;
-  box-shadow: 0 1px 3px rgba(124, 174, 255, 0.4);
+  color: #1e3a8a;
   font-weight: 500;
+  box-shadow: 1px 1px 5px #a0b8ff44;
 }
 
 .choice-btn:hover:not(:disabled) {
-  background-color: #d6e5ff;
-  border-color: #3b5bbf;
-  color: #1e2a66;
+  background-color: #bfdbfe;
 }
 
 .choice-btn:disabled {
   cursor: default;
 }
 
-/* Choice button states with color */
+/* Choice button states */
 .choice-btn.correct {
-  background-color: #d4f5e1;
-  /* soft green */
+  background-color: #d1fae5;
+  /* light green */
   border-color: #22c55e;
+  /* green */
   color: #166534;
   cursor: default;
   font-weight: 700;
-  box-shadow: 0 0 12px #22c55e99;
+  box-shadow: none;
 }
 
 .choice-btn.incorrect {
-  background-color: #fbdada;
-  /* soft red */
+  background-color: #fee2e2;
+  /* light red */
   border-color: #dc2626;
+  /* red */
   color: #991b1b;
   cursor: default;
   font-weight: 700;
-  box-shadow: 0 0 12px #dc262699;
+  box-shadow: none;
 }
 
 .choice-btn.not-selected {
-  opacity: 0.65;
+  opacity: 0.6;
   background-color: white;
   cursor: default;
+  box-shadow: none;
 }
 
-/* Answer text */
+/* === Answer and explanation text === */
 #answer-text {
   font-weight: 700;
-  margin-top: 12px;
-  color: #3b5bbf;
-  font-size: 1.05rem;
+  margin-top: 10px;
+  color: #1e40af;
 }
 
-/* Explanation text */
 #explanation-text {
   font-style: italic;
-  color: #55606e;
-  margin-top: 14px;
-  font-size: 0.95rem;
-  line-height: 1.4;
+  color: #4b5563;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  line-height: 1.3;
 }
 
-/* Controls for Prev/Next/Restart buttons */
+/* === Controls (Prev/Next/Restart buttons) === */
 .controls {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 18px;
-  margin-bottom: 35px;
-  max-width: 650px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
 .controls button {
   flex: 1 1 45%;
-  min-width: 130px;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  border-radius: 8px;
-  border: 2px solid #7caeff;
-  background-color: #a5bfff;
-  color: #1a1a1a;
+  min-width: 120px;
+  padding: 12px 0;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #3b82f6;
+  background-color: #60a5fa;
+  color: white;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  box-shadow: 0 2px 6px rgba(90, 142, 238, 0.25);
+  transition: background-color 0.2s ease;
+  user-select: none;
 }
 
 .controls button:hover {
-  background-color: #5a8dee;
-  color: white;
+  background-color: #2563eb;
 }
 
-/* Footer */
+/* === Footer === */
 footer {
   text-align: center;
   font-size: 0.9rem;
-  color: #55606e;
-  margin-bottom: 20px;
+  color: #4b5563;
+  margin-bottom: 10px;
 }
 
-/* Responsive tweaks for small devices */
+/* === Responsive tweaks === */
+@media (max-width: 600px) {
+
+  /* Show hamburger on mobile */
+  #hamburger-btn {
+    display: block;
+  }
+
+  /* Hide original user-settings and exam-controls on mobile */
+  #user-settings,
+  #exam-controls-box {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   #header {
     flex-direction: column;
@@ -354,9 +428,16 @@ footer {
     margin-bottom: 8px;
   }
 
+  #filters label,
+  #filters select,
+  #filters button {
+    flex: 1 1 100%;
+    min-width: auto;
+  }
+
   #user-settings {
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
 
   #user-settings button,
@@ -366,116 +447,18 @@ footer {
     min-width: auto;
   }
 
-  #filters label,
-  #filters select,
-  #filters button {
-    flex: 1 1 100%;
-    min-width: auto;
-  }
-
   #exam-controls-box {
-    gap: 8px;
+    gap: 6px;
   }
 }
 
-/* Hide hamburger by default on desktop */
-#hamburger-btn {
-  display: none;
-  font-size: 2.4rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: white;
-  user-select: none;
-  padding: 5px 12px 5px 12px;
-  line-height: 1;
-  transition: color 0.2s ease;
-}
-
-#hamburger-btn:hover {
-  color: #d6e5ff;
-}
-
-/* Mobile styles */
-@media (max-width: 768px) {
-
-  /* Show hamburger */
-  #hamburger-btn {
-    display: block;
-  }
-
-  /* Hide desktop user settings and exam controls */
-  #user-settings,
-  #exam-controls-box:not(:last-of-type) {
-    display: none;
-  }
-
-  /* Style mobile menu */
+/* === Hide mobile menu and overlay on desktop === */
+@media (min-width: 769px) {
   #mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    /* hidden offscreen */
-    width: 300px;
-    height: 100vh;
-    background-color: #5a8dee;
-    /* lighter blue */
-    color: white;
-    padding: 25px 20px;
-    box-shadow: -3px 0 12px rgba(0, 0, 0, 0.3);
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    z-index: 11000;
-    border-radius: 8px 0 0 8px;
+    display: none !important;
   }
 
-  /* Show mobile menu when active */
-  #mobile-menu.active {
-    right: 0;
-  }
-
-  #mobile-menu button {
-    width: 100%;
-    margin: 12px 0;
-    padding: 12px 0;
-    font-size: 1.1rem;
-    background-color: #3b68d1;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.25s ease;
-    font-weight: 600;
-  }
-
-  #mobile-menu button:hover {
-    background-color: #2a49a9;
-  }
-
-  #mobile-menu span {
-    display: block;
-    margin-bottom: 18px;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-align: center;
-  }
-
-  /* Overlay behind menu */
   #menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.35);
-    z-index: 10500;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  #menu-overlay.active {
-    opacity: 1;
-    pointer-events: all;
+    display: none !important;
   }
 }
