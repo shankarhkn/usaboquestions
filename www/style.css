@@ -1,358 +1,481 @@
-/* --- General body and text --- */
+/* === style.css with lighter blue theme and mobile-friendly hamburger menu === */
+
 body {
   font-family: 'Rubik', sans-serif;
   margin: 0;
   padding: 10px;
-  background-color: #eef4ff;
-  /* lighter blue background */
+  background-color: #e6f0ff;
+  /* very light blue */
   color: #1a1a1a;
   font-size: 16px;
   line-height: 1.4;
 }
 
-/* --- Header --- */
+/* Header */
 #header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 5px;
-  border-bottom: 3px solid #4f83cc;
-  /* lighter blue border */
-  background-color: #3a64b1;
-  /* lighter blue header background */
-  color: #fff;
+  padding: 10px 15px;
+  border-bottom: 3px solid #4a90e2;
+  /* medium blue border */
+  background-color: #5a8dee;
+  /* lighter blue header */
+  color: white;
+  position: relative;
+  z-index: 10000;
+}
+
+#header-left {
+  flex: 1 1 100%;
+  margin-bottom: 10px;
 }
 
 #header-left h1 {
   margin: 0;
   font-weight: 600;
-  font-size: 1.5rem;
-  color: #d0d9ff;
-  /* lighter header text */
+  font-size: 1.6rem;
+  color: #e0e7ff;
 }
 
 #header-left #subtitle {
   margin: 3px 0 0 0;
-  font-size: 0.9rem;
-  color: #aabfff;
-  /* pale blue text */
+  font-size: 0.95rem;
+  color: #c6d8ff;
 }
 
-/* --- Mobile Menu Styles --- */
-@media (max-width: 600px) {
-
-  #hamburger-btn {
-    display: block;
-    font-size: 2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #d0d9ff;
-    /* lightened hamburger color */
-  }
-
-  #user-settings,
-  #exam-controls-box {
-    display: block;
-  }
-
-  #mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background-color: #4978c7;
-    /* lighter blue background */
-    color: white;
-    padding: 25px 20px;
-    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.25);
-    transition: right 0.35s ease;
-    overflow-y: auto;
-    z-index: 9999;
-    font-weight: 500;
-  }
-
-  #mobile-menu.active {
-    right: 0;
-  }
-
-  #mobile-menu button {
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px;
-    font-size: 1.1rem;
-    background-color: #7aa6f9;
-    /* softer button blue */
-    border: none;
-    border-radius: 8px;
-    color: #1b2e66;
-    /* dark blue text */
-    cursor: pointer;
-    transition: background-color 0.25s ease, color 0.25s ease;
-    font-weight: 600;
-  }
-
-  #mobile-menu button:hover {
-    background-color: #a4c0ff;
-    /* lighter on hover */
-    color: #0b1a3a;
-  }
-
-  #mobile-menu span {
-    display: block;
-    margin-bottom: 18px;
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: #e6ebff;
-  }
+/* User settings */
+#user-settings {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  font-size: 1rem;
+  color: #d6dff6;
 }
 
-/* --- Bookmark star color tweaks --- */
-#bookmark-btn {
-  font-size: 1.8rem;
-  cursor: pointer;
-  background: none;
-  border: none;
-  user-select: none;
-  color: #facc15;
-  /* gold */
-  transition: color 0.2s ease;
-}
-
-#bookmark-btn.bookmarked {
-  color: #f59e0b;
-  /* brighter gold */
-}
-
-#bookmark-btn:hover {
-  color: #d97706;
-}
-
-/* --- Buttons and controls --- */
-#user-settings button,
-#exam-controls-box button,
-.controls button {
-  border-radius: 8px;
-  transition: background-color 0.25s ease;
-}
-
-#user-settings button:hover,
-#exam-controls-box button:hover,
-.controls button:hover {
-  background-color: #a4c0ff;
-  color: #0b1a3a;
-}
-
-/* --- Main container and content --- */
-#app {
-  max-width: 680px;
-  margin: 25px auto 30px auto;
-  padding: 0 10px;
-  user-select: none;
-  text-align: left;
-}
-
-/* --- CEE note --- */
-#cee-note {
-  font-size: 0.85rem;
-  color: #111d4a;
+#user-settings span {
+  flex: 1 1 100%;
+  text-align: center;
   font-weight: 600;
-  margin-bottom: 15px;
-  padding: 0 5px;
+  color: #e7f0ff;
 }
 
-/* --- Filters --- */
-#filters {
+#user-settings button {
+  flex: 1 1 45%;
+  min-width: 120px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #8bb3ff;
+  background-color: #7caeff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#user-settings button:hover {
+  background-color: #5a8dee;
+}
+
+/* Exam controls */
+#exam-controls-box {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
   gap: 10px;
+  margin: 15px 0;
+  background-color: #d6e5ff;
+  padding: 12px 10px;
+  border: 1px solid #8bb3ff;
+  border-radius: 8px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#exam-timer {
+  font-size: 1.3rem;
+  font-weight: 600;
+  flex: 1 1 100%;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #3b5bbf;
+}
+
+#exam-controls-box button {
+  flex: 1 1 45%;
+  min-width: 120px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #7caeff;
+  background-color: #a5bfff;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#exam-controls-box button:hover:not(:disabled) {
+  background-color: #5a8dee;
+  color: white;
+}
+
+#exam-controls-box button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Filters */
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
   margin-bottom: 20px;
-  font-weight: 500;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#filters label,
+#filters select,
+#filters button {
+  flex: 1 1 100%;
+  min-width: 200px;
+  font-size: 1rem;
 }
 
 #filters label {
-  font-size: 1rem;
-}
-
-#filters select {
-  font-size: 1rem;
+  color: #3b5bbf;
   font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 8px;
-  border: 1.5px solid #9aacf0;
-  background-color: #fff;
-  color: #1a1a1a;
 }
 
+#filters select,
 #filters button {
+  padding: 9px;
+  border-radius: 6px;
+  border: 1px solid #7caeff;
   cursor: pointer;
-  background-color: #4a76d9;
-  color: white;
-  padding: 7px 15px;
-  border-radius: 12px;
-  font-weight: 700;
-  border: none;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
+  background-color: white;
+  color: #3b5bbf;
+  transition: background-color 0.2s ease;
 }
 
+#filters select:hover,
 #filters button:hover {
-  background-color: #2a48af;
+  background-color: #d6e5ff;
 }
 
-/* --- Question box --- */
+/* Question Box */
 #question-box {
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-  padding: 10px 12px 15px 12px;
-  border-radius: 18px;
-  background-color: #e4edff;
-  box-shadow:
-    0 2px 7px rgba(19, 36, 93, 0.1),
-    inset 0 0 0 2px rgba(132, 156, 246, 0.25);
-  line-height: 1.4;
-  color: #263c8a;
+  max-width: 650px;
+  margin: 0 auto 30px auto;
+  padding: 20px 25px;
+  background-color: white;
+  border: 1px solid #8bb3ff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #2a3b8f;
+  box-shadow: 0 2px 8px rgba(90, 142, 238, 0.15);
 }
 
 #question-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  font-size: 1.05rem;
-  user-select: none;
-  margin-bottom: 6px;
-  padding-left: 2px;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 15px;
+  color: #3b5bbf;
+  font-weight: 600;
 }
 
-#question-meta-left span {
-  margin-right: 18px;
+#question-meta-left {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 1rem;
+}
+
+#bookmark-btn {
+  font-size: 1.9rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  user-select: none;
+  color: #fbbf24;
+  /* gold */
+  transition: color 0.25s ease;
+}
+
+#bookmark-btn.bookmarked {
+  color: #d97706;
+  /* darker gold */
+}
+
+#bookmark-btn:hover {
+  color: #c27804;
 }
 
 #question-text {
-  font-weight: 500;
-  font-size: 1.3rem;
-  margin-top: 12px;
-  color: #182552;
-}
-
-/* --- Choices --- */
-#choices-text {
-  padding-left: 16px;
-  margin-top: 12px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #27316a;
-}
-
-#choices-text span {
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #2e3c81;
-  margin-right: 7px;
-  user-select: none;
-}
-
-/* --- Answer and explanation --- */
-#answer-text {
-  margin-top: 20px;
   font-size: 1.15rem;
-  font-weight: 600;
-  color: #0a3bdb;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* Choices buttons */
+#choices-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.choice-btn {
+  padding: 14px 18px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 2px solid #7caeff;
+  background-color: white;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   user-select: none;
-}
-
-#explanation-text {
-  margin-top: 12px;
+  color: #2a3b8f;
+  box-shadow: 0 1px 3px rgba(124, 174, 255, 0.4);
   font-weight: 500;
-  font-style: italic;
-  color: #4b4b4b;
 }
 
-/* --- Controls: Previous, Next, Restart --- */
+.choice-btn:hover:not(:disabled) {
+  background-color: #d6e5ff;
+  border-color: #3b5bbf;
+  color: #1e2a66;
+}
+
+.choice-btn:disabled {
+  cursor: default;
+}
+
+/* Choice button states with color */
+.choice-btn.correct {
+  background-color: #d4f5e1;
+  /* soft green */
+  border-color: #22c55e;
+  color: #166534;
+  cursor: default;
+  font-weight: 700;
+  box-shadow: 0 0 12px #22c55e99;
+}
+
+.choice-btn.incorrect {
+  background-color: #fbdada;
+  /* soft red */
+  border-color: #dc2626;
+  color: #991b1b;
+  cursor: default;
+  font-weight: 700;
+  box-shadow: 0 0 12px #dc262699;
+}
+
+.choice-btn.not-selected {
+  opacity: 0.65;
+  background-color: white;
+  cursor: default;
+}
+
+/* Answer text */
+#answer-text {
+  font-weight: 700;
+  margin-top: 12px;
+  color: #3b5bbf;
+  font-size: 1.05rem;
+}
+
+/* Explanation text */
+#explanation-text {
+  font-style: italic;
+  color: #55606e;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Controls for Prev/Next/Restart buttons */
 .controls {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 14px;
-  margin-bottom: 30px;
+  gap: 18px;
+  margin-bottom: 35px;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .controls button {
-  background-color: #26418f;
-  color: white;
-  border: none;
-  padding: 11px 22px;
-  font-weight: 600;
+  flex: 1 1 45%;
+  min-width: 130px;
+  padding: 14px 0;
   font-size: 1.1rem;
-  border-radius: 14px;
+  border-radius: 8px;
+  border: 2px solid #7caeff;
+  background-color: #a5bfff;
+  color: #1a1a1a;
   cursor: pointer;
-  transition: background-color 0.25s ease;
-  user-select: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(90, 142, 238, 0.25);
 }
 
 .controls button:hover {
-  background-color: #1e3270;
+  background-color: #5a8dee;
+  color: white;
 }
 
-/* --- Footer --- */
+/* Footer */
 footer {
-  font-size: 0.85rem;
-  font-weight: 400;
   text-align: center;
-  color: #444;
-  margin-bottom: 18px;
+  font-size: 0.9rem;
+  color: #55606e;
+  margin-bottom: 20px;
 }
 
-/* --- Exam timer and controls inside header/mobile menu --- */
-#exam-controls-box {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #f0f6ff;
-  padding: 8px 10px;
-  border-radius: 8px;
+/* Responsive tweaks for small devices */
+@media (max-width: 480px) {
+  #header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #header-left {
+    margin-bottom: 8px;
+  }
+
+  #user-settings {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #user-settings button,
+  #exam-controls-box button,
+  .controls button {
+    flex: 1 1 100%;
+    min-width: auto;
+  }
+
+  #filters label,
+  #filters select,
+  #filters button {
+    flex: 1 1 100%;
+    min-width: auto;
+  }
+
+  #exam-controls-box {
+    gap: 8px;
+  }
 }
 
-#exam-timer {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #dbe9ff;
-  margin-bottom: 10px;
-}
-
-/* Disabled buttons */
-button:disabled {
-  background-color: #a2a6b5;
-  cursor: not-allowed;
-  color: #e5e5e5;
-}
-
-/* --- Hide hamburger on desktop --- */
+/* Hide hamburger by default on desktop */
 #hamburger-btn {
   display: none;
+  font-size: 2.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+  padding: 5px 12px 5px 12px;
+  line-height: 1;
+  transition: color 0.2s ease;
 }
 
-/* --- Scrollbar styling for mobile menu --- */
-#mobile-menu::-webkit-scrollbar {
-  width: 8px;
+#hamburger-btn:hover {
+  color: #d6e5ff;
 }
 
-#mobile-menu::-webkit-scrollbar-track {
-  background: #3a64b1;
-}
+/* Mobile styles */
+@media (max-width: 768px) {
 
-#mobile-menu::-webkit-scrollbar-thumb {
-  background-color: #7aa6f9;
-  border-radius: 4px;
-}
+  /* Show hamburger */
+  #hamburger-btn {
+    display: block;
+  }
 
-/* --- Accessibility focus outlines --- */
-button:focus,
-select:focus {
-  outline: 3px solid #a4c0ff;
-  outline-offset: 2px;
+  /* Hide desktop user settings and exam controls */
+  #user-settings,
+  #exam-controls-box:not(:last-of-type) {
+    display: none;
+  }
+
+  /* Style mobile menu */
+  #mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    /* hidden offscreen */
+    width: 300px;
+    height: 100vh;
+    background-color: #5a8dee;
+    /* lighter blue */
+    color: white;
+    padding: 25px 20px;
+    box-shadow: -3px 0 12px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    z-index: 11000;
+    border-radius: 8px 0 0 8px;
+  }
+
+  /* Show mobile menu when active */
+  #mobile-menu.active {
+    right: 0;
+  }
+
+  #mobile-menu button {
+    width: 100%;
+    margin: 12px 0;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    background-color: #3b68d1;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    font-weight: 600;
+  }
+
+  #mobile-menu button:hover {
+    background-color: #2a49a9;
+  }
+
+  #mobile-menu span {
+    display: block;
+    margin-bottom: 18px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  /* Overlay behind menu */
+  #menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: 10500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  #menu-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
 }

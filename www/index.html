@@ -41,7 +41,18 @@
         <button id="show-exam-stats-btn">Show Exam Stats</button>
       </div>
     </nav>
+
+    <!-- Overlay behind mobile menu -->
+    <div id="menu-overlay" hidden></div>
   </header>
+
+  <div id="exam-controls-box">
+    <div id="exam-timer">⏱ 50:00</div>
+    <button id="start-exam-mode">Start 50-min Exam</button>
+    <button id="pause-timer-btn" disabled>Pause</button>
+    <button id="stop-timer-btn" disabled>Stop</button>
+    <button id="show-exam-stats-btn">Show Exam Stats</button>
+  </div>
 
   <main id="app">
     <h4 id="cee-note">
@@ -91,6 +102,28 @@
   </main>
 
   <script src="script.js"></script>
+  <script>
+    // Hamburger menu toggle + overlay logic
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOverlay = document.getElementById('menu-overlay');
+
+    function toggleMenu() {
+      const active = mobileMenu.classList.toggle('active');
+      hamburgerBtn.setAttribute('aria-expanded', active);
+      mobileMenu.setAttribute('aria-hidden', !active);
+      if (active) {
+        menuOverlay.classList.add('active');
+        menuOverlay.removeAttribute('hidden');
+      } else {
+        menuOverlay.classList.remove('active');
+        setTimeout(() => menuOverlay.setAttribute('hidden', ''), 300);
+      }
+    }
+
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+  </script>
 </body>
 
 </html>

@@ -426,3 +426,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const menuOverlay = document.getElementById('menu-overlay');
+
+function toggleMenu() {
+  const isActive = mobileMenu.classList.toggle('active');
+  hamburgerBtn.setAttribute('aria-expanded', isActive);
+  mobileMenu.setAttribute('aria-hidden', !isActive);
+  if (isActive) {
+    menuOverlay.classList.add('active');
+    menuOverlay.removeAttribute('hidden');
+  } else {
+    menuOverlay.classList.remove('active');
+    // hide overlay after transition
+    setTimeout(() => menuOverlay.setAttribute('hidden', ''), 300);
+  }
+}
+
+hamburgerBtn.addEventListener('click', toggleMenu);
+menuOverlay.addEventListener('click', toggleMenu);
+
