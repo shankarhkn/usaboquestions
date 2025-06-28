@@ -48,13 +48,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (filteredQuestions.length === 0) return;
     currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
     showQuestion(currentIndex);
+    // Hide answer feedback on question change
+    document.getElementById('answer-text').style.display = 'none';
+    document.getElementById('answer-text').textContent = '';
   });
 
   document.getElementById("next").addEventListener("click", () => {
     if (filteredQuestions.length === 0) return;
     currentIndex = (currentIndex + 1) % filteredQuestions.length;
     showQuestion(currentIndex);
+    // Hide answer feedback on question change
+    document.getElementById('answer-text').style.display = 'none';
+    document.getElementById('answer-text').textContent = '';
   });
+  
 
   document.getElementById("apply-filters").addEventListener("click", applyFilters);
 

@@ -576,7 +576,7 @@ button:disabled {
 .dropdown-arrow span {
   display: inline-block;
   transform-origin: center center;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease;
   transform: translateY(0);
 }
 
