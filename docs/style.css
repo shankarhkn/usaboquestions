@@ -567,7 +567,7 @@ button:disabled {
   transform: translateY(-50%);
   pointer-events: none;
   color: #719be0;
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -576,15 +576,12 @@ button:disabled {
 .dropdown-arrow span {
   display: inline-block;
   transform-origin: center center;
-  animation-name: none;
-  animation-duration: 1.2s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-delay: 0s;
+  transition: transform 0.5s ease;
+  transform: translateY(0);
 }
 
 .dropdown-wrapper:hover .dropdown-arrow span {
-  animation-name: slide-down;
+  transform: translateY(4px);
 }
 
 @keyframes slide-down {
