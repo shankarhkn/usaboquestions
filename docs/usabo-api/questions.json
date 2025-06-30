@@ -447,5 +447,47 @@
     "E. III, IV."
   ],
   "answer": "D"
+},
+{
+  "question_number": "34",
+  "set": "2018 USABO Open",
+  "category": "Genetics and Evolution",
+  "question": "Which of the following amino-acid substitutions is LEAST likely to be disruptive to protein function?",
+  "choices": [
+    "A. Lysine to glycine.",
+    "B. Cysteine to leucine.",
+    "C. Alanine to proline.",
+    "D. Aspartate to valine.",
+    "E. Alanine to valine."
+  ],
+  "answer": "E"
+},
+{
+  "question_number": "35",
+  "set": "2018 USABO Open",
+  "category": "Genetics and Evolution",
+  "question": "Prader-Willi syndrome and Angelman Syndrome can each occur due to a deletion in the same part of chromosome 15. However, Prader-Willi syndrome will result if the defective chromosome was inherited from the father, while Angelman syndrome results if it was inherited from the mother. Identify the answer choice below that also exemplifies a similar inheritance pattern.",
+  "choices": [
+    "A. Inheritance of Flower Color in Peas.",
+    "B. Inheritance of Flower Color in Snapdragons.",
+    "C. Inheritance of the Igf-2 gene in Mice.",
+    "D. Inheritance of X-linked Color Blindness in Humans.",
+    "E. Inheritance of Height in Humans."
+  ],
+  "answer": "C"
+},
+{
+  "question_number": "36",
+  "set": "2018 USABO Open",
+  "category": "Genetics and Evolution",
+  "question": "A 30-year old woman (is planning to have a child and visits a genetic counselor. The only observed genetic disorder in her immediate family is that her brother was afflicted by Hurler syndrome (also known as mucopolysaccharidosis type I), a monogenic, autosomal recessive metabolic disorder caused by a loss of function of a lysosomal enzyme named alpha-L iduronidase. Hurler syndrome manifests itself early in childhood and is often fatal. What is the probability that the woman is a carrier for a disease-causing allele of alpha-L iduronidase?",
+  "choices": [
+    "A. 1/4.",
+    "B. 1/2.",
+    "C. 9/16.",
+    "D. 2/3.",
+    "E. 3/4."
+  ],
+  "answer": "D"
 }
 ]
