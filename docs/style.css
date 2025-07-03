@@ -624,3 +624,44 @@ button:disabled {
   opacity: 1;
   transform: translateY(0);
 }
+#header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+#title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* space between text and logo */
+}
+
+#title-row h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #222;
+}
+
+#site-logo {
+  width: 32px;
+  /* small logo size */
+  height: 32px;
+  border-radius: 6px;
+  /* rounded corners */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+#site-logo:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.6);
+}
+
+#subtitle {
+  margin: 4px 0 0 0;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.2;
+}
