@@ -518,6 +518,7 @@ button:disabled {
   transform: translateY(0);
 }
 
+
 #question-container {
   opacity: 1;
   transition: opacity 0.3s ease;
@@ -611,4 +612,15 @@ button:disabled {
   50% {
     transform: translateY(3px) rotate(0deg);
   }
+}
+
+#question-box.fade {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+#question-box.fade.show {
+  opacity: 1;
+  transform: translateY(0);
 }

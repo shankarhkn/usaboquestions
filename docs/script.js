@@ -47,8 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("prev").addEventListener("click", () => {
     if (filteredQuestions.length === 0) return;
     currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
-    showQuestion(currentIndex);
-    // Hide answer feedback on question change
+    showQuestion(currentIndex, true);
     document.getElementById('answer-text').style.display = 'none';
     document.getElementById('answer-text').textContent = '';
   });
@@ -56,11 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("next").addEventListener("click", () => {
     if (filteredQuestions.length === 0) return;
     currentIndex = (currentIndex + 1) % filteredQuestions.length;
-    showQuestion(currentIndex);
-    // Hide answer feedback on question change
+    showQuestion(currentIndex, true);
     document.getElementById('answer-text').style.display = 'none';
     document.getElementById('answer-text').textContent = '';
   });
+  
   
 
   document.getElementById("apply-filters").addEventListener("click", applyFilters);
@@ -194,130 +193,119 @@ function applyFilters() {
 }
 
 
-async function showQuestion(index) {
-  window.questionStartTime = Date.now();
-  if (filteredQuestions.length === 0) {
-    document.getElementById('question-text').textContent = 'No questions match the selected filters.';
-    document.getElementById('choices-text').innerHTML = '';
-    document.getElementById('question-set').textContent = '';
-    document.getElementById('question-category').textContent = '';
-    document.getElementById('question-number').textContent = '';
-    document.getElementById('answer-text').style.display = 'none';
-    return;
-  }
+async function showQuestion(index, force = false) {
+  const box = document.getElementById("question-box");
 
-  // If all filtered questions have been seen, show completion message
-  if (seenQuestionKeys.size === filteredQuestions.length) {
-    document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
-    document.getElementById('choices-text').innerHTML = '';
-    document.getElementById('question-set').textContent = '';
-    document.getElementById('question-category').textContent = '';
-    document.getElementById('question-number').textContent = '';
-    document.getElementById('answer-text').style.display = 'none';
-    return;
-  }
+  fadeOutAndIn(box, () => {
+    window.questionStartTime = Date.now();
 
-  // Loop to find next unseen question starting from index
-  let current = index;
-  let tries = 0;
-  while (tries < filteredQuestions.length) {
-    const question = filteredQuestions[current];
-    const key = `${question.set || 'set'}-${question.question_number || current + 1}`;
-    if (!seenQuestionKeys.has(key)) {
-      // Found unseen question, update currentIndex
-      currentIndex = current;
-      seenQuestionKeys.add(key);
+    if (filteredQuestions.length === 0) {
+      document.getElementById('question-text').textContent = 'No questions match the selected filters.';
+      document.getElementById('choices-text').innerHTML = '';
+      document.getElementById('question-set').textContent = '';
+      document.getElementById('question-category').textContent = '';
+      document.getElementById('question-number').textContent = '';
+      document.getElementById('answer-text').style.display = 'none';
+      return;
+    }
 
-      // Display bookmark status
-      const bookmarkBtn = document.getElementById('bookmark-btn');
-      if (bookmarks.includes(key)) {
-        bookmarkBtn.classList.add('bookmarked');
-        bookmarkBtn.textContent = '★'; // filled star
-      } else {
-        bookmarkBtn.classList.remove('bookmarked');
-        bookmarkBtn.textContent = '☆'; // empty star
-      }
+    let current = index;
 
-      // Show question metadata
-      document.getElementById('question-number').textContent = `Question ${question.question_number || current + 1}`;
-      document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
-      document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
-
-      // Show question text
-      document.getElementById('question-text').innerHTML = question.question;
-
-      // Show choices
-      const choicesContainer = document.getElementById('choices-text');
-      choicesContainer.innerHTML = '';
-      
-      question.choices.forEach(choice => {
-        const choiceBtn = document.createElement('button');
-        choiceBtn.textContent = choice;
-        choiceBtn.classList.add('choice-btn');
-
-        choiceBtn.addEventListener('click', () => {
-          // Disable all choice buttons immediately
-          document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
-
-          const selected = choice.trim().charAt(0);
-          const correct = question.answer;
-          const key = `${question.set || 'set'}-${question.question_number || currentIndex + 1}`;
-
-          // Mark buttons with correct/incorrect classes
-          choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
-          document.querySelectorAll('.choice-btn').forEach(btn => {
-            if (btn.textContent.trim().startsWith(correct + '.')) btn.classList.add('correct');
-            else if (btn !== choiceBtn) btn.classList.add('not-selected');
-          });
-
-          // Show answer feedback
-          const answerElem = document.getElementById('answer-text');
-          answerElem.style.display = 'block';
-          answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
-
-          // Calculate time spent on question in seconds
-          const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
-
-          // Get current progress, update, and save back
-          let progress = JSON.parse(localStorage.getItem('progress')) || {};
-          progress[key] = { correct: selected === correct, time: timeSpentSeconds };
-          localStorage.setItem('progress', JSON.stringify(progress));
-
-          // Update seen questions set
+    // If force is false, try to skip seen questions (your existing logic)
+    if (!force) {
+      let tries = 0;
+      while (tries < filteredQuestions.length) {
+        const question = filteredQuestions[current];
+        const key = `${question.set || 'set'}-${question.question_number || current + 1}`;
+        if (!seenQuestionKeys.has(key)) {
+          currentIndex = current;
           seenQuestionKeys.add(key);
+          break;
+        }
+        current = (current + 1) % filteredQuestions.length;
+        tries++;
+      }
+      if (tries === filteredQuestions.length) {
+        // All seen
+        document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
+        document.getElementById('choices-text').innerHTML = '';
+        document.getElementById('question-set').textContent = '';
+        document.getElementById('question-category').textContent = '';
+        document.getElementById('question-number').textContent = '';
+        document.getElementById('answer-text').style.display = 'none';
+        return;
+      }
+    } else {
+      // If force is true, just show the exact question requested
+      currentIndex = current;
+    }
 
-          // If exam mode active, save exam progress too
-          if (examModeActive) {
-            let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
-            examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
-            localStorage.setItem('examProgress', JSON.stringify(examProgress));
-            console.log('Saved examProgress:', examProgress);
+    const question = filteredQuestions[currentIndex];
+    const key = `${question.set || 'set'}-${question.question_number || currentIndex + 1}`;
+
+    // Update bookmark button
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    if (bookmarks.includes(key)) {
+      bookmarkBtn.classList.add('bookmarked');
+      bookmarkBtn.textContent = '★';
+    } else {
+      bookmarkBtn.classList.remove('bookmarked');
+      bookmarkBtn.textContent = '☆';
+    }
+
+    document.getElementById('question-number').textContent = `Question ${question.question_number || currentIndex + 1}`;
+    document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
+    document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
+    document.getElementById('question-text').innerHTML = question.question;
+
+    const choicesContainer = document.getElementById('choices-text');
+    choicesContainer.innerHTML = '';
+
+    question.choices.forEach(choice => {
+      const choiceBtn = document.createElement('button');
+      choiceBtn.textContent = choice;
+      choiceBtn.classList.add('choice-btn');
+
+      choiceBtn.addEventListener('click', () => {
+        document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+
+        const selected = choice.trim().charAt(0);
+        const correct = question.answer;
+
+        choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
+        document.querySelectorAll('.choice-btn').forEach(btn => {
+          if (btn.textContent.trim().startsWith(correct + '.')) {
+            btn.classList.add('correct');
+          } else if (btn !== choiceBtn) {
+            btn.classList.add('not-selected');
           }
-
-          console.log('Saved progress:', progress);
         });
-        
-        
-        
 
-        choicesContainer.appendChild(choiceBtn);
+        const answerElem = document.getElementById('answer-text');
+        answerElem.style.display = 'block';
+        answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+
+        const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
+
+        let progress = JSON.parse(localStorage.getItem('progress')) || {};
+        progress[key] = { correct: selected === correct, time: timeSpentSeconds };
+        localStorage.setItem('progress', JSON.stringify(progress));
+
+        seenQuestionKeys.add(key);
+
+        if (examModeActive) {
+          let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+          examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
+          localStorage.setItem('examProgress', JSON.stringify(examProgress));
+        }
       });
 
-      
-      return; // Exit after showing one question
-    }
-    current = (current + 1) % filteredQuestions.length;
-    tries++;
-  }
-
-  // If we somehow got here, show no unseen questions message
-  document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
-  document.getElementById('choices-text').innerHTML = '';
-  document.getElementById('question-set').textContent = '';
-  document.getElementById('question-category').textContent = '';
-  document.getElementById('question-number').textContent = '';
-  document.getElementById('answer-text').style.display = 'none';
+      choicesContainer.appendChild(choiceBtn);
+    });
+  });
 }
+
+
 
 
 
@@ -571,4 +559,31 @@ function saveExamProgress(key, data) {
     const examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
     examProgress[key] = data;
     localStorage.setItem('examProgress', JSON.stringify(examProgress));
+}
+function fadeOutAndIn(element, updateCallback) {
+  // Ensure .fade is present to enable fade transition
+  if (!element.classList.contains('fade')) {
+    element.classList.add('fade');
+  }
+
+  // Start fade-out by removing .show
+  element.classList.remove("show");
+
+  // After transition duration (250ms), update content and fade-in
+  setTimeout(() => {
+    updateCallback();                // update content
+
+    // Force reflow for transition restart
+    void element.offsetWidth;
+
+    // Fade in by adding .show back
+    element.classList.add("show");
+
+    // Optional: Remove 'fade' class after fade-in completes (another 250ms)
+    // so it doesn't stay forever and affect other styles:
+    setTimeout(() => {
+      element.classList.remove('fade');
+    }, 300);
+
+  }, 250);
 }
