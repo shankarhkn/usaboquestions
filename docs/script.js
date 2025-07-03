@@ -120,7 +120,9 @@ function shuffle(array) {
 async function fetchQuestions() {
   try {
     const res = await fetch('https://usaboquestions.onrender.com/questions');
-    questions = await res.json();
+    const data = await res.json();
+    questions = data.flat(); // FIX: Flatten nested arrays
+    console.log('Cleaned questions:', questions);
     populateFilterOptions();
     applyFilters();
   } catch (e) {
