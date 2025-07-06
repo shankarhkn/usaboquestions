@@ -1,6 +1,3 @@
-// === FULL UPDATED script.js ===
-// Additive, non-breaking, with "Incorrect Only" filtering within set filter, preserving your existing logic
-
 let questions = [];
 let filteredQuestions = [];
 let currentIndex = 0;

@@ -665,3 +665,14 @@ button:disabled {
   color: #555;
   line-height: 1.2;
 }
+
+@media (max-width: 768px) {
+  #exam-controls-box {
+    position: static;
+    width: auto;
+    max-width: 600px;
+    margin: 16px auto;
+    box-shadow: none;
+    border: 1px solid #cce0ff;
+  }
+}
