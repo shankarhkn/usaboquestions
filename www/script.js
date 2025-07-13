@@ -6,6 +6,9 @@ let filteredQuestions = [];
 let currentIndex = 0;
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 let seenQuestionKeys = new Set();
+let visitedHistory = [];
+let currentHistoryIndex = -1;  // index in visitedHistory
+
 
 let username = localStorage.getItem('username') || "Guest";
 
@@ -48,16 +51,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   document.getElementById("prev").addEventListener("click", () => {
-    if (filteredQuestions.length === 0) return;
-    currentIndex = (currentIndex - 1 + filteredQuestions.length) % filteredQuestions.length;
-    showQuestion(currentIndex);
+    if (currentHistoryIndex > 0) {
+      currentHistoryIndex--;
+      currentIndex = visitedHistory[currentHistoryIndex];
+      showQuestion(currentIndex, false); // don't re-add to history when going back
+    } else {
+      alert("You're at the beginning of the question history.");
+    }
   });
 
+
   document.getElementById("next").addEventListener("click", () => {
-    if (filteredQuestions.length === 0) return;
-    currentIndex = (currentIndex + 1) % filteredQuestions.length;
-    showQuestion(currentIndex);
+    if (currentHistoryIndex < visitedHistory.length - 1) {
+      // Move forward through visited history
+      currentHistoryIndex++;
+      currentIndex = visitedHistory[currentHistoryIndex];
+      showQuestion(currentIndex, false);
+    } else {
+      // Find next unseen question index
+      let nextIndex = -1;
+      for (let i = 0; i < filteredQuestions.length; i++) {
+        const q = filteredQuestions[i];
+        const key = `${q.set || 'set'}-${q.question_number || i + 1}`;
+        if (!seenQuestionKeys.has(key)) {
+          nextIndex = i;
+          break;
+        }
+      }
+
+      if (nextIndex !== -1) {
+        showQuestion(nextIndex); // pushToHistory defaults to true here
+      } else {
+        alert("✅ You've finished all questions in this filter.");
+      }
+    }
   });
+
 
   document.getElementById("apply-filters").addEventListener("click", applyFilters);
 
@@ -82,16 +111,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const bottomPauseBtn = document.getElementById("bottom-pause-timer-btn");
 
-  if (bottomPauseBtn) {
-    bottomPauseBtn.addEventListener("click", () => {
-      timerPaused = !timerPaused;
-      document.getElementById("pause-timer-btn").textContent = timerPaused ? "Resume" : "Pause";
+if (bottomPauseBtn) {
+  bottomPauseBtn.addEventListener("click", () => {
+    timerPaused = !timerPaused;
 
-      bottomPauseBtn.innerHTML = timerPaused
-        ? `<img src="photos/play-solid.svg" alt="Play" width="20" height="20"><br /><span class='nav-label'>Resume</span>`
-        : `<img src="photos/pause-solid.svg" alt="Pause" width="20" height="20"><br /><span class='nav-label'>Pause</span>`;
-    });
-  }
+    const mainPauseBtn = document.getElementById("pause-timer-btn");
+    mainPauseBtn.textContent = timerPaused ? "Resume" : "Pause";
+
+    const img = bottomPauseBtn.querySelector("img");
+    const label = bottomPauseBtn.querySelector("span");
+
+    if (timerPaused) {
+      img.src = "photos/play-solid.svg";
+      img.alt = "Play";
+      label.textContent = "Resume";
+    } else {
+      img.src = "photos/pause-solid.svg";
+      img.alt = "Pause";
+      label.textContent = "Pause";
+    }
+  });
+}
+
+
+
+
 
 
 
@@ -279,6 +323,9 @@ function populateFilterOptions() {
 
 function applyFilters() {
   seenQuestionKeys.clear();
+  visitedHistory = [];
+  currentHistoryIndex = -1;
+
 
   const selectedCategory = document.getElementById('category-select').value;
   const selectedSet = document.getElementById('set-select').value;
@@ -321,7 +368,7 @@ function applyFilters() {
 
 
 
-async function showQuestion(index) {
+async function showQuestion(index, pushToHistory = true) {
   if (filteredQuestions.length === 0) {
     document.getElementById('question-text').textContent = 'No questions match the selected filters.';
     document.getElementById('choices-text').innerHTML = '';
@@ -330,6 +377,20 @@ async function showQuestion(index) {
     document.getElementById('question-number').textContent = '';
     document.getElementById('answer-text').style.display = 'none';
     return;
+  }
+
+  const question = filteredQuestions[index];
+  const key = `${question.set || 'set'}-${question.question_number || index + 1}`;
+
+  currentIndex = index;
+  seenQuestionKeys.add(key);
+
+  // ✅ Add this to support Previous/Next tracking
+  if (pushToHistory) {
+    // When moving forward (new question), trim any forward history first
+    visitedHistory = visitedHistory.slice(0, currentHistoryIndex + 1);
+    visitedHistory.push(index);
+    currentHistoryIndex = visitedHistory.length - 1;
   }
 
   // If all filtered questions have been seen, show completion message
@@ -343,119 +404,71 @@ async function showQuestion(index) {
     return;
   }
 
-  // Loop to find next unseen question starting from index
-  let current = index;
-  let tries = 0;
-  while (tries < filteredQuestions.length) {
-    const question = filteredQuestions[current];
-    const key = `${question.set || 'set'}-${question.question_number || current + 1}`;
-    if (!seenQuestionKeys.has(key)) {
-      // Found unseen question, update currentIndex
-      currentIndex = current;
-      seenQuestionKeys.add(key);
+  // --- SHOW THE QUESTION AS IS, NO LOOPING TO NEXT UNSEEN ---
 
-      // Display bookmark status
-      const bookmarkBtn = document.getElementById('bookmark-btn');
-      if (bookmarks.includes(key)) {
-        bookmarkBtn.classList.add('bookmarked');
-        bookmarkBtn.textContent = '★'; // filled star
-      } else {
-        bookmarkBtn.classList.remove('bookmarked');
-        bookmarkBtn.textContent = '☆'; // empty star
-      }
+  // Display bookmark status
+  const bookmarkBtn = document.getElementById('bookmark-btn');
+  if (bookmarks.includes(key)) {
+    bookmarkBtn.classList.add('bookmarked');
+    bookmarkBtn.textContent = '★'; // filled star
+  } else {
+    bookmarkBtn.classList.remove('bookmarked');
+    bookmarkBtn.textContent = '☆'; // empty star
+  }
 
-      // Show question metadata
-      document.getElementById('question-number').textContent = `Question ${question.question_number || current + 1}`;
-      document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
-      document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
+  // Show question metadata
+  document.getElementById('question-number').textContent = `Question ${question.question_number || index + 1}`;
+  document.getElementById('question-category').textContent = question.category ? `Category: ${question.category}` : '';
+  document.getElementById('question-set').textContent = question.set ? `Set: ${question.set}` : '';
 
-      // Show question text
-      document.getElementById('question-text').innerHTML = question.question;
+  // Show question text
+  document.getElementById('question-text').innerHTML = question.question;
 
-      // Show choices
-      const choicesContainer = document.getElementById('choices-text');
-      choicesContainer.innerHTML = '';
+  // Show choices
+  const choicesContainer = document.getElementById('choices-text');
+  choicesContainer.innerHTML = '';
 
-      const answerElem = document.getElementById('answer-text');
-      answerElem.style.display = 'none';
-      answerElem.textContent = '';
+  const answerElem = document.getElementById('answer-text');
+  answerElem.style.display = 'none';
+  answerElem.textContent = '';
 
-      question.choices.forEach(choice => {
-        const choiceBtn = document.createElement('button');
-        choiceBtn.textContent = choice;
-        choiceBtn.classList.add('choice-btn');
+  question.choices.forEach(choice => {
+    const choiceBtn = document.createElement('button');
+    choiceBtn.textContent = choice;
+    choiceBtn.classList.add('choice-btn');
 
-        choiceBtn.addEventListener('click', () => {
-          document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+    choiceBtn.addEventListener('click', () => {
+      document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
 
-          const selected = choice.trim().charAt(0);
-          const correct = question.answer;
+      const selected = choice.trim().charAt(0);
+      const correct = question.answer;
 
-          choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
+      choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
 
-          document.querySelectorAll('.choice-btn').forEach(btn => {
-            if (btn.textContent.trim().startsWith(correct + '.')) btn.classList.add('correct');
-            else if (btn !== choiceBtn) btn.classList.add('not-selected');
-          });
-
-          answerElem.style.display = 'block';
-          answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
-
-          // Save progress to localStorage
-          const progress = JSON.parse(localStorage.getItem('progress')) || {};
-          progress[key] = { correct: selected === correct };
-          localStorage.setItem('progress', JSON.stringify(progress));
-        });
-
-        choicesContainer.appendChild(choiceBtn);
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        if (btn.textContent.trim().startsWith(correct + '.')) btn.classList.add('correct');
+        else if (btn !== choiceBtn) btn.classList.add('not-selected');
       });
 
-      return; // Exit after showing one question
-    }
-    current = (current + 1) % filteredQuestions.length;
-    tries++;
-  }
+      answerElem.style.display = 'block';
+      answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
 
-  // If we somehow got here, show no unseen questions message
-  document.getElementById('question-text').textContent = '✅ You have completed all questions matching the current filters.';
-  document.getElementById('choices-text').innerHTML = '';
-  document.getElementById('question-set').textContent = '';
-  document.getElementById('question-category').textContent = '';
-  document.getElementById('question-number').textContent = '';
-  document.getElementById('answer-text').style.display = 'none';
-}
+      // Save progress to localStorage
+      const progress = JSON.parse(localStorage.getItem('progress')) || {};
+      progress[key] = selected === correct;
+      localStorage.setItem('progress', JSON.stringify(progress));
 
+      const examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+      examProgress[key] = selected === correct;
+      localStorage.setItem('examProgress', JSON.stringify(examProgress));
 
-
-function handleAnswer(btn, q, choice, key) {
-  const buttons = document.querySelectorAll('.choice-btn');
-  buttons.forEach(b => b.disabled = true);
-
-  const userAnswer = choice.trim().charAt(0);
-  const isCorrect = userAnswer === q.answer;
-
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
-  progress[key] = isCorrect;
-  localStorage.setItem('progress', JSON.stringify(progress));
-
-  if (isCorrect) {
-    btn.classList.add('correct');
-  } else {
-    btn.classList.add('incorrect');
-    buttons.forEach(b => {
-      if (b.textContent.trim().startsWith(q.answer + '.')) {
-        b.classList.add('correct');
-      }
     });
-  }
 
-  buttons.forEach(b => {
-    if (!b.classList.contains('correct') && !b.classList.contains('incorrect')) {
-      b.classList.add('not-selected');
-      b.style.backgroundColor = '#fff'; // Ensure unselected stay white
-    }
+    choicesContainer.appendChild(choiceBtn);
   });
 }
+
+
 
 function toggleBookmark(key) {
   const idx = bookmarks.indexOf(key);
@@ -465,8 +478,18 @@ function toggleBookmark(key) {
     bookmarks.push(key);
   }
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  showQuestion(currentIndex); // Refresh display to update star
+
+  // Just update the star, not the full question
+  const bookmarkBtn = document.getElementById('bookmark-btn');
+  if (bookmarks.includes(key)) {
+    bookmarkBtn.classList.add('bookmarked');
+    bookmarkBtn.textContent = '★';
+  } else {
+    bookmarkBtn.classList.remove('bookmarked');
+    bookmarkBtn.textContent = '☆';
+  }
 }
+
 
 
 function showStats() {

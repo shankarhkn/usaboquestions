@@ -16,6 +16,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  font-family: 'Rubik', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
 /* App container */
 #app {
   max-width: 960px;
@@ -128,6 +143,7 @@ h3 {
   font-size: 1rem;
   margin-bottom: 0.4em;
   color: #000000;
+  font-weight: 1400;
 }
 
 #question-set {
@@ -148,26 +164,6 @@ h3 {
   margin-bottom: 1em;
 }
 
-/* Bookmark Button */
-#bookmark-btn {
-  font-size: 1.3rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 10px;
-  color: #f5b301;
-  /* Default gold color */
-  transition: color 0.3s ease;
-}
-
-#bookmark-btn:hover {
-  color: #f5b301;
-}
-
-#bookmark-btn.bookmarked {
-  color: #f5b301;
-}
 
 /* Choices styling */
 .choice-btn {
@@ -211,33 +207,6 @@ h3 {
   color: #5e1c1c;
 }
 
-/* Navigation buttons */
-.controls {
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  margin: 0 4px;
-  transition: background-color 0.3s ease;
-  user-select: none;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-button:disabled {
-  background-color: #999;
-  cursor: not-allowed;
-}
 
 /* Image styling */
 #question-box img {
@@ -269,9 +238,6 @@ button:disabled {
     margin: 8px 0;
   }
 
-  .controls {
-    margin-bottom: 1.5rem;
-  }
 
   #filters {
     flex-direction: column;
@@ -456,23 +422,6 @@ button:disabled {
   user-select: none;
 }
 
-#question-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  gap: 10px;
-}
-
-#question-meta-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  /* allow wrapping on smaller screens */
-  overflow: visible;
-  /* don't hide overflow */
-}
 
 #question-set,
 #question-number,
@@ -489,29 +438,6 @@ button:disabled {
   font-size: 14px;
 }
 
-#bookmark-btn {
-  cursor: pointer;
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #f5b301;
-  /* always gold */
-  transition: color 0.3s;
-  flex-shrink: 0;
-}
-
-#bookmark-btn:hover {
-  color: #f5b301;
-}
-
-#bookmark-btn.bookmarked {
-  color: #f5b301;
-  /* same gold when bookmarked */
-}
-
-#restart-questions {
-  margin-left: 10px;
-}
 
 #bottom-controls {
   position: fixed;
@@ -528,22 +454,6 @@ button:disabled {
   flex-wrap: wrap;
 }
 
-#bottom-controls button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  margin: 5px;
-  transition: background-color 0.3s ease;
-  white-space: nowrap;
-}
-
-#bottom-controls button:hover {
-  background-color: #0056b3;
-}
 #bottom-nav {
   position: fixed;
   bottom: 0;
@@ -566,34 +476,56 @@ button:disabled {
 }
 
 #bottom-nav button {
-  flex: 1 1 0;
-  min-width: 0;
-  /* important to prevent overflow */
-  background: none;
-  border: none;
-  outline: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Rubik', sans-serif;
-  font-size: 0.8rem;
-  color: #333;
+  justify-content: center;
+  font-size: 0.9rem;
+  padding: 6px;
+  width: 60px;
+  background: none;
+  border: none;
   cursor: pointer;
-  padding: 4px 6px;
-  white-space: nowrap;
 }
 
 #bottom-nav button img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   margin-bottom: 4px;
-  pointer-events: none;
-  /* avoid icon triggering hover/focus */
 }
 
 #bottom-nav button span {
-  display: block;
-  line-height: 1;
+  font-size: 0.75rem;
+  color: #333;
+  user-select: none;
+}
+#bottom-nav {
+  padding: 4px 0;
+  /* less vertical padding */
+  height: 48px;
+  /* set a fixed smaller height */
+  box-sizing: border-box;
+}
+
+#bottom-nav button {
+  width: 50px;
+  /* slightly narrower buttons */
+  padding: 4px 0;
+  /* reduce vertical padding */
+  font-size: 0.8rem;
+  /* smaller font to fit better */
+}
+
+#bottom-nav button img {
+  width: 16px;
+  /* smaller icons */
+  height: 16px;
+  margin-bottom: 2px;
+}
+
+#bottom-nav button span {
+  font-size: 0.6rem;
+  /* smaller label text */
 }
 
 /* Hide exam controls on small screens */
@@ -669,10 +601,6 @@ button:disabled {
     min-width: 140px;
   }
 
-  #bookmark-btn {
-    font-size: 20px;
-  }
-
   h1 {
     font-size: 1.5rem;
   }
@@ -702,4 +630,136 @@ button:disabled {
   font-size: 1rem;
   color: #555;
   /* optional color */
+}
+
+
+#question-meta-left span {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+#question-box {
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+#question-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background-color: #f9f9f9;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  max-width: 100%;
+  overflow: hidden;
+}
+#question-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  overflow: visible;
+  flex: 1;
+  min-width: 200px;
+}
+
+
+
+
+
+
+#question-meta-right {
+  display: flex;
+  align-items: center;
+}
+
+
+
+#question-category {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+
+
+
+/* Controls container: use gap, remove button margins */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  /* controls spacing between buttons */
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  min-width: 130px;
+  box-sizing: border-box;
+  margin: 0;
+  /* remove margin to avoid extra spacing */
+}
+
+/* Bottom nav buttons: show icon with label text underneath */
+#bottom-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  padding: 6px;
+  width: 60px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  /* make text visible */
+}
+
+#bottom-nav button img {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 4px;
+}
+
+#bottom-nav button span {
+  font-size: 0.75rem;
+  color: #333;
+  user-select: none;
+}
+/* Bookmark Button */
+#bookmark-btn {
+  font-size: 1.6rem;
+  /* consistent font size */
+  background: none;
+  /* no background */
+  border: none;
+  /* no border */
+  cursor: pointer;
+  /* pointer cursor on hover */
+  padding: 0;
+  /* no padding */
+  margin-left: auto;
+  /* push to the right in flex containers */
+  color: #666;
+  /* default gray color */
+  align-self: flex-start;
+  /* align to start if inside flex container */
+  transition: color 0.3s ease;
+}
+
+#bookmark-btn.bookmarked {
+  color: gold;
+  /* gold color when bookmarked */
+}
+
+#bookmark-btn:hover {
+  color: #f5b301;
+  /* hover color same as bookmarked */
 }
