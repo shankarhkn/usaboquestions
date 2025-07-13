@@ -468,8 +468,10 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: nowrap;
-  overflow: hidden;
+  flex-wrap: wrap;
+  /* allow wrapping on smaller screens */
+  overflow: visible;
+  /* don't hide overflow */
 }
 
 #question-set,
@@ -509,4 +511,195 @@ button:disabled {
 
 #restart-questions {
   margin-left: 10px;
+}
+
+#bottom-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-around;
+  z-index: 999;
+  border-top: 1px solid #ccc;
+  flex-wrap: wrap;
+}
+
+#bottom-controls button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+#bottom-controls button:hover {
+  background-color: #0056b3;
+}
+#bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  padding: 8px 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  /* prevent horizontal scroll */
+  width: 100vw;
+  /* full viewport width */
+  max-width: 100%;
+  /* prevent expanding beyond viewport */
+  z-index: 1000;
+}
+
+#bottom-nav button {
+  flex: 1 1 0;
+  min-width: 0;
+  /* important to prevent overflow */
+  background: none;
+  border: none;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.8rem;
+  color: #333;
+  cursor: pointer;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+#bottom-nav button img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+  pointer-events: none;
+  /* avoid icon triggering hover/focus */
+}
+
+#bottom-nav button span {
+  display: block;
+  line-height: 1;
+}
+
+/* Hide exam controls on small screens */
+@media (max-width: 768px) {
+  #exam-controls-box {
+    display: none !important;
+  }
+}
+#exam-info button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  z-index: 9999;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#mobile-bottom-nav button {
+  flex: 1;
+  text-align: center;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.nav-label {
+  display: block;
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 2px;
+}
+/* Hide only the exam controls box on small/mobile screens */
+@media (pointer: coarse),
+(max-width: 900px) {
+  #exam-controls-box {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  #question-box {
+    padding: 18px;
+    font-size: 1rem;
+  }
+
+  .choice-btn {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  #question-text {
+    font-size: 1rem;
+  }
+
+  #filters select,
+  #filters button {
+    font-size: 0.95rem;
+    min-width: 140px;
+  }
+
+  #bookmark-btn {
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 0.95rem;
+  }
+}
+#title-group {
+  display: flex;
+  align-items: center;
+  /* vertically centers children */
+  gap: 10px;
+  /* optional spacing between "BioReader" and welcome */
+}
+
+#title-group h1 {
+  margin: 0;
+  /* remove default margin to align nicely */
+  font-weight: 600;
+  /* keep your Rubik font weight */
+  font-size: 2rem;
+  /* or your preferred size */
+}
+
+#username-display {
+  font-size: 1rem;
+  color: #555;
+  /* optional color */
 }

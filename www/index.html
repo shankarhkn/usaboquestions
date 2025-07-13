@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BiologyReader</title>
+  <title>BioReader</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="photos/seedling.svg" type="image/svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,16 +15,14 @@
 <body>
   <header id="header">
     <div id="header-left">
-      <h1>Biology Question Viewer</h1>
+      <div id="title-group">
+        <h1>BioReader</h1>
+        <span id="username-display">Welcome, <strong>User</strong></span>
+      </div>
       <p id="subtitle">Still in development 🛠️, version 1.05a</p>
     </div>
-    <div id="user-settings">
-      <span>Welcome, <strong id="username-display">User</strong></span>
-      <button id="show-stats-btn">Show Stats</button>
-      <button id="change-username-btn">Change Username</button>
-      <button id="clear-stats-btn">Clear Stats</button>
-    </div>
   </header>
+
 
   <div id="exam-controls-box">
     <div id="exam-timer">⏱ 50:00</div>
@@ -39,6 +37,16 @@
       <strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the
         questions.</strong>
     </h4>
+    <!-- Exam Info Container -->
+    <div id="exam-info" style="display: none; text-align: center; margin: 1rem 0;">
+      <div id="exam-info-timer" style="font-size: 1.4rem; font-weight: bold; color: #007bff;">
+        ⏱ 50:00
+      </div>
+      <button id="show-inline-exam-stats" style="margin-top: 8px; background-color: #28a745;">
+        Show Exam Stats
+      </button>
+    </div>
+
 
     <section id="filters">
       <label for="category-select">Category:</label>
@@ -57,8 +65,8 @@
     <section id="question-box">
       <div id="question-meta">
         <div id="question-meta-left">
-          <span id="question-set"></span>
-          <span id="question-number"></span>
+          <span id="question-set"></span><span> | </span>
+          <span id="question-number"></span><span> | </span>
           <span id="question-category"></span>
         </div>
         <button id="bookmark-btn" title="Bookmark this question">☆</button>
@@ -80,9 +88,33 @@
 
 
     <footer class="copyright">
-      <p>&copy; <span id="year"></span> All Rights Reserved.</p>
+      <p>&copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.</p>
     </footer>
   </main>
+    <!-- Bottom Navigation -->
+    <nav id="bottom-nav">
+      <button id="bottom-stats-btn">
+        <img src="photos/chart-simple-solid.svg" alt="Stats" />
+        <span>Stats</span>
+      </button>
+      <button id="bottom-username-btn">
+        <img src="photos/user-solid.svg" alt="User" />
+        <span>User</span>
+      </button>
+      <button id="bottom-start-timer-btn">
+        <img src="photos/play-solid.svg" alt="Start" />
+        <span>Start</span>
+      </button>
+      <button id="bottom-stop-timer-btn">
+        <img src="photos/stop-solid.svg" alt="Stop" />
+        <span>Stop</span>
+      </button>
+      <button id="bottom-pause-timer-btn">
+        <img src="photos/pause-solid.svg" alt="Stop" />
+        <span>Pause</span>
+      </button>
+    </nav>
+
 
   <script src="script.js"></script>
 </body>

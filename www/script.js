@@ -22,16 +22,19 @@ window._examPauseTimestamp = null;
 document.addEventListener("DOMContentLoaded", () => {
   updateGreeting(username);
 
-  document.getElementById("show-stats-btn").addEventListener("click", showStats);
+  const showStatsBtn = document.getElementById("show-stats-btn");
+  if (showStatsBtn) {
+    showStatsBtn.addEventListener("click", showStats);
+  }
   document.getElementById("bookmark-btn").addEventListener("click", () => {
     if (filteredQuestions.length === 0) return;
     const q = filteredQuestions[currentIndex];
     const key = `${q.set || 'set'}-${q.question_number || currentIndex + 1}`;
     toggleBookmark(key);
   });
-  document.getElementById("change-username-btn").addEventListener("click", changeUsername);
-  document.getElementById("clear-stats-btn").addEventListener("click", clearStats);
-  document.getElementById("restart-questions").addEventListener("click", () => {
+  document.getElementById("change-username-btn")?.addEventListener("click", changeUsername);
+  document.getElementById("clear-stats-btn")?.addEventListener("click", clearStats);
+  document.getElementById("restart-questions")?.addEventListener("click", () => {
     if (filteredQuestions.length === 0) {
       alert("No questions to restart under current filters.");
       return;
@@ -65,6 +68,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
+
+  document.getElementById('bottom-stats-btn')?.addEventListener('click', showStats);
+  document.getElementById('bottom-username-btn')?.addEventListener('click', changeUsername);
+  document.getElementById('bottom-start-timer-btn')?.addEventListener('click', startExamMode);
+  document.getElementById('bottom-stop-timer-btn')?.addEventListener('click', stopTimer);
+  document.getElementById('bottom-home-btn')?.addEventListener('click', () => {
+    seenQuestionKeys.clear();
+    currentIndex = 0;
+    populateFilterOptions();
+    applyFilters();
+  });
+
+  const bottomPauseBtn = document.getElementById("bottom-pause-timer-btn");
+
+  if (bottomPauseBtn) {
+    bottomPauseBtn.addEventListener("click", () => {
+      timerPaused = !timerPaused;
+      document.getElementById("pause-timer-btn").textContent = timerPaused ? "Resume" : "Pause";
+
+      bottomPauseBtn.innerHTML = timerPaused
+        ? `<img src="photos/play-solid.svg" alt="Play" width="20" height="20"><br /><span class='nav-label'>Resume</span>`
+        : `<img src="photos/pause-solid.svg" alt="Pause" width="20" height="20"><br /><span class='nav-label'>Pause</span>`;
+    });
+  }
+
+
+
+  const examInfoContainer = document.getElementById('exam-info');
+  const examInfoTimer = document.getElementById('exam-info-timer');
+  const inlineExamStatsBtn = document.getElementById('show-inline-exam-stats');
+
+  inlineExamStatsBtn.addEventListener('click', showExamStats);
+
+  document.getElementById('bottom-start-timer-btn')?.addEventListener('click', () => {
+    startExamMode();
+    examInfoContainer.style.display = 'block';
+  });
+
+  // Keep exam info shown if examModeActive was already true
+  if (examModeActive) {
+    examInfoContainer.style.display = 'block';
+  }
+
+  // Keep timer synced
+  setInterval(() => {
+    if (examModeActive) {
+      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const seconds = (timeLeft % 60).toString().padStart(2, '0');
+      examInfoTimer.textContent = `⏱ ${minutes}:${seconds}`;
+    }
+  }, 1000);
+
+
+
+
   fetchQuestions();
 
   if (examModeActive) {
@@ -73,8 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateGreeting(name) {
-  document.getElementById('username-display').textContent = name;
+  document.getElementById('username-display').innerHTML = `Welcome, <strong>${name}</strong>`;
 }
+
 
 function changeUsername() {
   const newUsername = prompt("Enter a new username:", username);
@@ -103,37 +162,105 @@ function shuffle(array) {
 async function fetchQuestions() {
   try {
     const res = await fetch('https://usaboquestions.onrender.com/questions');
-    questions = await res.json();
+    let data = await res.json();
+
+    // ✅ Fully flatten any nested structure
+    const flattenDeep = (arr) => arr.flatMap(q => Array.isArray(q) ? flattenDeep(q) : [q]);
+    questions = flattenDeep(data);
+
+    // 🔍 Warn about bad/missing categories
+    questions.forEach((q, i) => {
+      if (!q.category || typeof q.category !== 'string' || q.category.trim() === '') {
+        console.warn(`❌ Invalid category at index ${i}:`, q.category, q);
+      }
+    });
+
+    console.log('✅ Total questions loaded:', questions.length);
+
     populateFilterOptions();
     applyFilters();
-  } catch (e) {
-    console.error(e);
-    document.getElementById('question-text').textContent = 'Failed to load questions.';
+  } catch (error) {
+    console.error("❌ Failed to fetch questions:", error);
   }
 }
+
+
+
+
+function populateCategoryDropdown(questions) {
+  // Extract category strings, trim whitespace, and remove null/empty
+  const rawCategories = questions
+    .map(q => (typeof q.category === 'string' ? q.category.trim() : null))
+    .filter(cat => cat && cat.length > 0);
+
+  // Get unique categories
+  const uniqueCategories = [...new Set(rawCategories)];
+
+  // Sort categories alphabetically
+  uniqueCategories.sort((a, b) => a.localeCompare(b));
+
+  // Get the dropdown <select> element by its ID
+  const categorySelect = document.getElementById('category-select');
+
+  if (!categorySelect) {
+    console.error('Category select element with id "category-select" not found.');
+    return;
+  }
+
+  // Clear existing options but keep the default "All" option
+  categorySelect.innerHTML = '<option value="">All</option>';
+
+  // Create an option element for each unique category
+  uniqueCategories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categorySelect.appendChild(option);
+  });
+
+  // Debug: Log loaded categories to the console
+  console.log('Categories loaded:', uniqueCategories);
+}
+
 
 function populateFilterOptions() {
   const categorySelect = document.getElementById('category-select');
   const setSelect = document.getElementById('set-select');
 
-  const categories = [...new Set(questions.map(q => q.category).filter(Boolean))];
-  const sets = [...new Set(questions.map(q => q.set).filter(Boolean))];
-
   categorySelect.innerHTML = '<option value="">All</option>';
-  sets.sort();
-
   setSelect.innerHTML = `
-        <option value="">All</option>
-        <option value="__bookmarked__">Bookmarked</option>
-        <option value="__incorrect__">Incorrect</option>
-    `;
+    <option value="">All</option>
+    <option value="__bookmarked__">Bookmarked</option>
+    <option value="__incorrect__">Incorrect</option>
+  `;
+
+  // Map normalized category -> original
+  const categoryMap = new Map();
+
+  questions.forEach(q => {
+    if (typeof q.category === 'string' && q.category.trim().length > 0) {
+      const normalized = q.category.trim().toLowerCase();
+      if (!categoryMap.has(normalized)) {
+        categoryMap.set(normalized, q.category.trim());
+      }
+    }
+  });
+
+  const categories = Array.from(categoryMap.values()).sort((a, b) => a.localeCompare(b));
 
   categories.forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    categorySelect.appendChild(opt);
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categorySelect.appendChild(option);
   });
+
+  // Same for sets (assuming they are simpler strings)
+  const sets = [...new Set(
+    questions
+      .map(q => (typeof q.set === 'string' ? q.set.trim() : ''))
+      .filter(set => set.length > 0)
+  )].sort((a, b) => a.localeCompare(b));
 
   sets.forEach(set => {
     const opt = document.createElement('option');
@@ -143,18 +270,34 @@ function populateFilterOptions() {
   });
 }
 
+
+
+
+
+
+
+
 function applyFilters() {
   seenQuestionKeys.clear();
+
   const selectedCategory = document.getElementById('category-select').value;
   const selectedSet = document.getElementById('set-select').value;
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
 
   filteredQuestions = questions.filter(q => {
     const isCategoryMatch = !selectedCategory || q.category === selectedCategory;
 
-    const isSetMatch =
-      (selectedSet === '__bookmarked__')
-        ? bookmarks.includes(`${q.set || 'set'}-${q.question_number}`)
-        : (!selectedSet || q.set === selectedSet);
+    const key = `${q.set || 'set'}-${q.question_number || q.id || 'unknown'}`;
+    const progressEntry = progress[key];
+
+    let isSetMatch = false;
+    if (selectedSet === '__bookmarked__') {
+      isSetMatch = bookmarks.includes(key);
+    } else if (selectedSet === '__incorrect__') {
+      isSetMatch = progressEntry && typeof progressEntry === 'object' && progressEntry.correct === false;
+    } else {
+      isSetMatch = !selectedSet || q.set === selectedSet;
+    }
 
     return isCategoryMatch && isSetMatch;
   });
@@ -173,6 +316,9 @@ function applyFilters() {
   currentIndex = 0;
   showQuestion(currentIndex);
 }
+
+
+
 
 
 async function showQuestion(index) {
@@ -257,7 +403,7 @@ async function showQuestion(index) {
 
           // Save progress to localStorage
           const progress = JSON.parse(localStorage.getItem('progress')) || {};
-          progress[key] = selected === correct;
+          progress[key] = { correct: selected === correct };
           localStorage.setItem('progress', JSON.stringify(progress));
         });
 
