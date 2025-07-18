@@ -118,7 +118,7 @@ async function fetchQuestions() {
   try {
     const res = await fetch('https://usaboquestions.onrender.com/questions');
     const data = await res.json();
-    questions = data.flat(); // FIX: Flatten nested arrays
+    questions = data.flat();
     console.log('Cleaned questions:', questions);
     populateFilterOptions();
     applyFilters();
@@ -210,7 +210,6 @@ async function showQuestion(index, force = false) {
 
     let current = index;
 
-    // If force is false, try to skip seen questions (your existing logic)
     if (!force) {
       let tries = 0;
       while (tries < filteredQuestions.length) {
@@ -235,14 +234,14 @@ async function showQuestion(index, force = false) {
         return;
       }
     } else {
-      // If force is true, just show the exact question requested
+      // If force is true, shows the exact question requested
       currentIndex = current;
     }
 
     const question = filteredQuestions[currentIndex];
     const key = `${question.set || 'set'}-${question.question_number || currentIndex + 1}`;
 
-    // Update bookmark button
+    // Updates bookmark button
     const bookmarkBtn = document.getElementById('bookmark-btn');
     if (bookmarks.includes(key)) {
       bookmarkBtn.classList.add('bookmarked');
@@ -334,7 +333,7 @@ function handleAnswer(btn, q, choice, key) {
   buttons.forEach(b => {
     if (!b.classList.contains('correct') && !b.classList.contains('incorrect')) {
       b.classList.add('not-selected');
-      b.style.backgroundColor = '#fff'; // Ensure unselected stay white
+      b.style.backgroundColor = '#fff'; // Ensure unselected stays white
     }
   });
 }
@@ -579,8 +578,6 @@ function fadeOutAndIn(element, updateCallback) {
     // Fade in by adding .show back
     element.classList.add("show");
 
-    // Optional: Remove 'fade' class after fade-in completes (another 250ms)
-    // so it doesn't stay forever and affect other styles:
     setTimeout(() => {
       element.classList.remove('fade');
     }, 300);
