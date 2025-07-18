@@ -594,10 +594,11 @@ function updateProgressBar() {
     document.getElementById('progress-bar-label').textContent = '';
     return;
   }
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
   let seenCount = 0;
   filteredQuestions.forEach((q, idx) => {
     const key = `${q.set || 'set'}-${q.question_number || (idx + 1)}`;
-    if (seenQuestionKeys.has(key)) seenCount++;
+    if (progress.hasOwnProperty(key)) seenCount++;
   });
   const total = filteredQuestions.length;
   const percent = Math.round((seenCount / total) * 100);
