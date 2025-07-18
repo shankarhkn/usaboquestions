@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       seenQuestionKeys.clear();
       currentIndex = 0;
       showQuestion(currentIndex);
+      updateProgressBar();
     }
   });
 
@@ -187,6 +188,7 @@ function applyFilters() {
   shuffle(filteredQuestions);
   currentIndex = 0;
   showQuestion(currentIndex);
+  updateProgressBar();
 }
 
 
@@ -299,6 +301,7 @@ async function showQuestion(index, force = false) {
 
       choicesContainer.appendChild(choiceBtn);
     });
+    updateProgressBar();
   });
 }
 
@@ -583,4 +586,21 @@ function fadeOutAndIn(element, updateCallback) {
     }, 300);
 
   }, 250);
+}
+
+function updateProgressBar() {
+  if (!filteredQuestions.length) {
+    document.getElementById('progress-bar').style.width = '0';
+    document.getElementById('progress-bar-label').textContent = '';
+    return;
+  }
+  let seenCount = 0;
+  filteredQuestions.forEach((q, idx) => {
+    const key = `${q.set || 'set'}-${q.question_number || (idx + 1)}`;
+    if (seenQuestionKeys.has(key)) seenCount++;
+  });
+  const total = filteredQuestions.length;
+  const percent = Math.round((seenCount / total) * 100);
+  document.getElementById('progress-bar').style.width = percent + '%';
+  document.getElementById('progress-bar-label').textContent = `Seen: ${seenCount} / ${total}`;
 }
