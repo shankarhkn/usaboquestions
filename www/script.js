@@ -169,6 +169,7 @@ if (bottomPauseBtn) {
   if (examModeActive) {
     resumeExamTimer();
   }
+  updateProgressBar();
 });
 
 function updateGreeting(name) {
@@ -359,6 +360,7 @@ function applyFilters() {
   shuffle(filteredQuestions);
   currentIndex = 0;
   showQuestion(currentIndex);
+  updateProgressBar();
 }
 
 
@@ -448,7 +450,13 @@ async function showQuestion(index, pushToHistory = true) {
       });
 
       answerElem.style.display = 'block';
-      answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+      if (window.innerWidth > 600) {
+        answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+        answerElem.style.display = 'block';
+      } else {
+        answerElem.textContent = '';
+        answerElem.style.display = 'none';
+      }
 
       // Save progress to localStorage
       const progress = JSON.parse(localStorage.getItem('progress')) || {};
@@ -463,6 +471,7 @@ async function showQuestion(index, pushToHistory = true) {
 
     choicesContainer.appendChild(choiceBtn);
   });
+  updateProgressBar();
 }
 
 
@@ -567,4 +576,22 @@ function showExamStats() {
   const totalIncorrect = Object.values(progress).filter(v => v === false).length;
 
   alert(`Exam Stats:\nSeen: ${totalSeen}\nCorrect: ${totalCorrect}\nIncorrect: ${totalIncorrect}`);
+}
+
+function updateProgressBar() {
+  if (!filteredQuestions.length) {
+    document.getElementById('progress-bar').style.width = '0';
+    document.getElementById('progress-bar-label').textContent = '';
+    return;
+  }
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  let seenCount = 0;
+  filteredQuestions.forEach((q, idx) => {
+    const key = `${q.set || 'set'}-${q.question_number || (idx + 1)}`;
+    if (progress.hasOwnProperty(key)) seenCount++;
+  });
+  const total = filteredQuestions.length;
+  const percent = Math.round((seenCount / total) * 100);
+  document.getElementById('progress-bar').style.width = percent + '%';
+  document.getElementById('progress-bar-label').textContent = `Seen: ${seenCount} / ${total}`;
 }
