@@ -325,6 +325,7 @@ button:disabled {
 #exam-controls-box button {
   display: block;
   width: 100%;
+  font-family: 'Rubik', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #exam-timer {
