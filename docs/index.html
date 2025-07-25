@@ -20,13 +20,14 @@
         <h1>BioReader</h1>
         <img src="photos/Logo.png" alt="BioReader Logo" id="site-logo" />
       </div>
-      <p id="subtitle">Still in development 🛠️, version 1.05a</p>
-    </div>      
+      <!-- Credits button removed from here -->
+    </div>
     <div id="user-settings">
       <span>Welcome, <strong id="username-display">User</strong></span>
       <button id="show-stats-btn">Show Stats</button>
       <button id="change-username-btn">Change Username</button>
       <button id="clear-stats-btn">Clear Stats</button>
+      <button id="credits-btn">Credits</button>
     </div>
   </header>
 
@@ -39,11 +40,6 @@
   </div>
 
   <main id="app">
-    <h4 id="cee-note">
-      <strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the
-        questions.</strong>
-    </h4>
-
     <section id="filters">
       <label for="category-select">Category:</label>
       <div class="dropdown-wrapper">
@@ -97,10 +93,22 @@
       <button id="restart-questions">Restart Seen Questions</button>
     </div>
 
-    <footer class="copyright">
-      <p>&copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.</p>
-    </footer>
   </main>
+
+  <!-- Add modal for credits (hidden by default) -->
+  <div id="credits-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:2000; justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:24px 18px; border-radius:10px; max-width:90vw; max-height:80vh; overflow:auto; box-shadow:0 4px 24px rgba(0,0,0,0.18); text-align:center;">
+      <h2>Credits</h2>
+      <p><strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the questions.</strong></p>
+      <p>App &copy; <span id="year-modal"></span> Shankar Harikrishnan. All Rights Reserved.</p>
+      <p>Still in development 🛠️, version 1.05a</p>
+      <button id="close-credits-modal" style="margin-top:18px;">Close</button>
+    </div>
+  </div>
+
+  <footer class="copyright">
+    &copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.
+  </footer>
 
   <script src="script.js"></script>
 </body>

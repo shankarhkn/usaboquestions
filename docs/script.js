@@ -74,6 +74,23 @@ document.addEventListener("DOMContentLoaded", () => {
   if (examModeActive) {
     resumeExamTimer();
   }
+
+  // Credits modal logic
+  const creditsBtn = document.getElementById('credits-btn');
+  const creditsModal = document.getElementById('credits-modal');
+  const closeCreditsModal = document.getElementById('close-credits-modal');
+  if (creditsBtn && creditsModal && closeCreditsModal) {
+    creditsBtn.addEventListener('click', () => {
+      creditsModal.style.display = 'flex';
+      document.getElementById('year-modal').textContent = new Date().getFullYear();
+    });
+    closeCreditsModal.addEventListener('click', () => {
+      creditsModal.style.display = 'none';
+    });
+    creditsModal.addEventListener('click', (e) => {
+      if (e.target === creditsModal) creditsModal.style.display = 'none';
+    });
+  }
 });
 
 function updateGreeting(name) {

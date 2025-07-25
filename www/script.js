@@ -20,6 +20,104 @@ window._examPauseTimestamp = null;
 
 // === On DOM Loaded ===
 document.addEventListener("DOMContentLoaded", () => {
+  // Credits modal logic FIRST
+  const creditsBtn = document.getElementById('credits-btn');
+  const creditsModal = document.getElementById('credits-modal');
+  const closeCreditsModal = document.getElementById('close-credits-modal');
+  if (creditsBtn && creditsModal && closeCreditsModal) {
+    creditsBtn.addEventListener('click', () => {
+      creditsModal.style.display = 'flex';
+      const yearModal = document.getElementById('year-modal');
+      if (yearModal) {
+        yearModal.textContent = new Date().getFullYear();
+      }
+    });
+    closeCreditsModal.addEventListener('click', () => {
+      creditsModal.style.display = 'none';
+    });
+    creditsModal.addEventListener('click', (e) => {
+      if (e.target === creditsModal) creditsModal.style.display = 'none';
+    });
+  }
+
+  // --- MOBILE TIMER LOGIC (INDEPENDENT) ---
+  let mobileTimerInterval = null;
+  let mobileTimeLeft = 50 * 60;
+  let mobileTimerRunning = false;
+  let mobileTimerPaused = false;
+
+  function updateMobileTimerDisplay() {
+    const m = Math.floor(mobileTimeLeft / 60).toString().padStart(2, '0');
+    const s = (mobileTimeLeft % 60).toString().padStart(2, '0');
+    const mobileTimer = document.getElementById('mobile-timer');
+    if (mobileTimer) mobileTimer.textContent = `${m}:${s}`;
+    console.log(`Timer display updated: ${m}:${s}`);
+  }
+
+  function startMobileTimer() {
+    console.log('Start button clicked');
+    if (mobileTimerInterval) clearInterval(mobileTimerInterval);
+    mobileTimeLeft = 50 * 60;
+    mobileTimerRunning = true;
+    mobileTimerPaused = false;
+    updateMobileTimerDisplay();
+    mobileTimerInterval = setInterval(() => {
+      if (!mobileTimerPaused && mobileTimerRunning && mobileTimeLeft > 0) {
+        mobileTimeLeft--;
+        updateMobileTimerDisplay();
+        if (mobileTimeLeft === 0) {
+          clearInterval(mobileTimerInterval);
+          mobileTimerRunning = false;
+          console.log('Timer finished');
+        }
+      }
+    }, 1000);
+  }
+
+  function stopMobileTimer() {
+    console.log('Stop button clicked');
+    if (mobileTimerInterval) clearInterval(mobileTimerInterval);
+    mobileTimeLeft = 50 * 60;
+    mobileTimerRunning = false;
+    mobileTimerPaused = false;
+    updateMobileTimerDisplay();
+  }
+
+  function pauseMobileTimer() {
+    if (!mobileTimerRunning) return;
+    mobileTimerPaused = !mobileTimerPaused;
+    console.log(mobileTimerPaused ? 'Timer paused' : 'Timer resumed');
+    // Optionally update the pause button text/icon
+    const pauseBtn = document.getElementById('bottom-pause-timer-btn');
+    if (pauseBtn) {
+      const label = pauseBtn.querySelector('span');
+      if (label) label.textContent = mobileTimerPaused ? 'Resume' : 'Pause';
+      const img = pauseBtn.querySelector('img');
+      if (img) {
+        img.src = mobileTimerPaused ? 'photos/play-solid.svg' : 'photos/pause-solid.svg';
+        img.alt = mobileTimerPaused ? 'Play' : 'Pause';
+      }
+    }
+  }
+
+  const startBtn = document.getElementById('bottom-start-timer-btn');
+  if (startBtn) {
+    startBtn.addEventListener('click', startMobileTimer);
+    console.log('Start button event attached');
+  }
+  const stopBtn = document.getElementById('bottom-stop-timer-btn');
+  if (stopBtn) {
+    stopBtn.addEventListener('click', stopMobileTimer);
+    console.log('Stop button event attached');
+  }
+  const pauseBtn = document.getElementById('bottom-pause-timer-btn');
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', pauseMobileTimer);
+    console.log('Pause button event attached');
+  }
+
+  updateMobileTimerDisplay();
+
   updateGreeting(username);
 
   const showStatsBtn = document.getElementById("show-stats-btn");
@@ -87,18 +185,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("apply-filters").addEventListener("click", applyFilters);
 
-  document.getElementById("start-exam-mode").addEventListener("click", startExamMode);
-  document.getElementById("pause-timer-btn").addEventListener("click", pauseTimer);
-  document.getElementById("stop-timer-btn").addEventListener("click", stopTimer);
-  document.getElementById("show-exam-stats-btn").addEventListener("click", showExamStats);
+  // Remove event listeners for removed exam controls
+  // document.getElementById("start-exam-mode").addEventListener("click", startExamMode);
+  // document.getElementById("pause-timer-btn").addEventListener("click", pauseTimer);
+  // document.getElementById("stop-timer-btn").addEventListener("click", stopTimer);
+  // document.getElementById("show-exam-stats-btn").addEventListener("click", showExamStats);
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  // Remove bottom nav timer controls if present
+  // document.getElementById('bottom-start-timer-btn')?.addEventListener('click', startExamMode);
+  // document.getElementById('bottom-stop-timer-btn')?.addEventListener('click', stopTimer);
+  // document.getElementById('bottom-pause-timer-btn')?.addEventListener('click', ...);
 
+  // document.getElementById('year').textContent = new Date().getFullYear();
 
   document.getElementById('bottom-stats-btn')?.addEventListener('click', showStats);
   document.getElementById('bottom-username-btn')?.addEventListener('click', changeUsername);
-  document.getElementById('bottom-start-timer-btn')?.addEventListener('click', startExamMode);
-  document.getElementById('bottom-stop-timer-btn')?.addEventListener('click', stopTimer);
   document.getElementById('bottom-home-btn')?.addEventListener('click', () => {
     seenQuestionKeys.clear();
     currentIndex = 0;
@@ -106,70 +207,49 @@ document.addEventListener("DOMContentLoaded", () => {
     applyFilters();
   });
 
-  const bottomPauseBtn = document.getElementById("bottom-pause-timer-btn");
-
-if (bottomPauseBtn) {
-  bottomPauseBtn.addEventListener("click", () => {
-    timerPaused = !timerPaused;
-
-    const mainPauseBtn = document.getElementById("pause-timer-btn");
-    mainPauseBtn.textContent = timerPaused ? "Resume" : "Pause";
-
-    const img = bottomPauseBtn.querySelector("img");
-    const label = bottomPauseBtn.querySelector("span");
-
-    if (timerPaused) {
-      img.src = "photos/play-solid.svg";
-      img.alt = "Play";
-      label.textContent = "Resume";
-    } else {
-      img.src = "photos/pause-solid.svg";
-      img.alt = "Pause";
-      label.textContent = "Pause";
-    }
-  });
-}
-
-
-
-
-
-
-
-  const examInfoContainer = document.getElementById('exam-info');
-  const examInfoTimer = document.getElementById('exam-info-timer');
-  const inlineExamStatsBtn = document.getElementById('show-inline-exam-stats');
-
-  inlineExamStatsBtn.addEventListener('click', showExamStats);
-
-  document.getElementById('bottom-start-timer-btn')?.addEventListener('click', () => {
-    startExamMode();
-    examInfoContainer.style.display = 'block';
-  });
+  // Remove bottomPauseBtn logic
 
   // Keep exam info shown if examModeActive was already true
-  if (examModeActive) {
+  const examInfoContainer = document.getElementById('exam-info');
+  if (examInfoContainer && examModeActive) {
     examInfoContainer.style.display = 'block';
   }
 
-  // Keep timer synced
-  setInterval(() => {
-    if (examModeActive) {
-      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-      const seconds = (timeLeft % 60).toString().padStart(2, '0');
-      examInfoTimer.textContent = `⏱ ${minutes}:${seconds}`;
-    }
-  }, 1000);
-
-
-
+  // Keep timer synced (for mobile timer)
+  // Remove this conflicting interval:
+  // setInterval(() => {
+  //   if (examModeActive) {
+  //     const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  //     const seconds = (timeLeft % 60).toString().padStart(2, '0');
+  //     const mobileTimer = document.getElementById('mobile-timer');
+  //     if (mobileTimer) mobileTimer.textContent = `⏱ ${minutes}:${seconds}`;
+  //   }
+  // }, 1000);
 
   fetchQuestions();
 
   if (examModeActive) {
-    resumeExamTimer();
+    // resumeExamTimer(); // This line is removed as per the edit hint.
   }
   updateProgressBar();
+
+  // Dropdown arrow toggle logic for mobile
+  const mobileDropdownArrow = document.getElementById('mobile-dropdown-arrow');
+  const mobileToggleSection = document.getElementById('mobile-toggle-section');
+  let mobileToggleOpen = false;
+  if (mobileDropdownArrow && mobileToggleSection) {
+    mobileDropdownArrow.addEventListener('click', () => {
+      mobileToggleOpen = !mobileToggleOpen;
+      mobileToggleSection.style.display = mobileToggleOpen ? 'block' : 'none';
+      const arrowSpan = mobileDropdownArrow.querySelector('span');
+      if (arrowSpan) {
+        arrowSpan.textContent = mobileToggleOpen ? '▲' : '▼';
+        arrowSpan.style.fontSize = '1.5rem';
+        arrowSpan.style.lineHeight = '1';
+      }
+    });
+  }
+
 });
 
 function updateGreeting(name) {
@@ -541,9 +621,9 @@ function stopTimer() {
 }
 
 function updateTimerDisplay() {
-  const m = Math.floor(timeLeft / 60);
-  const s = timeLeft % 60;
-  document.getElementById('exam-timer').textContent = `⏱ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  document.getElementById('exam-timer').textContent = `⏱ ${m}:${s}`;
 }
 
 function saveExamState() {

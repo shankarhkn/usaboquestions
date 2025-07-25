@@ -18,50 +18,53 @@
       <div id="title-group">
         <h1>BioReader</h1>
         <span id="username-display">Welcome, <strong>User</strong></span>
+        <button id="credits-btn">Credits</button>
       </div>
-      <p id="subtitle">Still in development 🛠️, version 1.05a</p>
     </div>
   </header>
 
-
-  <div id="exam-controls-box">
-    <div id="exam-timer">⏱ 50:00</div>
-    <button id="start-exam-mode">Start 50-min Exam</button>
-    <button id="pause-timer-btn" disabled>Pause</button>
-    <button id="stop-timer-btn" disabled>Stop</button>
-    <button id="show-exam-stats-btn">Show Exam Stats</button>
+  <!-- Add modal for credits (hidden by default) -->
+  <div id="credits-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:2000; justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:24px 18px; border-radius:10px; max-width:90vw; max-height:80vh; overflow:auto; box-shadow:0 4px 24px rgba(0,0,0,0.18); text-align:center;">
+      <h2>Credits</h2>
+      <p><strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the questions.</strong></p>
+      <p>App &copy; <span id="year-modal"></span> Shankar Harikrishnan. All Rights Reserved.</p>
+      <button id="close-credits-modal" style="margin-top:18px;">Close</button>
+    </div>
   </div>
 
+  <!-- Remove the entire exam-controls-box -->
   <main id="app">
-    <h4 id="cee-note">
-      <strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the
-        questions.</strong>
-    </h4>
-    <p>App &copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.</p>
+    <!-- Mobile-only exam controls (centered) -->
     <!-- Exam Info Container -->
-    <div id="exam-info" style="display: none; text-align: center; margin: 1rem 0;">
-      <div id="exam-info-timer" style="font-size: 1.4rem; font-weight: bold; color: #007bff;">
-        ⏱ 50:00
-      </div>
-      <button id="show-inline-exam-stats" style="margin-top: 8px; background-color: #28a745;">
-        Show Exam Stats
+    <!-- Remove any other timer or Show Exam Stats button, including #exam-info and #exam-info-timer -->
+
+    <!-- Keep the timer always visible above the dropdown arrow -->
+    <!-- Flex container for timer and dropdown arrow, both centered as a group -->
+    <div class="centered-row" id="timer-row">
+      <span class="timer-group">
+        <span class="timer-emoji">⏰</span>
+        <span id="mobile-timer"></span>
+      </span>
+      <button id="mobile-dropdown-arrow" style="background:none;border:none;cursor:pointer;padding:0 4px;display:flex;align-items:center;">
+        <span style="font-size:1.5rem;line-height:1;display:block;">▼</span>
       </button>
     </div>
-
-
-    <section id="filters">
-      <label for="category-select">Category:</label>
-      <select id="category-select">
-        <option value="">All</option>
-      </select>
-
-      <label for="set-select">Set:</label>
-      <select id="set-select">
-        <option value="">All</option>
-      </select>
-
-      <button id="apply-filters">Apply Filters</button>
-    </section>
+    <!-- Toggle section for stats and filters -->
+    <div id="mobile-toggle-section" style="display:none;">
+      <button id="mobile-exam-stats-btn" style="background:#28a745; color:#fff; font-size:1.08rem; padding:10px 22px; border-radius:8px; border:none; display:block; margin:0 auto;">Show Exam Stats</button>
+      <section id="filters">
+        <label for="category-select">Category:</label>
+        <select id="category-select">
+          <option value="">All</option>
+        </select>
+        <label for="set-select">Set:</label>
+        <select id="set-select">
+          <option value="">All</option>
+        </select>
+        <button id="apply-filters">Apply Filters</button>
+      </section>
+    </div>
 
     <div id="progress-bar-container">
       <div id="progress-bar-bg">
