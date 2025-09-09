@@ -365,9 +365,9 @@ async function showQuestion(index, force = false) {
             }
           });
 
-          const answerElem = document.getElementById('answer-text');
-          answerElem.style.display = 'block';
-          answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+          //const answerElem = document.getElementById('answer-text');
+          //answerElem.style.display = 'block';
+          //answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
 
           const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
 
@@ -422,9 +422,9 @@ async function showQuestion(index, force = false) {
           }
         });
 
-        const answerElem = document.getElementById('answer-text');
-        answerElem.style.display = 'block';
-        answerElem.textContent = `You answered '${selectedAnswer}'. The correct answer is '${correctAnswer}'.`;
+        //const answerElem = document.getElementById('answer-text');
+        //answerElem.style.display = 'block';
+        //answerElem.textContent = `You answered '${selectedAnswer}'. The correct answer is '${correctAnswer}'.`;
 
         const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
 
