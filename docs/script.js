@@ -11,6 +11,50 @@ let timeLeft = parseInt(localStorage.getItem('examTimeLeft')) || 50 * 60;
 let timerPaused = false;
 let examModeActive = JSON.parse(localStorage.getItem('examModeActive')) || false;
 
+async function loadQuestions() {
+  const local = await fetch('usabo-api/questions.json').then(r => r.json());
+  const remote = await fetch('https://usaboquestions.onrender.com/questions').then(r => r.json()).catch(() => []);
+
+  const combined = [...local, ...remote].flat(Infinity);
+  questions = combined;
+  console.log('Combined sets:', [...new Set(questions.map(q => q.set))]);
+
+  populateFilterOptions();
+  applyFilters();
+}
+
+
+
+function populateFilters() {
+  const categorySelect = document.getElementById("category-select");
+  const setSelect = document.getElementById("set-select");
+
+  // Clear previous options
+  categorySelect.innerHTML = '<option value="">All</option>';
+  setSelect.innerHTML = '<option value="">All</option>';
+
+  const categories = [...new Set(questions.map(q => q.category))].sort();
+  const sets = [...new Set(questions.map(q => q.set))].sort();
+
+  console.log("Sets to populate:", sets);
+
+  categories.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    categorySelect.appendChild(opt);
+  });
+
+  sets.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = s;
+    setSelect.appendChild(opt);
+  });
+}
+
+
+
 window._examTimerStartTimestamp = null;
 window._examPauseTimestamp = null;
 
@@ -130,12 +174,13 @@ function shuffle(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
 async function fetchQuestions() {
   try {
-    const res = await fetch('https://usaboquestions.onrender.com/questions');
-    const data = await res.json();
-    questions = data.flat();
+    const local = await fetch('usabo-api/questions.json').then(r => r.json());
+    const remote = await fetch('https://usaboquestions.onrender.com/questions').then(r => r.json()).catch(() => []);
+
+    questions = [...local, ...remote].flat(Infinity);
+
     console.log('Cleaned questions:', questions);
     populateFilterOptions();
     applyFilters();
@@ -145,21 +190,24 @@ async function fetchQuestions() {
   }
 }
 
+
+
 function populateFilterOptions() {
   const categorySelect = document.getElementById('category-select');
   const setSelect = document.getElementById('set-select');
 
-  const categories = [...new Set(questions.map(q => q.category).filter(Boolean))];
-  const sets = [...new Set(questions.map(q => q.set).filter(Boolean))];
+  // Only keep valid objects with category/set
+  const validQuestions = questions.filter(q => q && typeof q === "object");
+
+  const categories = [...new Set(validQuestions.map(q => q.category).filter(Boolean))].sort();
+  const sets = [...new Set(validQuestions.map(q => q.set).filter(Boolean))].sort();
 
   categorySelect.innerHTML = '<option value="">All</option>';
-  sets.sort();
-
   setSelect.innerHTML = `
-        <option value="">All</option>
-        <option value="__bookmarked__">Bookmarked</option>
-        <option value="__incorrect__">Incorrect</option>
-    `;
+    <option value="">All</option>
+    <option value="__bookmarked__">Bookmarked</option>
+    <option value="__incorrect__">Incorrect</option>
+  `;
 
   categories.forEach(cat => {
     const opt = document.createElement('option');
@@ -175,6 +223,7 @@ function populateFilterOptions() {
     setSelect.appendChild(opt);
   });
 }
+
 
 function applyFilters() {
   seenQuestionKeys.clear();
@@ -276,47 +325,124 @@ async function showQuestion(index, force = false) {
     const choicesContainer = document.getElementById('choices-text');
     choicesContainer.innerHTML = '';
 
+    // Check if this is a multiple choice question
+    const isMultipleChoice = question.answer.includes('+');
+    let selectedChoices = new Set();
+    let submitted = false;
+
     question.choices.forEach(choice => {
       const choiceBtn = document.createElement('button');
       choiceBtn.textContent = choice;
       choiceBtn.classList.add('choice-btn');
 
       choiceBtn.addEventListener('click', () => {
+        if (submitted) return; // Prevent changes after submission
+
+        if (isMultipleChoice) {
+          // Handle multiple choice selection
+          const choiceLetter = choice.trim().charAt(0);
+          if (selectedChoices.has(choiceLetter)) {
+            selectedChoices.delete(choiceLetter);
+            choiceBtn.classList.remove('selected');
+          } else {
+            selectedChoices.add(choiceLetter);
+            choiceBtn.classList.add('selected');
+          }
+        } else {
+          // Handle single choice selection
+          document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+          submitted = true;
+
+          const selected = choice.trim().charAt(0);
+          const correct = question.answer;
+
+          choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
+          document.querySelectorAll('.choice-btn').forEach(btn => {
+            if (btn.textContent.trim().startsWith(correct + '.')) {
+              btn.classList.add('correct');
+            } else if (btn !== choiceBtn) {
+              btn.classList.add('not-selected');
+            }
+          });
+
+          const answerElem = document.getElementById('answer-text');
+          answerElem.style.display = 'block';
+          answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+
+          const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
+
+          let progress = JSON.parse(localStorage.getItem('progress')) || {};
+          progress[key] = { correct: selected === correct, time: timeSpentSeconds };
+          localStorage.setItem('progress', JSON.stringify(progress));
+
+          seenQuestionKeys.add(key);
+
+          if (examModeActive) {
+            let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
+            examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
+            localStorage.setItem('examProgress', JSON.stringify(examProgress));
+          }
+        }
+      });
+
+      choicesContainer.appendChild(choiceBtn);
+    });
+
+    // Add submit button for multiple choice questions
+    if (isMultipleChoice) {
+      const submitBtn = document.createElement('button');
+      submitBtn.textContent = 'Submit Answer';
+      submitBtn.classList.add('submit-btn');
+      submitBtn.style.cssText = 'margin-top: 15px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;';
+      
+      submitBtn.addEventListener('click', () => {
+        if (selectedChoices.size === 0) {
+          alert('Please select at least one answer.');
+          return;
+        }
+
+        submitted = true;
         document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+        submitBtn.disabled = true;
 
-        const selected = choice.trim().charAt(0);
-        const correct = question.answer;
+        const selectedAnswer = Array.from(selectedChoices).sort().join('+');
+        const correctAnswer = question.answer;
+        const isCorrect = selectedAnswer === correctAnswer;
 
-        choiceBtn.classList.add(selected === correct ? 'correct' : 'incorrect');
+        // Show correct answers
+        const correctChoices = correctAnswer.split('+');
         document.querySelectorAll('.choice-btn').forEach(btn => {
-          if (btn.textContent.trim().startsWith(correct + '.')) {
+          const choiceLetter = btn.textContent.trim().charAt(0);
+          if (correctChoices.includes(choiceLetter)) {
             btn.classList.add('correct');
-          } else if (btn !== choiceBtn) {
+          } else if (selectedChoices.has(choiceLetter)) {
+            btn.classList.add('incorrect');
+          } else {
             btn.classList.add('not-selected');
           }
         });
 
         const answerElem = document.getElementById('answer-text');
         answerElem.style.display = 'block';
-        answerElem.textContent = `You answered '${selected}'. The correct answer is '${correct}'.`;
+        answerElem.textContent = `You answered '${selectedAnswer}'. The correct answer is '${correctAnswer}'.`;
 
         const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
 
         let progress = JSON.parse(localStorage.getItem('progress')) || {};
-        progress[key] = { correct: selected === correct, time: timeSpentSeconds };
+        progress[key] = { correct: isCorrect, time: timeSpentSeconds };
         localStorage.setItem('progress', JSON.stringify(progress));
 
         seenQuestionKeys.add(key);
 
         if (examModeActive) {
           let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
-          examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
+          examProgress[key] = { correct: isCorrect, time: timeSpentSeconds };
           localStorage.setItem('examProgress', JSON.stringify(examProgress));
         }
       });
 
-      choicesContainer.appendChild(choiceBtn);
-    });
+      choicesContainer.appendChild(submitBtn);
+    }
     updateProgressBar();
   });
 }

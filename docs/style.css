@@ -136,6 +136,11 @@ h3 {
     font-size: 36px;
   }
 
+  .submit-btn {
+    font-size: 1.3rem !important;
+    padding: 12px 24px !important;
+  }
+
   /* Progress bar - match filters section width */
   #progress-bar-container {
     max-width: 600px !important;
@@ -208,6 +213,11 @@ h3 {
   /* Progress bar - match filters section width */
   #progress-bar-container {
     max-width: 900px !important;
+  }
+
+  .submit-btn {
+    font-size: 1.5rem !important;
+    padding: 14px 28px !important;
   }
 }
 
@@ -357,6 +367,13 @@ h3 {
 .choice-btn:hover {
   background-color: #e6f0ff;
   border-color: #007bff;
+}
+
+.choice-btn.selected {
+  background-color: #e6f0ff;
+  border-color: #007bff;
+  color: #007bff;
+  font-weight: 600;
 }
 
 .choice-btn.not-selected {
