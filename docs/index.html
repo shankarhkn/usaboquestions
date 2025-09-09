@@ -20,7 +20,6 @@
         <h1>BioReader</h1>
         <img src="photos/Logo.png" alt="BioReader Logo" id="site-logo" />
       </div>
-      <!-- Credits button removed from here -->
     </div>
     <div id="user-settings">
       <span>Welcome, <strong id="username-display">User</strong></span>
@@ -31,6 +30,7 @@
     </div>
   </header>
 
+  <!-- Exam controls -->
   <div id="exam-controls-box">
     <div id="exam-timer">⏱ 50:00</div>
     <button id="start-exam-mode">Start 50-min Exam</button>
@@ -45,31 +45,29 @@
       <div class="dropdown-wrapper">
         <select id="category-select">
           <option value="">All</option>
-          <!-- other category options here -->
         </select>
         <div class="dropdown-arrow"><span>▼</span></div>
       </div>
-    
+
       <label for="set-select">Set:</label>
       <div class="dropdown-wrapper">
         <select id="set-select">
           <option value="">All</option>
-          <!-- other set options here -->
         </select>
         <div class="dropdown-arrow"><span>▼</span></div>
       </div>
-    
+
       <button id="apply-filters">Apply Filters</button>
     </section>
-    
-  <div id="progress-bar-container" style="max-width:900px;margin:0 auto 1.5rem auto;">
-    <div id="progress-bar-bg" style="background:#e3e8ee;height:10px;border-radius:6px;overflow:hidden;">
-      <div id="progress-bar"
-        style="height:10px;width:0;background:linear-gradient(90deg,#007bff,#00c6ff);transition:width 0.4s cubic-bezier(.4,0,.2,1);">
+
+    <div id="progress-bar-container" style="max-width:900px;margin:0 auto 1.5rem auto;">
+      <div id="progress-bar-bg" style="background:#e3e8ee;height:10px;border-radius:6px;overflow:hidden;">
+        <div id="progress-bar"
+          style="height:10px;width:0;background:linear-gradient(90deg,#007bff,#00c6ff);transition:width 0.4s cubic-bezier(.4,0,.2,1);">
+        </div>
       </div>
+      <div id="progress-bar-label" style="text-align:right;font-size:0.95rem;color:#555;margin-top:2px;"></div>
     </div>
-    <div id="progress-bar-label" style="text-align:right;font-size:0.95rem;color:#555;margin-top:2px;"></div>
-  </div>
 
     <section id="question-box">
       <div id="question-meta">
@@ -92,14 +90,16 @@
       <button id="next">Next</button>
       <button id="restart-questions">Restart Seen Questions</button>
     </div>
-
   </main>
 
-  <!-- Add modal for credits (hidden by default) -->
-  <div id="credits-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:2000; justify-content:center; align-items:center;">
-    <div style="background:#fff; padding:24px 18px; border-radius:10px; max-width:90vw; max-height:80vh; overflow:auto; box-shadow:0 4px 24px rgba(0,0,0,0.18); text-align:center;">
+  <!-- Credits modal -->
+  <div id="credits-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:2000; justify-content:center; align-items:center;">
+    <div
+      style="background:#fff; padding:24px 18px; border-radius:10px; max-width:90vw; max-height:80vh; overflow:auto; box-shadow:0 4px 24px rgba(0,0,0,0.18); text-align:center;">
       <h2>Credits</h2>
-      <p><strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the questions.</strong></p>
+      <p><strong>All questions belong to CEE and their respective domains. I don't own, nor claim to own, any of the
+          questions.</strong></p>
       <p>App &copy; <span id="year-modal"></span> Shankar Harikrishnan. All Rights Reserved.</p>
       <p>Still in development 🛠️, version 1.05a</p>
       <button id="close-credits-modal" style="margin-top:18px;">Close</button>
