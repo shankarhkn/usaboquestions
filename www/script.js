@@ -140,7 +140,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (confirm("Are you sure you want to restart the current filtered questions?")) {
       seenQuestionKeys.clear();
       currentIndex = 0;
+      
+      // Clear progress data for the current filtered questions
+      const progress = JSON.parse(localStorage.getItem('progress')) || {};
+      filteredQuestions.forEach((q, idx) => {
+        const key = `${q.set || 'set'}-${q.question_number || (idx + 1)}`;
+        delete progress[key];
+      });
+      localStorage.setItem('progress', JSON.stringify(progress));
+      
       showQuestion(currentIndex);
+      updateProgressBar();
     }
   });
 

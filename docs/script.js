@@ -80,6 +80,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (confirm("Are you sure you want to restart the current filtered questions?")) {
       seenQuestionKeys.clear();
       currentIndex = 0;
+      
+      // Clear progress data for the current filtered questions
+      const progress = JSON.parse(localStorage.getItem('progress')) || {};
+      filteredQuestions.forEach((q, idx) => {
+        const key = `${q.set || 'set'}-${q.question_number || (idx + 1)}`;
+        delete progress[key];
+      });
+      localStorage.setItem('progress', JSON.stringify(progress));
+      
       showQuestion(currentIndex);
       updateProgressBar();
     }
@@ -179,7 +188,17 @@ async function fetchQuestions() {
     const local = await fetch('usabo-api/questions.json').then(r => r.json());
     const remote = await fetch('https://usaboquestions.onrender.com/questions').then(r => r.json()).catch(() => []);
 
-    questions = [...local, ...remote].flat(Infinity);
+    // Combine and deduplicate questions
+    const combined = [...local, ...remote].flat(Infinity);
+    const seen = new Set();
+    questions = combined.filter(q => {
+      const key = `${q.set || 'set'}-${q.question_number || 'unknown'}`;
+      if (seen.has(key)) {
+        return false; // Skip duplicate
+      }
+      seen.add(key);
+      return true;
+    });
 
     console.log('Cleaned questions:', questions);
     populateFilterOptions();
@@ -371,16 +390,21 @@ async function showQuestion(index, force = false) {
 
           const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
 
+          // Only save progress if not already saved
           let progress = JSON.parse(localStorage.getItem('progress')) || {};
-          progress[key] = { correct: selected === correct, time: timeSpentSeconds };
-          localStorage.setItem('progress', JSON.stringify(progress));
+          if (!progress.hasOwnProperty(key)) {
+            progress[key] = { correct: selected === correct, time: timeSpentSeconds };
+            localStorage.setItem('progress', JSON.stringify(progress));
+          }
 
           seenQuestionKeys.add(key);
 
           if (examModeActive) {
             let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
-            examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
-            localStorage.setItem('examProgress', JSON.stringify(examProgress));
+            if (!examProgress.hasOwnProperty(key)) {
+              examProgress[key] = { correct: selected === correct, time: timeSpentSeconds };
+              localStorage.setItem('examProgress', JSON.stringify(examProgress));
+            }
           }
         }
       });
@@ -428,16 +452,21 @@ async function showQuestion(index, force = false) {
 
         const timeSpentSeconds = Math.floor((Date.now() - window.questionStartTime) / 1000);
 
+        // Only save progress if not already saved
         let progress = JSON.parse(localStorage.getItem('progress')) || {};
-        progress[key] = { correct: isCorrect, time: timeSpentSeconds };
-        localStorage.setItem('progress', JSON.stringify(progress));
+        if (!progress.hasOwnProperty(key)) {
+          progress[key] = { correct: isCorrect, time: timeSpentSeconds };
+          localStorage.setItem('progress', JSON.stringify(progress));
+        }
 
         seenQuestionKeys.add(key);
 
         if (examModeActive) {
           let examProgress = JSON.parse(localStorage.getItem('examProgress')) || {};
-          examProgress[key] = { correct: isCorrect, time: timeSpentSeconds };
-          localStorage.setItem('examProgress', JSON.stringify(examProgress));
+          if (!examProgress.hasOwnProperty(key)) {
+            examProgress[key] = { correct: isCorrect, time: timeSpentSeconds };
+            localStorage.setItem('examProgress', JSON.stringify(examProgress));
+          }
         }
       });
 
@@ -459,8 +488,10 @@ function handleAnswer(btn, q, choice, key) {
   const isCorrect = userAnswer === q.answer;
 
   const progress = JSON.parse(localStorage.getItem('progress')) || {};
-  progress[key] = isCorrect;
-  localStorage.setItem('progress', JSON.stringify(progress));
+  if (!progress.hasOwnProperty(key)) {
+    progress[key] = isCorrect;
+    localStorage.setItem('progress', JSON.stringify(progress));
+  }
 
   if (isCorrect) {
     btn.classList.add('correct');
@@ -693,8 +724,10 @@ Average time per question: ${avgTime} seconds`);
 }
 function saveProgress(key, data) {
     const progress = JSON.parse(localStorage.getItem('progress')) || {};
-    progress[key] = data;
-    localStorage.setItem('progress', JSON.stringify(progress));
+    if (!progress.hasOwnProperty(key)) {
+      progress[key] = data;
+      localStorage.setItem('progress', JSON.stringify(progress));
+    }
 }
 
 function saveExamProgress(key, data) {
@@ -738,7 +771,9 @@ function updateProgressBar() {
   let seenCount = 0;
   filteredQuestions.forEach((q, idx) => {
     const key = `${q.set || 'set'}-${q.question_number || (idx + 1)}`;
-    if (progress.hasOwnProperty(key)) seenCount++;
+    if (progress.hasOwnProperty(key)) {
+      seenCount++;
+    }
   });
   const total = filteredQuestions.length;
   const percent = Math.round((seenCount / total) * 100);
