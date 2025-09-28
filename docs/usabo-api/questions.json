@@ -578,7 +578,7 @@
     "question_number": "43",
     "set": "2018 USABO Open",
     "category": "Genetics and Evolution",
-    "question": "<br><img src='https://github.com/shankarhkn/usaboquestions/blob/main/docs/questionphotos/2018Oq43.png' alt='diagram' style='display: block; margin: 12px auto; max-width: 60%; height: auto;'><br>Based on trihybrid cross results, what is the correct chromosomal map and distances (in cM) between the genes?",
+    "question": "<br><img src='https://raw.githubusercontent.com/shankarhkn/usaboquestions/refs/heads/main/docs/questionphotos/2018Oq43.png' alt='diagram' style='display: block; margin: 12px auto; max-width: 60%; height: auto;'><br>Based on trihybrid cross results, what is the correct chromosomal map and distances (in cM) between the genes?",
     "choices": [
       "A. v(13.2)ct(6.4)cv.",
       "B. cv(13.2)ct(6.4)v.",
