@@ -25,11 +25,20 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Load questions
   await loadQuestions();
   
+  // Test API connectivity first
+  const apiAvailable = await testAPIConnectivity();
+  console.log('API available:', apiAvailable);
+  
   // Load leaderboards
   await loadLeaderboards();
   
-  // Set up real-time leaderboard updates
-  setupRealTimeLeaderboards();
+  // Set up real-time leaderboard updates (only if API is available)
+  if (apiAvailable) {
+    setupRealTimeLeaderboards();
+  } else {
+    console.log('API not available, skipping real-time updates');
+    showOfflineModeIndicator();
+  }
   
   // Set up manual refresh buttons
   setupRefreshButtons();
@@ -352,9 +361,37 @@ const API_BASE_URL = (() => {
   return 'https://bioreader-leaderboard.onrender.com/api';
 })();
 
+// Test API connectivity
+async function testAPIConnectivity() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(5000) // 5 second timeout
+    });
+    return response.ok;
+  } catch (error) {
+    console.log('API connectivity test failed:', error.message);
+    return false;
+  }
+}
+
 async function loadLeaderboards() {
   try {
-    const response = await fetch(`${API_BASE_URL}/leaderboards`);
+    console.log('Attempting to load leaderboards from:', API_BASE_URL);
+    const response = await fetch(`${API_BASE_URL}/leaderboards`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      // Add timeout to help with blocked requests
+      signal: AbortSignal.timeout(10000) // 10 second timeout
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const result = await response.json();
     
     if (result.success) {
@@ -362,24 +399,101 @@ async function loadLeaderboards() {
         weekly: result.data.weekly || [],
         monthly: result.data.monthly || []
       };
+      console.log('Successfully loaded global leaderboards:', leaderboards);
     } else {
       console.error('Failed to load leaderboards:', result.error);
-      // Fallback to localStorage
-      const savedLeaderboards = localStorage.getItem('leaderboards');
-      if (savedLeaderboards) {
-        leaderboards = JSON.parse(savedLeaderboards);
-      }
+      throw new Error(result.error || 'Unknown API error');
     }
   } catch (error) {
     console.error('Error loading leaderboards:', error);
+    
+    // Check if it's a blocked request
+    if (error.name === 'AbortError' || error.message.includes('ERR_BLOCKED_BY_CLIENT') || error.message.includes('Failed to fetch')) {
+      console.warn('API request blocked by browser/client. Using local storage fallback.');
+      showBlockedRequestWarning();
+    }
+    
     // Fallback to localStorage
     const savedLeaderboards = localStorage.getItem('leaderboards');
     if (savedLeaderboards) {
-      leaderboards = JSON.parse(savedLeaderboards);
+      try {
+        leaderboards = JSON.parse(savedLeaderboards);
+        console.log('Using local leaderboards as fallback');
+      } catch (parseError) {
+        console.error('Error parsing saved leaderboards:', parseError);
+        leaderboards = { weekly: [], monthly: [] };
+      }
+    } else {
+      leaderboards = { weekly: [], monthly: [] };
     }
   }
   
   updateLeaderboards();
+}
+
+// Show warning when API requests are blocked
+function showBlockedRequestWarning() {
+  // Only show warning once per session
+  if (sessionStorage.getItem('blocked-warning-shown')) return;
+  
+  const warningDiv = document.createElement('div');
+  warningDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ff6b6b;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10000;
+    max-width: 300px;
+    font-size: 14px;
+    line-height: 1.4;
+  `;
+  warningDiv.innerHTML = `
+    <strong>⚠️ Ad Blocker Detected</strong><br>
+    Global leaderboards are blocked. Disable your ad blocker for this site to see global rankings.
+    <button onclick="this.parentElement.remove()" style="
+      background: none;
+      border: none;
+      color: white;
+      float: right;
+      font-size: 18px;
+      cursor: pointer;
+      margin-left: 10px;
+    ">×</button>
+  `;
+  
+  document.body.appendChild(warningDiv);
+  sessionStorage.setItem('blocked-warning-shown', 'true');
+  
+  // Auto-remove after 10 seconds
+  setTimeout(() => {
+    if (warningDiv.parentElement) {
+      warningDiv.remove();
+    }
+  }, 10000);
+}
+
+// Show offline mode indicator
+function showOfflineModeIndicator() {
+  const indicator = document.createElement('div');
+  indicator.id = 'offline-indicator';
+  indicator.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #ffa500;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 10000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  `;
+  indicator.innerHTML = '📡 Offline Mode - Local Leaderboards Only';
+  document.body.appendChild(indicator);
 }
 
 // Set up real-time leaderboard updates
@@ -421,9 +535,15 @@ function setupRefreshButtons() {
       
       try {
         console.log('Manual refresh triggered...');
-        await loadLeaderboards();
-        updateLeaderboards();
-        console.log('Leaderboards refreshed successfully');
+        const apiAvailable = await testAPIConnectivity();
+        if (apiAvailable) {
+          await loadLeaderboards();
+          updateLeaderboards();
+          console.log('Leaderboards refreshed successfully');
+        } else {
+          console.log('API not available, using local data only');
+          updateLeaderboards();
+        }
       } catch (error) {
         console.error('Error refreshing leaderboards:', error);
       } finally {
@@ -440,9 +560,15 @@ function setupRefreshButtons() {
       
       try {
         console.log('Manual refresh triggered...');
-        await loadLeaderboards();
-        updateLeaderboards();
-        console.log('Leaderboards refreshed successfully');
+        const apiAvailable = await testAPIConnectivity();
+        if (apiAvailable) {
+          await loadLeaderboards();
+          updateLeaderboards();
+          console.log('Leaderboards refreshed successfully');
+        } else {
+          console.log('API not available, using local data only');
+          updateLeaderboards();
+        }
       } catch (error) {
         console.error('Error refreshing leaderboards:', error);
       } finally {
@@ -501,8 +627,13 @@ async function updateLeaderboard(type, startDate, containerId) {
           username,
           points: userEntry.points,
           type
-        })
+        }),
+        signal: AbortSignal.timeout(10000) // 10 second timeout
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const result = await response.json();
       if (result.success) {
@@ -514,6 +645,13 @@ async function updateLeaderboard(type, startDate, containerId) {
       }
     } catch (error) {
       console.error('Error updating global leaderboard:', error);
+      
+      // Check if it's a blocked request
+      if (error.name === 'AbortError' || error.message.includes('ERR_BLOCKED_BY_CLIENT') || error.message.includes('Failed to fetch')) {
+        console.warn('API update blocked by browser/client. Using local storage only.');
+        // Still save to local storage
+        localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
+      }
     }
   }
   
