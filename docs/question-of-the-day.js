@@ -335,17 +335,41 @@ function updateStatsDisplay() {
 }
 
 // Load leaderboards
-function loadLeaderboards() {
-  const savedLeaderboards = localStorage.getItem('leaderboards');
-  if (savedLeaderboards) {
-    leaderboards = JSON.parse(savedLeaderboards);
+// API base URL - update this to your server URL
+const API_BASE_URL = 'http://localhost:3001/api';
+
+async function loadLeaderboards() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/leaderboards`);
+    const result = await response.json();
+    
+    if (result.success) {
+      leaderboards = {
+        weekly: result.data.weekly || [],
+        monthly: result.data.monthly || []
+      };
+    } else {
+      console.error('Failed to load leaderboards:', result.error);
+      // Fallback to localStorage
+      const savedLeaderboards = localStorage.getItem('leaderboards');
+      if (savedLeaderboards) {
+        leaderboards = JSON.parse(savedLeaderboards);
+      }
+    }
+  } catch (error) {
+    console.error('Error loading leaderboards:', error);
+    // Fallback to localStorage
+    const savedLeaderboards = localStorage.getItem('leaderboards');
+    if (savedLeaderboards) {
+      leaderboards = JSON.parse(savedLeaderboards);
+    }
   }
   
   updateLeaderboards();
 }
 
 // Update leaderboards
-function updateLeaderboards() {
+async function updateLeaderboards() {
   const username = localStorage.getItem('username') || 'Guest';
   const today = new Date();
   const weekStart = new Date(today);
@@ -353,17 +377,17 @@ function updateLeaderboards() {
   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
   
   // Update weekly leaderboard
-  updateLeaderboard('weekly', weekStart, 'weekly-leaderboard');
+  await updateLeaderboard('weekly', weekStart, 'weekly-leaderboard');
   
   // Update monthly leaderboard
-  updateLeaderboard('monthly', monthStart, 'monthly-leaderboard');
+  await updateLeaderboard('monthly', monthStart, 'monthly-leaderboard');
   
-  // Save leaderboards
+  // Save leaderboards as backup
   localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
 }
 
 // Update a specific leaderboard
-function updateLeaderboard(type, startDate, containerId) {
+async function updateLeaderboard(type, startDate, containerId) {
   const username = localStorage.getItem('username') || 'Guest';
   
   // Get or create user entry
@@ -380,6 +404,32 @@ function updateLeaderboard(type, startDate, containerId) {
     const pointsToday = userStats.lastAnswerDate === today ? 10 : 0;
     userEntry.points += pointsToday;
     userEntry.lastUpdated = today;
+    
+    // Update global leaderboard via API
+    try {
+      const response = await fetch(`${API_BASE_URL}/leaderboard/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          points: userEntry.points,
+          type
+        })
+      });
+      
+      const result = await response.json();
+      if (result.success) {
+        console.log('Global leaderboard updated successfully');
+        // Reload leaderboards from API
+        await loadLeaderboards();
+      } else {
+        console.error('Failed to update global leaderboard:', result.error);
+      }
+    } catch (error) {
+      console.error('Error updating global leaderboard:', error);
+    }
   }
   
   // Sort by points
