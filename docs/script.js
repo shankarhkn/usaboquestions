@@ -160,29 +160,27 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log('Timer button found:', timerToggleBtn);
   console.log('Exam controls box found:', examControlsBox);
   
-  // Force hide timer on small screens by default
+  // Handle timer visibility based on screen size
   if (examControlsBox) {
     console.log('Window width:', window.innerWidth);
     console.log('Is small screen:', window.innerWidth <= 600);
     
     if (window.innerWidth <= 600) {
-      // Small screen - force hide timer
+      // Small screen - timer is always visible in the page flow
       examControlsBox.classList.remove('show');
-      examControlsBox.style.display = 'none';
-      examControlsBox.style.visibility = 'hidden';
-      examControlsBox.style.opacity = '0';
-      console.log('Timer hidden on small screen');
+      console.log('Timer positioned in page flow on small screen');
     } else {
-      // Large screen - ensure timer is visible
+      // Large screen - timer is positioned fixed
       examControlsBox.classList.remove('show');
       examControlsBox.style.display = '';
       examControlsBox.style.visibility = '';
       examControlsBox.style.opacity = '';
-      console.log('Timer visible on large screen');
+      console.log('Timer positioned fixed on large screen');
     }
   }
   
-  if (timerToggleBtn && examControlsBox) {
+  // Timer button only works on large screens (small screens have timer always visible)
+  if (timerToggleBtn && examControlsBox && window.innerWidth > 600) {
     timerToggleBtn.addEventListener('click', (e) => {
       console.log('Timer button clicked!');
       e.preventDefault();
@@ -193,9 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                  examControlsBox.style.opacity !== '0';
       
       console.log('Currently visible:', isCurrentlyVisible);
-      console.log('Display:', examControlsBox.style.display);
-      console.log('Visibility:', examControlsBox.style.visibility);
-      console.log('Opacity:', examControlsBox.style.opacity);
       
       if (isCurrentlyVisible) {
         // Hide timer
@@ -216,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     
-    // Close timer when clicking outside
+    // Close timer when clicking outside (large screens only)
     document.addEventListener('click', (e) => {
       if (examControlsBox.classList.contains('show') && 
           !examControlsBox.contains(e.target) && 
@@ -229,52 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('Timer closed by outside click');
       }
     });
-    
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      if (window.innerWidth <= 600) {
-        // Small screen - hide timer by default
-        examControlsBox.classList.remove('show');
-        examControlsBox.style.display = 'none';
-        examControlsBox.style.visibility = 'hidden';
-        examControlsBox.style.opacity = '0';
-        timerToggleBtn.textContent = '⏱ Timer';
-        console.log('Timer hidden on resize (small screen)');
-      } else {
-        // Large screen - show timer normally
-        examControlsBox.classList.remove('show');
-        examControlsBox.style.display = '';
-        examControlsBox.style.visibility = '';
-        examControlsBox.style.opacity = '';
-        console.log('Timer visible on resize (large screen)');
-      }
-    });
-    
-    // Prevent timer from showing on scroll (iPad Safari issue)
-    window.addEventListener('scroll', () => {
-      if (window.innerWidth <= 600 && !examControlsBox.classList.contains('show')) {
-        // Force hide timer on small screens during scroll
-        examControlsBox.style.display = 'none';
-        examControlsBox.style.visibility = 'hidden';
-        examControlsBox.style.opacity = '0';
-        examControlsBox.classList.remove('show');
-        console.log('Timer forced hidden on scroll');
-      }
-    });
-    
-    // Continuous monitoring for iPad Safari (force hide timer on small screens)
-    setInterval(() => {
-      if (window.innerWidth <= 600 && !examControlsBox.classList.contains('show')) {
-        // Continuously force hide timer on small screens
-        examControlsBox.style.display = 'none';
-        examControlsBox.style.visibility = 'hidden';
-        examControlsBox.style.opacity = '0';
-        examControlsBox.style.position = 'absolute';
-        examControlsBox.style.left = '-9999px';
-        examControlsBox.style.top = '-9999px';
-        console.log('Timer continuously forced hidden');
-      }
-    }, 100); // Check every 100ms
+  } else if (window.innerWidth <= 600) {
+    console.log('Timer always visible on small screens - no toggle needed');
   } else {
     console.log('Timer elements not found');
   }
