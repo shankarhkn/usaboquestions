@@ -26,7 +26,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   await loadQuestions();
   
   // Load leaderboards
-  loadLeaderboards();
+  await loadLeaderboards();
+  
+  // Set up real-time leaderboard updates
+  setupRealTimeLeaderboards();
+  
+  // Set up manual refresh buttons
+  setupRefreshButtons();
   
   // Display today's question
   displayTodaysQuestion();
@@ -366,6 +372,77 @@ async function loadLeaderboards() {
   }
   
   updateLeaderboards();
+}
+
+// Set up real-time leaderboard updates
+function setupRealTimeLeaderboards() {
+  // Update leaderboards every 30 seconds
+  setInterval(async () => {
+    try {
+      console.log('Updating leaderboards...');
+      await loadLeaderboards();
+      updateLeaderboards();
+    } catch (error) {
+      console.error('Error updating leaderboards:', error);
+    }
+  }, 30000); // 30 seconds
+  
+  // Also update when the page becomes visible (user switches back to tab)
+  document.addEventListener('visibilitychange', async () => {
+    if (!document.hidden) {
+      console.log('Page became visible, updating leaderboards...');
+      try {
+        await loadLeaderboards();
+        updateLeaderboards();
+      } catch (error) {
+        console.error('Error updating leaderboards on visibility change:', error);
+      }
+    }
+  });
+}
+
+// Set up manual refresh buttons
+function setupRefreshButtons() {
+  const refreshBtn = document.getElementById('refresh-leaderboards');
+  const refreshBtnMonthly = document.getElementById('refresh-leaderboards-monthly');
+  
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.textContent = '⏳';
+      refreshBtn.disabled = true;
+      
+      try {
+        console.log('Manual refresh triggered...');
+        await loadLeaderboards();
+        updateLeaderboards();
+        console.log('Leaderboards refreshed successfully');
+      } catch (error) {
+        console.error('Error refreshing leaderboards:', error);
+      } finally {
+        refreshBtn.textContent = '🔄';
+        refreshBtn.disabled = false;
+      }
+    });
+  }
+  
+  if (refreshBtnMonthly) {
+    refreshBtnMonthly.addEventListener('click', async () => {
+      refreshBtnMonthly.textContent = '⏳';
+      refreshBtnMonthly.disabled = true;
+      
+      try {
+        console.log('Manual refresh triggered...');
+        await loadLeaderboards();
+        updateLeaderboards();
+        console.log('Leaderboards refreshed successfully');
+      } catch (error) {
+        console.error('Error refreshing leaderboards:', error);
+      } finally {
+        refreshBtnMonthly.textContent = '🔄';
+        refreshBtnMonthly.disabled = false;
+      }
+    });
+  }
 }
 
 // Update leaderboards

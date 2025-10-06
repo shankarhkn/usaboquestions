@@ -355,12 +355,18 @@
     <!-- Leaderboards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
       <div class="leaderboard">
-        <h3>🏆 Weekly Leaders</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="margin: 0;">🏆 Weekly Leaders</h3>
+          <button id="refresh-leaderboards" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9em;" title="Refresh leaderboards">🔄</button>
+        </div>
         <div id="weekly-leaderboard"></div>
       </div>
       
       <div class="leaderboard">
-        <h3>📅 Monthly Leaders</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="margin: 0;">📅 Monthly Leaders</h3>
+          <button id="refresh-leaderboards-monthly" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9em;" title="Refresh leaderboards">🔄</button>
+        </div>
         <div id="monthly-leaderboard"></div>
       </div>
     </div>
