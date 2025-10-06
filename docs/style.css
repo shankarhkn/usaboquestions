@@ -866,4 +866,61 @@ button:disabled {
     box-shadow: none;
     border: 1px solid #cce0ff;
   }
+  
+  /* Hide timer button on larger screens */
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* Force hide timer on small screens by default */
+@media (max-width: 600px) {
+  #exam-controls-box:not(.show) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Show timer button on small screens */
+  .mobile-only {
+    display: inline-block !important;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin: 0 4px;
+    transition: background-color 0.3s ease;
+    user-select: none;
+  }
+  
+  .mobile-only:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Hide exam controls box on small screens by default */
+  #exam-controls-box {
+    display: none !important;
+  }
+  
+  /* Show exam controls when timer is toggled */
+  #exam-controls-box.show {
+    display: block !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 1000 !important;
+    background: white !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+    max-width: 90vw !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
 }

@@ -13,67 +13,86 @@
   <link href="https://cdn.jsdelivr.net/npm/hover.css/css/hover-min.css" rel="stylesheet" />
   <style>
     .leaderboard {
-      background: #f8f9fa;
-      border-radius: 6px;
-      padding: 8px;
-      margin: 8px 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
     }
     .leaderboard h3 {
-      margin: 0 0 6px 0;
-      color: #333;
+      margin: 0 0 12px 0;
+      color: #2c3e50;
       text-align: center;
-      font-size: 1em;
+      font-size: 1.1em;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .leaderboard-entry {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 0;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 0.8em;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-size: 0.85em;
+      border-radius: 6px;
+      margin: 2px 0;
+      transition: all 0.2s ease;
     }
     .leaderboard-entry:last-child {
       border-bottom: none;
     }
+    .leaderboard-entry:hover {
+      background: rgba(255,255,255,0.5);
+      transform: translateX(2px);
+    }
     .rank {
       font-weight: bold;
       color: #007bff;
-      min-width: 20px;
+      min-width: 25px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .points {
       font-weight: bold;
       color: #28a745;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .question-container {
-      background: white;
-      border-radius: 4px;
-      padding: 8px;
-      margin: 6px 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 12px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
     }
     .answer-feedback {
-      margin-top: 6px;
-      padding: 6px;
-      border-radius: 3px;
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
       font-weight: bold;
-      font-size: 0.75em;
+      font-size: 0.8em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .correct {
-      background: #d4edda;
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
       color: #155724;
       border: 1px solid #c3e6cb;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
     }
     .incorrect {
-      background: #f8d7da;
+      background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
       color: #721c24;
       border: 1px solid #f5c6cb;
+      box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
     }
     .points-earned {
-      background: #d1ecf1;
+      background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
       color: #0c5460;
       border: 1px solid #bee5eb;
-      margin-top: 4px;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
     }
     .stats-container {
       display: grid;
@@ -82,34 +101,43 @@
       margin: 8px 0;
     }
     .stat-card {
-      background: white;
-      border-radius: 6px;
-      padding: 8px;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-radius: 12px;
+      padding: 16px;
       text-align: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
     }
     .stat-number {
-      font-size: 1.2em;
+      font-size: 1.4em;
       font-weight: bold;
       color: #007bff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      margin-bottom: 4px;
     }
     .stat-label {
-      color: #666;
-      margin-top: 2px;
-      font-size: 0.75em;
+      color: #6c757d;
+      margin-top: 4px;
+      font-size: 0.8em;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .back-btn {
-      background: #6c757d;
+      background-color: #007bff;
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 3px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
       cursor: pointer;
-      margin: 6px 0;
-      font-size: 0.8em;
+      margin: 0 4px;
+      transition: background-color 0.3s ease;
+      user-select: none;
     }
     .back-btn:hover {
-      background: #5a6268;
+      background-color: #0056b3;
     }
     #question-text {
       font-size: 0.8em;
@@ -124,8 +152,23 @@
       margin: 3px 0 !important;
     }
     #submit-answer {
-      padding: 4px 8px;
-      font-size: 0.75em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    #submit-answer:hover {
+      background-color: #0056b3;
+    }
+    #submit-answer:disabled {
+      background-color: #999;
+      cursor: not-allowed;
     }
     #question-info {
       font-size: 0.7em !important;
@@ -161,6 +204,91 @@
       flex: 1;
       min-width: 0;
     }
+    
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.4s ease-out forwards;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .bounce-in {
+      animation: bounceIn 0.6s ease-out forwards;
+    }
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: scale(0.3); }
+      50% { opacity: 1; transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 0.3s ease-in-out;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .glow {
+      animation: glow 0.3s ease-in-out;
+    }
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(0, 123, 255, 0.8); }
+      100% { box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      transition: transform 0.2s ease;
+    }
+    
+    .leaderboard-entry:hover {
+      background-color: #f0f0f0;
+      transition: background-color 0.2s ease;
+    }
+    
+    .choice-option:hover {
+      transform: translateX(3px);
+      transition: transform 0.2s ease;
+    }
+    
+    .change-name-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .change-name-btn:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 
@@ -175,6 +303,7 @@
     <div id="user-settings">
       <span>Welcome, <strong id="username-display">User</strong></span>
       <button class="back-btn" onclick="window.location.href='index.html'">← Back to Main</button>
+      <button class="change-name-btn" id="change-name-btn">Change Name</button>
     </div>
   </header>
 

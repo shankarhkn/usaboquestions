@@ -152,6 +152,69 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = 'question-of-the-day.html';
     });
   }
+
+  // Timer toggle button for mobile
+  const timerToggleBtn = document.getElementById('timer-toggle-btn');
+  const examControlsBox = document.getElementById('exam-controls-box');
+  
+  console.log('Timer button found:', timerToggleBtn);
+  console.log('Exam controls box found:', examControlsBox);
+  
+  // Force hide timer on small screens by default
+  if (examControlsBox && window.innerWidth <= 600) {
+    examControlsBox.classList.remove('show');
+    examControlsBox.style.display = 'none';
+    console.log('Timer hidden on small screen');
+  }
+  
+  if (timerToggleBtn && examControlsBox) {
+    timerToggleBtn.addEventListener('click', (e) => {
+      console.log('Timer button clicked!');
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const isShowing = examControlsBox.classList.contains('show');
+      console.log('Currently showing:', isShowing);
+      
+      examControlsBox.classList.toggle('show');
+      
+      // Update button text based on state
+      if (examControlsBox.classList.contains('show')) {
+        timerToggleBtn.textContent = '✕ Close Timer';
+        console.log('Timer opened');
+      } else {
+        timerToggleBtn.textContent = '⏱ Timer';
+        console.log('Timer closed');
+      }
+    });
+    
+    // Close timer when clicking outside
+    document.addEventListener('click', (e) => {
+      if (examControlsBox.classList.contains('show') && 
+          !examControlsBox.contains(e.target) && 
+          !timerToggleBtn.contains(e.target)) {
+        examControlsBox.classList.remove('show');
+        timerToggleBtn.textContent = '⏱ Timer';
+        console.log('Timer closed by outside click');
+      }
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 600) {
+        // Small screen - hide timer by default
+        examControlsBox.classList.remove('show');
+        examControlsBox.style.display = 'none';
+        timerToggleBtn.textContent = '⏱ Timer';
+      } else {
+        // Large screen - show timer normally
+        examControlsBox.classList.remove('show');
+        examControlsBox.style.display = '';
+      }
+    });
+  } else {
+    console.log('Timer elements not found');
+  }
 });
 
 function updateGreeting(name) {

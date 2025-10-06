@@ -33,6 +33,30 @@ document.addEventListener('DOMContentLoaded', async function() {
   
   // Update user stats display
   updateStatsDisplay();
+  
+  // Setup change name functionality
+  setupChangeName();
+  
+  // Add animations to elements (after stats are loaded)
+  addAnimations();
+  
+  // Ensure stats are displayed (fallback)
+  setTimeout(() => {
+    updateStatsDisplay();
+    
+    // Force visibility of stats elements
+    const statsElements = [
+      'total-points', 'streak', 'questions-answered', 'accuracy'
+    ];
+    statsElements.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.style.opacity = '1';
+        element.style.visibility = 'visible';
+        element.style.display = 'block';
+      }
+    });
+  }, 500);
 });
 
 // Load questions from the API
@@ -123,12 +147,14 @@ function displayTodaysQuestion() {
   if (currentQuestion.choices && currentQuestion.choices.length > 0) {
     currentQuestion.choices.forEach((choice, index) => {
       const choiceDiv = document.createElement('div');
-      choiceDiv.style.margin = '3px 0';
-      choiceDiv.style.padding = '4px';
-      choiceDiv.style.border = '1px solid #ddd';
-      choiceDiv.style.borderRadius = '2px';
+      choiceDiv.style.margin = '6px 0';
+      choiceDiv.style.padding = '12px 16px';
+      choiceDiv.style.border = '1px solid rgba(0,0,0,0.1)';
+      choiceDiv.style.borderRadius = '8px';
       choiceDiv.style.cursor = 'pointer';
-      choiceDiv.style.transition = 'background-color 0.2s';
+      choiceDiv.style.transition = 'all 0.3s ease';
+      choiceDiv.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)';
+      choiceDiv.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
       
       const radioId = `choice-${index}`;
       choiceDiv.innerHTML = `
@@ -149,13 +175,20 @@ function displayTodaysQuestion() {
       
       // Add hover effect
       choiceDiv.addEventListener('mouseenter', () => {
-        choiceDiv.style.backgroundColor = '#f8f9fa';
+        choiceDiv.style.background = 'linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%)';
+        choiceDiv.style.transform = 'translateX(4px)';
+        choiceDiv.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)';
       });
       choiceDiv.addEventListener('mouseleave', () => {
-        choiceDiv.style.backgroundColor = '';
+        choiceDiv.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)';
+        choiceDiv.style.transform = 'translateX(0)';
+        choiceDiv.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
       });
       
       choicesContainer.appendChild(choiceDiv);
+      
+      // Add choice animation
+      addChoiceAnimation(choiceDiv);
     });
   }
   
@@ -181,6 +214,9 @@ function displayTodaysQuestion() {
   } else {
     // Add submit button event listener
     document.getElementById('submit-answer').onclick = submitAnswer;
+    
+    // Add submit button animation
+    addSubmitAnimation();
   }
 }
 
@@ -221,6 +257,9 @@ function submitAnswer() {
   }
   
   feedbackDiv.appendChild(resultDiv);
+  
+  // Add animation to feedback
+  resultDiv.classList.add('bounce-in');
   
   // Disable submit button
   document.getElementById('submit-answer').disabled = true;
@@ -280,14 +319,19 @@ function loadUserData() {
 
 // Update stats display
 function updateStatsDisplay() {
-  document.getElementById('total-points').textContent = userStats.totalPoints;
-  document.getElementById('streak').textContent = userStats.streak;
-  document.getElementById('questions-answered').textContent = userStats.questionsAnswered;
+  const totalPointsEl = document.getElementById('total-points');
+  const streakEl = document.getElementById('streak');
+  const questionsAnsweredEl = document.getElementById('questions-answered');
+  const accuracyEl = document.getElementById('accuracy');
+  
+  if (totalPointsEl) totalPointsEl.textContent = userStats.totalPoints;
+  if (streakEl) streakEl.textContent = userStats.streak;
+  if (questionsAnsweredEl) questionsAnsweredEl.textContent = userStats.questionsAnswered;
   
   const accuracy = userStats.questionsAnswered > 0 
     ? Math.round((userStats.correctAnswers / userStats.questionsAnswered) * 100)
     : 0;
-  document.getElementById('accuracy').textContent = accuracy + '%';
+  if (accuracyEl) accuracyEl.textContent = accuracy + '%';
 }
 
 // Load leaderboards
@@ -382,6 +426,9 @@ function setupBookmarkButton() {
   // Set initial bookmark state
   updateBookmarkButton(bookmarkBtn, isBookmarked);
   
+  // Add bookmark animation
+  addBookmarkAnimation(bookmarkBtn);
+  
   // Add click event listener
   bookmarkBtn.addEventListener('click', () => {
     if (isBookmarked) {
@@ -412,4 +459,104 @@ function updateBookmarkButton(button, isBookmarked) {
     button.style.color = '#ccc';
     button.title = 'Bookmark this question';
   }
+}
+
+// Add animations to page elements
+function addAnimations() {
+  // Wait a bit to ensure all elements are loaded
+  setTimeout(() => {
+    // Don't animate stats cards - keep them static
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach((card) => {
+      if (card) {
+        // Ensure card is visible but no animation
+        card.style.opacity = '1';
+        card.style.visibility = 'visible';
+      }
+    });
+    
+    // Animate question container
+    const questionContainer = document.querySelector('.question-container');
+    if (questionContainer) {
+      questionContainer.style.opacity = '1';
+      questionContainer.style.visibility = 'visible';
+      setTimeout(() => {
+        questionContainer.classList.add('slide-in');
+      }, 200);
+    }
+    
+    // Animate leaderboards
+    const leaderboards = document.querySelectorAll('.leaderboard');
+    leaderboards.forEach((leaderboard, index) => {
+      if (leaderboard) {
+        leaderboard.style.opacity = '1';
+        leaderboard.style.visibility = 'visible';
+        setTimeout(() => {
+          leaderboard.classList.add('bounce-in');
+        }, 400 + index * 100);
+      }
+    });
+    
+    // Add hover animations to choice options
+    const choiceOptions = document.querySelectorAll('#choices-container div');
+    choiceOptions.forEach(option => {
+      if (option) {
+        option.classList.add('choice-option');
+      }
+    });
+  }, 100);
+}
+
+// Setup change name functionality
+function setupChangeName() {
+  const changeNameBtn = document.getElementById('change-name-btn');
+  if (changeNameBtn) {
+    changeNameBtn.addEventListener('click', () => {
+      const newName = prompt('Enter your new name:', localStorage.getItem('username') || 'Guest');
+      if (newName && newName.trim() !== '') {
+        localStorage.setItem('username', newName.trim());
+        document.getElementById('username-display').textContent = newName.trim();
+        
+        // Add animation to show name change
+        const usernameDisplay = document.getElementById('username-display');
+        usernameDisplay.classList.add('pulse');
+        setTimeout(() => {
+          usernameDisplay.classList.remove('pulse');
+        }, 300);
+      }
+    });
+  }
+}
+
+// Add animation to choice selection
+function addChoiceAnimation(choiceDiv) {
+  choiceDiv.addEventListener('click', () => {
+    choiceDiv.classList.add('glow');
+    setTimeout(() => {
+      choiceDiv.classList.remove('glow');
+    }, 300);
+  });
+}
+
+// Add animation to submit button
+function addSubmitAnimation() {
+  const submitBtn = document.getElementById('submit-answer');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      submitBtn.classList.add('pulse');
+      setTimeout(() => {
+        submitBtn.classList.remove('pulse');
+      }, 300);
+    });
+  }
+}
+
+// Add animation to bookmark button
+function addBookmarkAnimation(bookmarkBtn) {
+  bookmarkBtn.addEventListener('click', () => {
+    bookmarkBtn.classList.add('bounce-in');
+    setTimeout(() => {
+      bookmarkBtn.classList.remove('bounce-in');
+    }, 600);
+  });
 }
