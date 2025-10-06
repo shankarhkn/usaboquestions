@@ -375,6 +375,23 @@ async function testAPIConnectivity() {
   }
 }
 
+// Test function for debugging (can be called from browser console)
+window.testLeaderboardAPI = async function() {
+  console.log('Testing API connectivity...');
+  const apiAvailable = await testAPIConnectivity();
+  console.log('API available:', apiAvailable);
+  
+  if (apiAvailable) {
+    console.log('Testing leaderboard loading...');
+    await loadLeaderboards();
+    console.log('Current leaderboards:', leaderboards);
+  } else {
+    console.log('API not available, checking local storage...');
+    const saved = localStorage.getItem('leaderboards');
+    console.log('Local leaderboards:', saved ? JSON.parse(saved) : 'None');
+  }
+};
+
 async function loadLeaderboards() {
   try {
     console.log('Attempting to load leaderboards from:', API_BASE_URL);
@@ -408,7 +425,10 @@ async function loadLeaderboards() {
     console.error('Error loading leaderboards:', error);
     
     // Check if it's a blocked request
-    if (error.name === 'AbortError' || error.message.includes('ERR_BLOCKED_BY_CLIENT') || error.message.includes('Failed to fetch')) {
+    if (error.name === 'AbortError' || 
+        error.message.includes('ERR_BLOCKED_BY_CLIENT') || 
+        error.message.includes('Failed to fetch') ||
+        error.message.includes('TypeError: Failed to fetch')) {
       console.warn('API request blocked by browser/client. Using local storage fallback.');
       showBlockedRequestWarning();
     }
@@ -538,10 +558,22 @@ function setupRefreshButtons() {
         const apiAvailable = await testAPIConnectivity();
         if (apiAvailable) {
           await loadLeaderboards();
-          updateLeaderboards();
           console.log('Leaderboards refreshed successfully');
         } else {
           console.log('API not available, using local data only');
+          // Load from local storage
+          const savedLeaderboards = localStorage.getItem('leaderboards');
+          if (savedLeaderboards) {
+            try {
+              leaderboards = JSON.parse(savedLeaderboards);
+              console.log('Using local leaderboards as fallback');
+            } catch (parseError) {
+              console.error('Error parsing saved leaderboards:', parseError);
+              leaderboards = { weekly: [], monthly: [] };
+            }
+          } else {
+            leaderboards = { weekly: [], monthly: [] };
+          }
           updateLeaderboards();
         }
       } catch (error) {
@@ -563,10 +595,22 @@ function setupRefreshButtons() {
         const apiAvailable = await testAPIConnectivity();
         if (apiAvailable) {
           await loadLeaderboards();
-          updateLeaderboards();
           console.log('Leaderboards refreshed successfully');
         } else {
           console.log('API not available, using local data only');
+          // Load from local storage
+          const savedLeaderboards = localStorage.getItem('leaderboards');
+          if (savedLeaderboards) {
+            try {
+              leaderboards = JSON.parse(savedLeaderboards);
+              console.log('Using local leaderboards as fallback');
+            } catch (parseError) {
+              console.error('Error parsing saved leaderboards:', parseError);
+              leaderboards = { weekly: [], monthly: [] };
+            }
+          } else {
+            leaderboards = { weekly: [], monthly: [] };
+          }
           updateLeaderboards();
         }
       } catch (error) {
@@ -647,7 +691,10 @@ async function updateLeaderboard(type, startDate, containerId) {
       console.error('Error updating global leaderboard:', error);
       
       // Check if it's a blocked request
-      if (error.name === 'AbortError' || error.message.includes('ERR_BLOCKED_BY_CLIENT') || error.message.includes('Failed to fetch')) {
+      if (error.name === 'AbortError' || 
+          error.message.includes('ERR_BLOCKED_BY_CLIENT') || 
+          error.message.includes('Failed to fetch') ||
+          error.message.includes('TypeError: Failed to fetch')) {
         console.warn('API update blocked by browser/client. Using local storage only.');
         // Still save to local storage
         localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
