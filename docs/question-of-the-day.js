@@ -29,15 +29,33 @@ document.addEventListener('DOMContentLoaded', async function() {
   const apiAvailable = await testAPIConnectivity();
   console.log('API available:', apiAvailable);
   
-  // Load leaderboards
-  await loadLeaderboards();
+  // Load leaderboards (only if API is available)
+  if (apiAvailable) {
+    await loadLeaderboards();
+  } else {
+    console.log('API not available, loading from local storage');
+    showOfflineModeIndicator();
+    // Load from local storage
+    const savedLeaderboards = localStorage.getItem('leaderboards');
+    if (savedLeaderboards) {
+      try {
+        leaderboards = JSON.parse(savedLeaderboards);
+        console.log('Using local leaderboards as fallback');
+      } catch (parseError) {
+        console.error('Error parsing saved leaderboards:', parseError);
+        leaderboards = { weekly: [], monthly: [] };
+      }
+    } else {
+      leaderboards = { weekly: [], monthly: [] };
+    }
+    updateLeaderboards();
+  }
   
   // Set up real-time leaderboard updates (only if API is available)
   if (apiAvailable) {
     setupRealTimeLeaderboards();
   } else {
     console.log('API not available, skipping real-time updates');
-    showOfflineModeIndicator();
   }
   
   // Set up manual refresh buttons
