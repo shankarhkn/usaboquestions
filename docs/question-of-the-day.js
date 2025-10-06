@@ -358,16 +358,8 @@ function updateStatsDisplay() {
 }
 
 // Load leaderboards
-// API base URL - configure this for your deployment
-const API_BASE_URL = (() => {
-  // For local development
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return 'http://localhost:3001/api';
-  }
-  
-  // For Render deployment - using your actual Render API URL
-  return 'https://bioreader-leaderboard.onrender.com/api';
-})();
+// API base URL - always use the deployed API
+const API_BASE_URL = 'https://bioreader-leaderboard.onrender.com/api';
 
 // Test API connectivity (silent - no console logs)
 async function testAPIConnectivity() {
