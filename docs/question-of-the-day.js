@@ -25,37 +25,27 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Load questions
   await loadQuestions();
   
-  // Test API connectivity first
+  // Test API connectivity first (silent)
   const apiAvailable = await testAPIConnectivity();
-  console.log('API available:', apiAvailable);
   
   // Load leaderboards (only if API is available)
   if (apiAvailable) {
     await loadLeaderboards();
+    // Set up real-time leaderboard updates
+    setupRealTimeLeaderboards();
   } else {
-    console.log('API not available, loading from local storage');
-    showOfflineModeIndicator();
-    // Load from local storage
+    // Silent fallback to local storage
     const savedLeaderboards = localStorage.getItem('leaderboards');
     if (savedLeaderboards) {
       try {
         leaderboards = JSON.parse(savedLeaderboards);
-        console.log('Using local leaderboards as fallback');
       } catch (parseError) {
-        console.error('Error parsing saved leaderboards:', parseError);
         leaderboards = { weekly: [], monthly: [] };
       }
     } else {
       leaderboards = { weekly: [], monthly: [] };
     }
     updateLeaderboards();
-  }
-  
-  // Set up real-time leaderboard updates (only if API is available)
-  if (apiAvailable) {
-    setupRealTimeLeaderboards();
-  } else {
-    console.log('API not available, skipping real-time updates');
   }
   
   // Set up manual refresh buttons
@@ -379,16 +369,16 @@ const API_BASE_URL = (() => {
   return 'https://bioreader-leaderboard.onrender.com/api';
 })();
 
-// Test API connectivity
+// Test API connectivity (silent - no console logs)
 async function testAPIConnectivity() {
   try {
     const response = await fetch(`${API_BASE_URL}/health`, {
       method: 'GET',
-      signal: AbortSignal.timeout(5000) // 5 second timeout
+      signal: AbortSignal.timeout(3000) // 3 second timeout
     });
     return response.ok;
   } catch (error) {
-    console.log('API connectivity test failed:', error.message);
+    // Silent failure - no console logs
     return false;
   }
 }
@@ -412,15 +402,13 @@ window.testLeaderboardAPI = async function() {
 
 async function loadLeaderboards() {
   try {
-    console.log('Attempting to load leaderboards from:', API_BASE_URL);
     const response = await fetch(`${API_BASE_URL}/leaderboards`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      // Add timeout to help with blocked requests
-      signal: AbortSignal.timeout(10000) // 10 second timeout
+      signal: AbortSignal.timeout(5000) // 5 second timeout
     });
     
     if (!response.ok) {
@@ -434,31 +422,16 @@ async function loadLeaderboards() {
         weekly: result.data.weekly || [],
         monthly: result.data.monthly || []
       };
-      console.log('Successfully loaded global leaderboards:', leaderboards);
     } else {
-      console.error('Failed to load leaderboards:', result.error);
       throw new Error(result.error || 'Unknown API error');
     }
   } catch (error) {
-    console.error('Error loading leaderboards:', error);
-    
-    // Check if it's a blocked request
-    if (error.name === 'AbortError' || 
-        error.message.includes('ERR_BLOCKED_BY_CLIENT') || 
-        error.message.includes('Failed to fetch') ||
-        error.message.includes('TypeError: Failed to fetch')) {
-      console.warn('API request blocked by browser/client. Using local storage fallback.');
-      showBlockedRequestWarning();
-    }
-    
-    // Fallback to localStorage
+    // Silent fallback to localStorage
     const savedLeaderboards = localStorage.getItem('leaderboards');
     if (savedLeaderboards) {
       try {
         leaderboards = JSON.parse(savedLeaderboards);
-        console.log('Using local leaderboards as fallback');
       } catch (parseError) {
-        console.error('Error parsing saved leaderboards:', parseError);
         leaderboards = { weekly: [], monthly: [] };
       }
     } else {
@@ -572,21 +545,16 @@ function setupRefreshButtons() {
       refreshBtn.disabled = true;
       
       try {
-        console.log('Manual refresh triggered...');
         const apiAvailable = await testAPIConnectivity();
         if (apiAvailable) {
           await loadLeaderboards();
-          console.log('Leaderboards refreshed successfully');
         } else {
-          console.log('API not available, using local data only');
           // Load from local storage
           const savedLeaderboards = localStorage.getItem('leaderboards');
           if (savedLeaderboards) {
             try {
               leaderboards = JSON.parse(savedLeaderboards);
-              console.log('Using local leaderboards as fallback');
             } catch (parseError) {
-              console.error('Error parsing saved leaderboards:', parseError);
               leaderboards = { weekly: [], monthly: [] };
             }
           } else {
@@ -595,7 +563,7 @@ function setupRefreshButtons() {
           updateLeaderboards();
         }
       } catch (error) {
-        console.error('Error refreshing leaderboards:', error);
+        // Silent error handling
       } finally {
         refreshBtn.textContent = '🔄';
         refreshBtn.disabled = false;
@@ -609,21 +577,16 @@ function setupRefreshButtons() {
       refreshBtnMonthly.disabled = true;
       
       try {
-        console.log('Manual refresh triggered...');
         const apiAvailable = await testAPIConnectivity();
         if (apiAvailable) {
           await loadLeaderboards();
-          console.log('Leaderboards refreshed successfully');
         } else {
-          console.log('API not available, using local data only');
           // Load from local storage
           const savedLeaderboards = localStorage.getItem('leaderboards');
           if (savedLeaderboards) {
             try {
               leaderboards = JSON.parse(savedLeaderboards);
-              console.log('Using local leaderboards as fallback');
             } catch (parseError) {
-              console.error('Error parsing saved leaderboards:', parseError);
               leaderboards = { weekly: [], monthly: [] };
             }
           } else {
@@ -632,7 +595,7 @@ function setupRefreshButtons() {
           updateLeaderboards();
         }
       } catch (error) {
-        console.error('Error refreshing leaderboards:', error);
+        // Silent error handling
       } finally {
         refreshBtnMonthly.textContent = '🔄';
         refreshBtnMonthly.disabled = false;
