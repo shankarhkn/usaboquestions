@@ -385,19 +385,21 @@ async function testAPIConnectivity() {
 
 // Test function for debugging (can be called from browser console)
 window.testLeaderboardAPI = async function() {
-  console.log('Testing API connectivity...');
+  console.log('🔍 Testing API connectivity...');
   const apiAvailable = await testAPIConnectivity();
-  console.log('API available:', apiAvailable);
+  console.log('✅ API available:', apiAvailable);
   
   if (apiAvailable) {
-    console.log('Testing leaderboard loading...');
+    console.log('🌐 Testing global leaderboard loading...');
     await loadLeaderboards();
-    console.log('Current leaderboards:', leaderboards);
+    console.log('📊 Current leaderboards:', leaderboards);
   } else {
-    console.log('API not available, checking local storage...');
+    console.log('💾 API not available, checking local storage...');
     const saved = localStorage.getItem('leaderboards');
-    console.log('Local leaderboards:', saved ? JSON.parse(saved) : 'None');
+    console.log('📱 Local leaderboards:', saved ? JSON.parse(saved) : 'None');
   }
+  
+  console.log('🎯 Current user stats:', userStats);
 };
 
 async function loadLeaderboards() {
@@ -442,93 +444,28 @@ async function loadLeaderboards() {
   updateLeaderboards();
 }
 
-// Show warning when API requests are blocked
-function showBlockedRequestWarning() {
-  // Only show warning once per session
-  if (sessionStorage.getItem('blocked-warning-shown')) return;
-  
-  const warningDiv = document.createElement('div');
-  warningDiv.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #ff6b6b;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 10000;
-    max-width: 300px;
-    font-size: 14px;
-    line-height: 1.4;
-  `;
-  warningDiv.innerHTML = `
-    <strong>⚠️ Ad Blocker Detected</strong><br>
-    Global leaderboards are blocked. Disable your ad blocker for this site to see global rankings.
-    <button onclick="this.parentElement.remove()" style="
-      background: none;
-      border: none;
-      color: white;
-      float: right;
-      font-size: 18px;
-      cursor: pointer;
-      margin-left: 10px;
-    ">×</button>
-  `;
-  
-  document.body.appendChild(warningDiv);
-  sessionStorage.setItem('blocked-warning-shown', 'true');
-  
-  // Auto-remove after 10 seconds
-  setTimeout(() => {
-    if (warningDiv.parentElement) {
-      warningDiv.remove();
-    }
-  }, 10000);
-}
-
-// Show offline mode indicator
-function showOfflineModeIndicator() {
-  const indicator = document.createElement('div');
-  indicator.id = 'offline-indicator';
-  indicator.style.cssText = `
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background: #ffa500;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    z-index: 10000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  `;
-  indicator.innerHTML = '📡 Offline Mode - Local Leaderboards Only';
-  document.body.appendChild(indicator);
-}
+// Silent operation - no warnings or indicators
 
 // Set up real-time leaderboard updates
 function setupRealTimeLeaderboards() {
   // Update leaderboards every 30 seconds
   setInterval(async () => {
     try {
-      console.log('Updating leaderboards...');
       await loadLeaderboards();
       updateLeaderboards();
     } catch (error) {
-      console.error('Error updating leaderboards:', error);
+      // Silent error handling
     }
   }, 30000); // 30 seconds
   
   // Also update when the page becomes visible (user switches back to tab)
   document.addEventListener('visibilitychange', async () => {
     if (!document.hidden) {
-      console.log('Page became visible, updating leaderboards...');
       try {
         await loadLeaderboards();
         updateLeaderboards();
       } catch (error) {
-        console.error('Error updating leaderboards on visibility change:', error);
+        // Silent error handling
       }
     }
   });
@@ -662,24 +599,14 @@ async function updateLeaderboard(type, startDate, containerId) {
       
       const result = await response.json();
       if (result.success) {
-        console.log('Global leaderboard updated successfully');
         // Reload leaderboards from API
         await loadLeaderboards();
       } else {
-        console.error('Failed to update global leaderboard:', result.error);
+        // Silent error handling
       }
     } catch (error) {
-      console.error('Error updating global leaderboard:', error);
-      
-      // Check if it's a blocked request
-      if (error.name === 'AbortError' || 
-          error.message.includes('ERR_BLOCKED_BY_CLIENT') || 
-          error.message.includes('Failed to fetch') ||
-          error.message.includes('TypeError: Failed to fetch')) {
-        console.warn('API update blocked by browser/client. Using local storage only.');
-        // Still save to local storage
-        localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
-      }
+      // Silent error handling - just save to local storage
+      localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
     }
   }
   
