@@ -874,8 +874,9 @@ button:disabled {
   }
 }
 
-@media (max-width: 600px) {
-  /* Move timer above filters on small screens */
+/* iPad and small screens - move timer above filters */
+@media (max-width: 768px) {
+  /* Move timer above filters on small screens and iPads */
   #exam-controls-box {
     position: static !important;
     width: 100% !important;
@@ -896,7 +897,7 @@ button:disabled {
     z-index: auto !important;
   }
   
-  /* Hide timer button on small screens since timer is always visible */
+  /* Hide timer button on small screens and iPads since timer is always visible */
   .mobile-only {
     display: none !important;
   }

@@ -163,12 +163,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle timer visibility based on screen size
   if (examControlsBox) {
     console.log('Window width:', window.innerWidth);
-    console.log('Is small screen:', window.innerWidth <= 600);
+    console.log('Is small screen or iPad:', window.innerWidth <= 768);
     
-    if (window.innerWidth <= 600) {
-      // Small screen - timer is always visible in the page flow
+    if (window.innerWidth <= 768) {
+      // Small screen or iPad - timer is always visible in the page flow
       examControlsBox.classList.remove('show');
-      console.log('Timer positioned in page flow on small screen');
+      console.log('Timer positioned in page flow on small screen/iPad');
     } else {
       // Large screen - timer is positioned fixed
       examControlsBox.classList.remove('show');
@@ -179,8 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // Timer button only works on large screens (small screens have timer always visible)
-  if (timerToggleBtn && examControlsBox && window.innerWidth > 600) {
+  // Timer button only works on large screens (small screens and iPads have timer always visible)
+  if (timerToggleBtn && examControlsBox && window.innerWidth > 768) {
     timerToggleBtn.addEventListener('click', (e) => {
       console.log('Timer button clicked!');
       e.preventDefault();
@@ -224,8 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('Timer closed by outside click');
       }
     });
-  } else if (window.innerWidth <= 600) {
-    console.log('Timer always visible on small screens - no toggle needed');
+  } else if (window.innerWidth <= 768) {
+    console.log('Timer always visible on small screens and iPads - no toggle needed');
   } else {
     console.log('Timer elements not found');
   }
