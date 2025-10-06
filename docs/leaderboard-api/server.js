@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -81,6 +81,15 @@ function updateLeaderboard(leaderboard, username, points, weekOrMonth) {
 }
 
 // Routes
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'BioReader Leaderboard API is running',
+    endpoints: ['/api/health', '/api/leaderboards', '/api/leaderboard/update']
+  });
+});
 
 // Get leaderboards
 app.get('/api/leaderboards', (req, res) => {
