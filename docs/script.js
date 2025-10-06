@@ -261,6 +261,20 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('Timer forced hidden on scroll');
       }
     });
+    
+    // Continuous monitoring for iPad Safari (force hide timer on small screens)
+    setInterval(() => {
+      if (window.innerWidth <= 600 && !examControlsBox.classList.contains('show')) {
+        // Continuously force hide timer on small screens
+        examControlsBox.style.display = 'none';
+        examControlsBox.style.visibility = 'hidden';
+        examControlsBox.style.opacity = '0';
+        examControlsBox.style.position = 'absolute';
+        examControlsBox.style.left = '-9999px';
+        examControlsBox.style.top = '-9999px';
+        console.log('Timer continuously forced hidden');
+      }
+    }, 100); // Check every 100ms
   } else {
     console.log('Timer elements not found');
   }
