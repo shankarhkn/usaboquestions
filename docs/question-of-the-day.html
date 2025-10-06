@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Question of the Day - BioReader</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="photos/seedling.svg" type="image/svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/hover.css/css/hover-min.css" rel="stylesheet" />
+  <style>
+    .leaderboard {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 8px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .leaderboard h3 {
+      margin: 0 0 6px 0;
+      color: #333;
+      text-align: center;
+      font-size: 1em;
+    }
+    .leaderboard-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 0.8em;
+    }
+    .leaderboard-entry:last-child {
+      border-bottom: none;
+    }
+    .rank {
+      font-weight: bold;
+      color: #007bff;
+      min-width: 20px;
+    }
+    .points {
+      font-weight: bold;
+      color: #28a745;
+    }
+    .question-container {
+      background: white;
+      border-radius: 4px;
+      padding: 8px;
+      margin: 6px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .answer-feedback {
+      margin-top: 6px;
+      padding: 6px;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 0.75em;
+    }
+    .correct {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .points-earned {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+      margin-top: 4px;
+    }
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin: 8px 0;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .stat-number {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #007bff;
+    }
+    .stat-label {
+      color: #666;
+      margin-top: 2px;
+      font-size: 0.75em;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin: 6px 0;
+      font-size: 0.8em;
+    }
+    .back-btn:hover {
+      background: #5a6268;
+    }
+    #question-text {
+      font-size: 0.8em;
+      line-height: 1.2;
+      margin: 8px 0;
+    }
+    #choices-container {
+      font-size: 0.75em;
+    }
+    #choices-container div {
+      padding: 4px !important;
+      margin: 3px 0 !important;
+    }
+    #submit-answer {
+      padding: 4px 8px;
+      font-size: 0.75em;
+    }
+    #question-info {
+      font-size: 0.7em !important;
+      gap: 8px !important;
+    }
+    #question-date {
+      font-size: 0.7em;
+      margin: 2px 0;
+    }
+    h2 {
+      font-size: 1em;
+      margin: 0;
+    }
+    #question-meta {
+      margin-bottom: 6px;
+    }
+    #question-meta > div {
+      margin-bottom: 4px !important;
+    }
+    #question-text {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    #question-text img {
+      max-width: 200px !important;
+      width: 200px !important;
+      height: auto !important;
+      flex-shrink: 0 !important;
+      margin: 0 !important;
+    }
+    #question-text-content {
+      flex: 1;
+      min-width: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header id="header">
+    <div id="header-left">
+      <div id="title-row">
+        <h1>BioReader - Question of the Day</h1>
+        <img src="photos/Logo.png" alt="BioReader Logo" id="site-logo" />
+      </div>
+    </div>
+    <div id="user-settings">
+      <span>Welcome, <strong id="username-display">User</strong></span>
+      <button class="back-btn" onclick="window.location.href='index.html'">← Back to Main</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <!-- User Stats -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-number" id="total-points">0</div>
+        <div class="stat-label">Total Points</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="streak">0</div>
+        <div class="stat-label">Day Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="questions-answered">0</div>
+        <div class="stat-label">Questions Answered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="accuracy">0%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </div>
+
+    <!-- Question Container -->
+    <div class="question-container">
+      <div id="question-meta">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h2>Question of the Day</h2>
+          <button id="bookmark-btn" title="Bookmark this question" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #ccc;">☆</button>
+        </div>
+        <div id="question-info" style="display: flex; gap: 15px; margin-bottom: 10px; font-size: 14px; color: #666;">
+          <span id="question-number-display"></span>
+          <span id="question-set-display"></span>
+          <span id="question-category-display"></span>
+        </div>
+        <p id="question-date"></p>
+      </div>
+      
+      <div id="question-text">Loading today's question...</div>
+      <div id="choices-container" style="margin: 15px 0;"></div>
+      
+      <div id="answer-section" style="display: none;">
+        <button id="submit-answer" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 0;">Submit Answer</button>
+        <div id="answer-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Leaderboards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+      <div class="leaderboard">
+        <h3>🏆 Weekly Leaders</h3>
+        <div id="weekly-leaderboard"></div>
+      </div>
+      
+      <div class="leaderboard">
+        <h3>📅 Monthly Leaders</h3>
+        <div id="monthly-leaderboard"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="copyright">
+    &copy; <span id="year"></span> Shankar Harikrishnan. All Rights Reserved.
+  </footer>
+
+  <script src="question-of-the-day.js"></script>
+</body>
+
+</html>

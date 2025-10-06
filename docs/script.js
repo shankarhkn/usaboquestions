@@ -144,6 +144,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.target === creditsModal) creditsModal.style.display = 'none';
     });
   }
+
+  // Question of the Day button
+  const questionOfDayBtn = document.getElementById('question-of-day-btn');
+  if (questionOfDayBtn) {
+    questionOfDayBtn.addEventListener('click', () => {
+      window.location.href = 'question-of-the-day.html';
+    });
+  }
 });
 
 function updateGreeting(name) {
