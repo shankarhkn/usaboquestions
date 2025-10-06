@@ -882,6 +882,17 @@ button:disabled {
     opacity: 0 !important;
     position: absolute !important;
     left: -9999px !important;
+    top: -9999px !important;
+  }
+  
+  /* Force hide timer on small screens even when show class is present */
+  #exam-controls-box:not(.show) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
   }
   
   /* Show timer button on small screens */

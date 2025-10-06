@@ -239,12 +239,26 @@ document.addEventListener("DOMContentLoaded", () => {
         examControlsBox.style.visibility = 'hidden';
         examControlsBox.style.opacity = '0';
         timerToggleBtn.textContent = '⏱ Timer';
+        console.log('Timer hidden on resize (small screen)');
       } else {
         // Large screen - show timer normally
         examControlsBox.classList.remove('show');
         examControlsBox.style.display = '';
         examControlsBox.style.visibility = '';
         examControlsBox.style.opacity = '';
+        console.log('Timer visible on resize (large screen)');
+      }
+    });
+    
+    // Prevent timer from showing on scroll (iPad Safari issue)
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth <= 600 && !examControlsBox.classList.contains('show')) {
+        // Force hide timer on small screens during scroll
+        examControlsBox.style.display = 'none';
+        examControlsBox.style.visibility = 'hidden';
+        examControlsBox.style.opacity = '0';
+        examControlsBox.classList.remove('show');
+        console.log('Timer forced hidden on scroll');
       }
     });
   } else {
