@@ -161,10 +161,25 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log('Exam controls box found:', examControlsBox);
   
   // Force hide timer on small screens by default
-  if (examControlsBox && window.innerWidth <= 600) {
-    examControlsBox.classList.remove('show');
-    examControlsBox.style.display = 'none';
-    console.log('Timer hidden on small screen');
+  if (examControlsBox) {
+    console.log('Window width:', window.innerWidth);
+    console.log('Is small screen:', window.innerWidth <= 600);
+    
+    if (window.innerWidth <= 600) {
+      // Small screen - force hide timer
+      examControlsBox.classList.remove('show');
+      examControlsBox.style.display = 'none';
+      examControlsBox.style.visibility = 'hidden';
+      examControlsBox.style.opacity = '0';
+      console.log('Timer hidden on small screen');
+    } else {
+      // Large screen - ensure timer is visible
+      examControlsBox.classList.remove('show');
+      examControlsBox.style.display = '';
+      examControlsBox.style.visibility = '';
+      examControlsBox.style.opacity = '';
+      console.log('Timer visible on large screen');
+    }
   }
   
   if (timerToggleBtn && examControlsBox) {
@@ -173,18 +188,31 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       e.stopPropagation();
       
-      const isShowing = examControlsBox.classList.contains('show');
-      console.log('Currently showing:', isShowing);
+      const isCurrentlyVisible = examControlsBox.style.display !== 'none' && 
+                                 examControlsBox.style.visibility !== 'hidden' && 
+                                 examControlsBox.style.opacity !== '0';
       
-      examControlsBox.classList.toggle('show');
+      console.log('Currently visible:', isCurrentlyVisible);
+      console.log('Display:', examControlsBox.style.display);
+      console.log('Visibility:', examControlsBox.style.visibility);
+      console.log('Opacity:', examControlsBox.style.opacity);
       
-      // Update button text based on state
-      if (examControlsBox.classList.contains('show')) {
-        timerToggleBtn.textContent = '✕ Close Timer';
-        console.log('Timer opened');
-      } else {
+      if (isCurrentlyVisible) {
+        // Hide timer
+        examControlsBox.classList.remove('show');
+        examControlsBox.style.display = 'none';
+        examControlsBox.style.visibility = 'hidden';
+        examControlsBox.style.opacity = '0';
         timerToggleBtn.textContent = '⏱ Timer';
         console.log('Timer closed');
+      } else {
+        // Show timer
+        examControlsBox.classList.add('show');
+        examControlsBox.style.display = 'block';
+        examControlsBox.style.visibility = 'visible';
+        examControlsBox.style.opacity = '1';
+        timerToggleBtn.textContent = '✕ Close Timer';
+        console.log('Timer opened');
       }
     });
     
@@ -194,6 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
           !examControlsBox.contains(e.target) && 
           !timerToggleBtn.contains(e.target)) {
         examControlsBox.classList.remove('show');
+        examControlsBox.style.display = 'none';
+        examControlsBox.style.visibility = 'hidden';
+        examControlsBox.style.opacity = '0';
         timerToggleBtn.textContent = '⏱ Timer';
         console.log('Timer closed by outside click');
       }
@@ -205,11 +236,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Small screen - hide timer by default
         examControlsBox.classList.remove('show');
         examControlsBox.style.display = 'none';
+        examControlsBox.style.visibility = 'hidden';
+        examControlsBox.style.opacity = '0';
         timerToggleBtn.textContent = '⏱ Timer';
       } else {
         // Large screen - show timer normally
         examControlsBox.classList.remove('show');
         examControlsBox.style.display = '';
+        examControlsBox.style.visibility = '';
+        examControlsBox.style.opacity = '';
       }
     });
   } else {

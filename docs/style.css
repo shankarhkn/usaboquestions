@@ -498,7 +498,7 @@ button:disabled {
   right: 20px;
   width: 240px;
   background-color: white;
-  padding: 15px 20px;
+  padding: 20px 24px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   z-index: 9999;
@@ -511,6 +511,7 @@ button:disabled {
   overflow-y: auto;
   font-family: Rubik, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 
 #exam-controls-box button {
   display: block;
@@ -873,16 +874,16 @@ button:disabled {
   }
 }
 
-/* Force hide timer on small screens by default */
 @media (max-width: 600px) {
-  #exam-controls-box:not(.show) {
+  /* Hide timer on small screens by default */
+  #exam-controls-box {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
   }
-}
-
-@media (max-width: 600px) {
+  
   /* Show timer button on small screens */
   .mobile-only {
     display: inline-block !important;
@@ -902,25 +903,37 @@ button:disabled {
     background-color: #0056b3;
   }
   
-  /* Hide exam controls box on small screens by default */
-  #exam-controls-box {
-    display: none !important;
-  }
-  
   /* Show exam controls when timer is toggled */
   #exam-controls-box.show {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
     z-index: 1000 !important;
     background: white !important;
-    padding: 20px !important;
+    padding: 20px 24px !important;
     border-radius: 10px !important;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
     max-width: 90vw !important;
-    width: auto !important;
+    width: 240px !important;
     margin: 0 !important;
+    overflow-x: hidden !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    font-family: Rubik, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  }
+  
+  /* Force spacing for modal timer buttons */
+  #exam-controls-box.show button {
+    margin: 12px 0 !important;
+    display: block !important;
+  }
+  
+  /* Additional spacing for modal timer */
+  #exam-controls-box.show {
+    gap: 20px !important;
   }
 }
