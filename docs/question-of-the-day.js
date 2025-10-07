@@ -1,4 +1,4 @@
-// Question of the Day
+// Question of the Day functionality
 let questions = [];
 let currentQuestion = null;
 let userStats = {
@@ -564,11 +564,22 @@ async function updateLeaderboard(type, startDate, containerId) {
   
   // Update user's points for this period (only if they answered today)
   const today = new Date().toDateString();
-  if (userEntry.lastUpdated !== today && userStats.lastAnswerDate === today) {
-    // Add points earned today to the period total
-    const pointsToday = userStats.lastAnswerDate === today ? 10 : 0;
+
+  // Normalize lastUpdated to a date string for reliable comparison across formats
+  let lastUpdatedDateString = null;
+  if (userEntry.lastUpdated) {
+    const parsed = new Date(userEntry.lastUpdated);
+    lastUpdatedDateString = isNaN(parsed.getTime())
+      ? String(userEntry.lastUpdated)
+      : parsed.toDateString();
+  }
+
+  if (lastUpdatedDateString !== today && userStats.lastAnswerDate === today) {
+    // Add points earned today to the period total (10 points per correct daily answer)
+    const pointsToday = 10;
     userEntry.points += pointsToday;
-    userEntry.lastUpdated = today;
+    // Store as ISO so server/client stay consistent; comparison uses normalized date string above
+    userEntry.lastUpdated = new Date().toISOString();
     
     // Update global leaderboard via API
     try {

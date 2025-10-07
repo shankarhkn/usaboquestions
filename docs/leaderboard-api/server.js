@@ -67,9 +67,24 @@ function updateLeaderboard(leaderboard, username, points, weekOrMonth) {
   const existingIndex = leaderboard.findIndex(entry => entry.username === username && entry.period === weekOrMonth);
   
   if (existingIndex >= 0) {
-    // Update existing entry - use the points sent from frontend (which should be the total)
-    leaderboard[existingIndex].points = points;
-    leaderboard[existingIndex].lastUpdated = new Date().toISOString();
+    // Update existing entry - guard against duplicate same-day increments
+    const entry = leaderboard[existingIndex];
+    const todayString = new Date().toDateString();
+    let lastUpdatedDateString = null;
+    if (entry.lastUpdated) {
+      const parsed = new Date(entry.lastUpdated);
+      lastUpdatedDateString = isNaN(parsed.getTime())
+        ? String(entry.lastUpdated)
+        : parsed.toDateString();
+    }
+
+    if (lastUpdatedDateString === todayString) {
+      // Already updated today; keep existing points to avoid duplicate +10s
+      entry.lastUpdated = new Date().toISOString();
+    } else {
+      entry.points = points;
+      entry.lastUpdated = new Date().toISOString();
+    }
   } else {
     // Add new entry
     leaderboard.push({
