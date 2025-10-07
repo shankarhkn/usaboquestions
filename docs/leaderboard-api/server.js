@@ -22,10 +22,10 @@ if (!fs.existsSync(DATA_FILE)) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
 }
 
-// Reset all leaderboard data
-const resetData = { weekly: [], monthly: [] };
-fs.writeFileSync(DATA_FILE, JSON.stringify(resetData, null, 2));
-console.log('Leaderboard data reset!');
+// Reset all leaderboard data (one-time reset - now commented out)
+// const resetData = { weekly: [], monthly: [] };
+// fs.writeFileSync(DATA_FILE, JSON.stringify(resetData, null, 2));
+// console.log('Leaderboard data reset!');
 
 // Helper function to get current week number
 function getCurrentWeek() {
