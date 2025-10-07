@@ -1,4 +1,4 @@
-// Question of the Day functionality
+// Question of the Day
 let questions = [];
 let currentQuestion = null;
 let userStats = {
