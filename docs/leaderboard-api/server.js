@@ -62,8 +62,8 @@ function updateLeaderboard(leaderboard, username, points, weekOrMonth) {
   const existingIndex = leaderboard.findIndex(entry => entry.username === username && entry.period === weekOrMonth);
   
   if (existingIndex >= 0) {
-    // Update existing entry
-    leaderboard[existingIndex].points = Math.max(leaderboard[existingIndex].points, points);
+    // Update existing entry - use the points sent from frontend (which should be the total)
+    leaderboard[existingIndex].points = points;
     leaderboard[existingIndex].lastUpdated = new Date().toISOString();
   } else {
     // Add new entry
