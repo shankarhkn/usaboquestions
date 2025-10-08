@@ -555,11 +555,18 @@ async function updateLeaderboards() {
 async function updateLeaderboard(type, startDate, containerId) {
   const username = localStorage.getItem('username') || 'Guest';
   
-  // Get or create user entry
+  // Get or create user entry (only if they have points to add)
   let userEntry = leaderboards[type].find(entry => entry.username === username);
   if (!userEntry) {
-    userEntry = { username, points: 0, lastUpdated: null };
-    leaderboards[type].push(userEntry);
+    // Only create entry if user answered today and has points to add
+    const today = new Date().toDateString();
+    if (userStats.lastAnswerDate === today) {
+      userEntry = { username, points: 0, lastUpdated: null };
+      leaderboards[type].push(userEntry);
+    } else {
+      // Don't create entry for users who haven't answered today
+      return;
+    }
   }
   
   // Update user's points for this period (only if they answered today)
@@ -622,7 +629,10 @@ async function updateLeaderboard(type, startDate, containerId) {
   
   container.innerHTML = '';
   
-  const top5 = leaderboards[type].slice(0, 5);
+  // Filter out entries with 0 points (unless they're from server data)
+  const validEntries = leaderboards[type].filter(entry => entry.points > 0);
+  const top5 = validEntries.slice(0, 5);
+  
   if (top5.length === 0) {
     container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No entries yet</div>';
     return;
@@ -742,11 +752,16 @@ function addAnimations() {
 function setupChangeName() {
   const changeNameBtn = document.getElementById('change-name-btn');
   if (changeNameBtn) {
-    changeNameBtn.addEventListener('click', () => {
-      const newName = prompt('Enter your new name:', localStorage.getItem('username') || 'Guest');
-      if (newName && newName.trim() !== '') {
-        localStorage.setItem('username', newName.trim());
-        document.getElementById('username-display').textContent = newName.trim();
+    changeNameBtn.addEventListener('click', async () => {
+      const oldName = localStorage.getItem('username') || 'Guest';
+      const newName = prompt('Enter your new name:', oldName);
+      if (newName && newName.trim() !== '' && newName.trim() !== oldName) {
+        const trimmedNewName = newName.trim();
+        localStorage.setItem('username', trimmedNewName);
+        document.getElementById('username-display').textContent = trimmedNewName;
+        
+        // Update leaderboards with new name
+        await updateLeaderboardNames(oldName, trimmedNewName);
         
         // Add animation to show name change
         const usernameDisplay = document.getElementById('username-display');
@@ -757,6 +772,62 @@ function setupChangeName() {
       }
     });
   }
+}
+
+// Update leaderboard names when user changes their name
+async function updateLeaderboardNames(oldName, newName) {
+  // Update local leaderboards
+  ['weekly', 'monthly'].forEach(type => {
+    const userEntry = leaderboards[type].find(entry => entry.username === oldName);
+    if (userEntry) {
+      userEntry.username = newName;
+    }
+  });
+  
+  // Save updated local leaderboards
+  localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
+  
+  // Update server leaderboards via API
+  try {
+    const apiAvailable = await testAPIConnectivity();
+    if (apiAvailable) {
+      // Update weekly leaderboard on server
+      const weeklyEntry = leaderboards.weekly.find(entry => entry.username === newName);
+      if (weeklyEntry) {
+        await fetch(`${API_BASE_URL}/leaderboard/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: newName,
+            points: weeklyEntry.points,
+            type: 'weekly'
+          })
+        });
+      }
+      
+      // Update monthly leaderboard on server
+      const monthlyEntry = leaderboards.monthly.find(entry => entry.username === newName);
+      if (monthlyEntry) {
+        await fetch(`${API_BASE_URL}/leaderboard/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: newName,
+            points: monthlyEntry.points,
+            type: 'monthly'
+          })
+        });
+      }
+      
+      // Reload leaderboards from server to ensure consistency
+      await loadLeaderboards();
+    }
+  } catch (error) {
+    console.error('Error updating leaderboard names on server:', error);
+  }
+  
+  // Refresh the display
+  updateLeaderboards();
 }
 
 // Add animation to choice selection
