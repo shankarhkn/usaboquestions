@@ -82,7 +82,8 @@ function updateLeaderboard(leaderboard, username, points, weekOrMonth) {
       // Already updated today; keep existing points to avoid duplicate +10s
       entry.lastUpdated = new Date().toISOString();
     } else {
-      entry.points = points;
+      // Add points to existing total (not replace) for new day
+      entry.points += points;
       entry.lastUpdated = new Date().toISOString();
     }
   } else {

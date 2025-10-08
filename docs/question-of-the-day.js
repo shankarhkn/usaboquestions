@@ -590,7 +590,7 @@ async function updateLeaderboard(type, startDate, containerId) {
         },
         body: JSON.stringify({
           username,
-          points: userEntry.points,
+          points: pointsToday, // Send only points earned today, not total
           type
         }),
         signal: AbortSignal.timeout(10000) // 10 second timeout
