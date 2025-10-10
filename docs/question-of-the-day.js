@@ -291,7 +291,7 @@ function submitAnswer() {
   // Update stats display
   updateStatsDisplay();
   
-  // Update leaderboards
+  // Update leaderboards (this will sync with server first)
   updateLeaderboards();
 }
 
@@ -541,6 +541,16 @@ async function updateLeaderboards() {
   weekStart.setDate(today.getDate() - today.getDay());
   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
   
+  // Always try to load from server first to get latest data
+  try {
+    const apiAvailable = await testAPIConnectivity();
+    if (apiAvailable) {
+      await loadLeaderboards();
+    }
+  } catch (error) {
+    // Silent fallback to local data
+  }
+  
   // Update weekly leaderboard
   await updateLeaderboard('weekly', weekStart, 'weekly-leaderboard');
   
@@ -555,18 +565,12 @@ async function updateLeaderboards() {
 async function updateLeaderboard(type, startDate, containerId) {
   const username = localStorage.getItem('username') || 'Guest';
   
-  // Get or create user entry (only if they have points to add)
+  // Get or create user entry
   let userEntry = leaderboards[type].find(entry => entry.username === username);
   if (!userEntry) {
-    // Only create entry if user answered today and has points to add
-    const today = new Date().toDateString();
-    if (userStats.lastAnswerDate === today) {
-      userEntry = { username, points: 0, lastUpdated: null };
-      leaderboards[type].push(userEntry);
-    } else {
-      // Don't create entry for users who haven't answered today
-      return;
-    }
+    // Create entry for current user (they might exist on server but not locally)
+    userEntry = { username, points: 0, lastUpdated: null };
+    leaderboards[type].push(userEntry);
   }
   
   // Update user's points for this period (only if they answered today)
