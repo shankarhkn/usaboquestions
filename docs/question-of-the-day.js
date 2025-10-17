@@ -14,10 +14,52 @@ let leaderboards = {
   monthly: []
 };
 
+// Generate a unique user ID if one doesn't exist
+function getOrCreateUserId() {
+  let userId = localStorage.getItem('userId');
+  if (!userId) {
+    // Generate a unique ID using timestamp and random number
+    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('userId', userId);
+  }
+  return userId;
+}
+
+// Get current user info (ID + username)
+function getCurrentUser() {
+  const userId = getOrCreateUserId();
+  const username = localStorage.getItem('username') || 'Guest';
+  return { userId, username };
+}
+
+// Migrate existing leaderboard entries to use user IDs
+function migrateLeaderboardEntries() {
+  const { userId, username } = getCurrentUser();
+  let needsMigration = false;
+  
+  // Check if any entries need migration (missing userId)
+  ['weekly', 'monthly'].forEach(type => {
+    leaderboards[type].forEach(entry => {
+      if (!entry.userId && entry.username === username) {
+        entry.userId = userId;
+        needsMigration = true;
+      }
+    });
+  });
+  
+  // Save migrated data if needed
+  if (needsMigration) {
+    localStorage.setItem('leaderboards', JSON.stringify(leaderboards));
+  }
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async function() {
   // Set current year
   document.getElementById('year').textContent = new Date().getFullYear();
+  
+  // Ensure user has a unique ID (migration for existing users)
+  getOrCreateUserId();
   
   // Load user data
   loadUserData();
@@ -45,8 +87,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     } else {
       leaderboards = { weekly: [], monthly: [] };
     }
-    updateLeaderboards();
   }
+  
+  // Migrate existing entries to use user IDs
+  migrateLeaderboardEntries();
+  
+  // Update leaderboards display
+  updateLeaderboards();
   
   // Set up manual refresh buttons
   setupRefreshButtons();
@@ -392,6 +439,8 @@ window.testLeaderboardAPI = async function() {
   }
   
   console.log('🎯 Current user stats:', userStats);
+  console.log('🆔 Current user ID:', getOrCreateUserId());
+  console.log('👤 Current user info:', getCurrentUser());
 };
 
 async function loadLeaderboards() {
@@ -535,7 +584,7 @@ function setupRefreshButtons() {
 
 // Update leaderboards
 async function updateLeaderboards() {
-  const username = localStorage.getItem('username') || 'Guest';
+  const { userId, username } = getCurrentUser();
   const today = new Date();
   const weekStart = new Date(today);
   weekStart.setDate(today.getDate() - today.getDay());
@@ -563,14 +612,17 @@ async function updateLeaderboards() {
 
 // Update a specific leaderboard
 async function updateLeaderboard(type, startDate, containerId) {
-  const username = localStorage.getItem('username') || 'Guest';
+  const { userId, username } = getCurrentUser();
   
-  // Get or create user entry
-  let userEntry = leaderboards[type].find(entry => entry.username === username);
+  // Get or create user entry (use userId for identification)
+  let userEntry = leaderboards[type].find(entry => entry.userId === userId);
   if (!userEntry) {
     // Create entry for current user (they might exist on server but not locally)
-    userEntry = { username, points: 0, lastUpdated: null };
+    userEntry = { userId, username, points: 0, lastUpdated: null };
     leaderboards[type].push(userEntry);
+  } else {
+    // Update username in case it changed
+    userEntry.username = username;
   }
   
   // Update user's points for this period (only if they answered today)
@@ -600,6 +652,7 @@ async function updateLeaderboard(type, startDate, containerId) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          userId,
           username,
           points: pointsToday, // Send only points earned today, not total
           type
@@ -780,9 +833,11 @@ function setupChangeName() {
 
 // Update leaderboard names when user changes their name
 async function updateLeaderboardNames(oldName, newName) {
-  // Update local leaderboards
+  const { userId } = getCurrentUser();
+  
+  // Update local leaderboards using userId
   ['weekly', 'monthly'].forEach(type => {
-    const userEntry = leaderboards[type].find(entry => entry.username === oldName);
+    const userEntry = leaderboards[type].find(entry => entry.userId === userId);
     if (userEntry) {
       userEntry.username = newName;
     }
@@ -796,12 +851,13 @@ async function updateLeaderboardNames(oldName, newName) {
     const apiAvailable = await testAPIConnectivity();
     if (apiAvailable) {
       // Update weekly leaderboard on server
-      const weeklyEntry = leaderboards.weekly.find(entry => entry.username === newName);
+      const weeklyEntry = leaderboards.weekly.find(entry => entry.userId === userId);
       if (weeklyEntry) {
         await fetch(`${API_BASE_URL}/leaderboard/update`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            userId,
             username: newName,
             points: weeklyEntry.points,
             type: 'weekly'
@@ -810,12 +866,13 @@ async function updateLeaderboardNames(oldName, newName) {
       }
       
       // Update monthly leaderboard on server
-      const monthlyEntry = leaderboards.monthly.find(entry => entry.username === newName);
+      const monthlyEntry = leaderboards.monthly.find(entry => entry.userId === userId);
       if (monthlyEntry) {
         await fetch(`${API_BASE_URL}/leaderboard/update`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            userId,
             username: newName,
             points: monthlyEntry.points,
             type: 'monthly'
